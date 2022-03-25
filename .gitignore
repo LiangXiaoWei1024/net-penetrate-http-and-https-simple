@@ -2,3 +2,5 @@
 Test*.java
 */target
 logs
+.idea
+.iml
