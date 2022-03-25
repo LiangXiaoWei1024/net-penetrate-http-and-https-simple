@@ -1,10 +1,15 @@
 package com.kele.penetrate.utils;
 
+import com.kele.penetrate.Start;
+
 import java.io.File;
+import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 public class ScanPackage
 {
@@ -19,15 +24,37 @@ public class ScanPackage
             Enumeration<URL> resources = e.getResources(path);
             ArrayList<File> dirs = new ArrayList<>();
 
-            while (resources.hasMoreElements())
+            if (!getJarStart())
             {
-                URL directory = resources.nextElement();
-                dirs.add(new File(directory.getFile()));
-            }
+                while (resources.hasMoreElements())
+                {
+                    URL directory = resources.nextElement();
+                    dirs.add(new File(directory.getFile()));
+                }
 
-            for (File directory1 : dirs)
+                for (File directory1 : dirs)
+                {
+                    classes.addAll(findClasses(directory1, packageName));
+                }
+            }
+            else
             {
-                classes.addAll(findClasses(directory1, packageName));
+                while (resources.hasMoreElements())
+                {
+                    URL directory = resources.nextElement();
+                    JarURLConnection jarURLConnection = (JarURLConnection) directory.openConnection();
+                    JarFile jarFile = jarURLConnection.getJarFile();
+                    Enumeration<JarEntry> entries = jarFile.entries();
+                    while (entries.hasMoreElements())
+                    {
+                        JarEntry jarEntry = entries.nextElement();
+                        String jarEntryName = jarEntry.getName();
+                        if (jarEntryName.contains(path) && jarEntryName.contains(".class"))
+                        {
+                            classes.add(Class.forName(jarEntryName.replace("/", ".").replace(".class", "")));
+                        }
+                    }
+                }
             }
         }
         catch (Exception arg7)
@@ -64,4 +91,13 @@ public class ScanPackage
         }
         return classes;
     }
+
+    //<editor-fold desc="获取是否是jar启动">
+    private static boolean getJarStart()
+    {
+        URL url = Start.class.getResource("");
+        String protocol = url.getProtocol();
+        return "jar".equals(protocol);
+    }
+    //</editor-fold>
 }
