@@ -1,4 +1,4 @@
-package com.kele.penetrate.receiver.http;
+package com.kele.penetrate.service;
 
 import com.kele.penetrate.config.Config;
 import com.kele.penetrate.factory.Autowired;
@@ -10,10 +10,10 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Recognizer
 @SuppressWarnings("unused")
-@Slf4j
-public class NettyHttpService extends Thread
+public class NettyServiceInit extends Thread
 {
     @Autowired
     private Config config;
@@ -21,27 +21,27 @@ public class NettyHttpService extends Thread
     @Override
     public void run()
     {
-        EventLoopGroup parentGroup = new NioEventLoopGroup();
-        EventLoopGroup childGroup = new NioEventLoopGroup();
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        EventLoopGroup bossGroup = new NioEventLoopGroup();
         try
         {
             ServerBootstrap server = new ServerBootstrap();
-            server.group(parentGroup, childGroup)
+            server.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(new NettyHttpChannelInitializerHandler());
+                    .childHandler(new NettyServiceChannelInitializerHandler());
 
-            ChannelFuture future = server.bind(config.getHttpPort()).sync();
-            log.info("http接收器启动成功,端口：" + config.getHttpPort());
+            ChannelFuture future = server.bind(config.getServicePort()).sync();
+            log.info("服务器启动成功,端口：" + config.getServicePort());
             future.channel().closeFuture().sync();
         }
-        catch (InterruptedException ex)
+        catch (Exception ex)
         {
-            log.error("http启动失败", ex);
+            log.error("服务器启动失败", ex);
         }
         finally
         {
-            childGroup.shutdownGracefully();
-            parentGroup.shutdownGracefully();
+            bossGroup.shutdownGracefully();
+            workerGroup.shutdownGracefully();
         }
     }
 }

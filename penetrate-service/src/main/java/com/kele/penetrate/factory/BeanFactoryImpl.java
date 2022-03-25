@@ -24,7 +24,7 @@ public class BeanFactoryImpl
     {
         try
         {
-            //<editor-fold desc="第一次 主要是为了把所有的类全部实例出来，后续可能会有依赖注入的情况 比如DemoA 里面注入 DemoB">
+            //<editor-fold desc="扫描所有Recognizer注解的类">
             for (Class<?> clazz : classesByPackageName)
             {
                 Recognizer annotation = clazz.getAnnotation(Recognizer.class);
@@ -36,7 +36,7 @@ public class BeanFactoryImpl
             }
             //</editor-fold>
 
-            //<editor-fold desc="第二次 主要类里面的属性给注入进去">
+            //<editor-fold desc="注入属性">
             for (Class<?> aClass : classesByPackageName)
             {
                 Object o = beans.get(aClass.getName());

@@ -14,12 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 @Recognizer
 @SuppressWarnings("unused")
 @Slf4j
-public class NettyHttpsService
+public class NettyHttpsService extends Thread
 {
     @Autowired
     private Config config;
 
-    public void init(int port)
+    @Override
+    public void run()
     {
         EventLoopGroup parentGroup = new NioEventLoopGroup();
         EventLoopGroup childGroup = new NioEventLoopGroup();
