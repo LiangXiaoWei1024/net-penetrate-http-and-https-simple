@@ -1,40 +1,32 @@
-<configuration>
-    <conversionRule conversionWord="epoch"
-                    converterClass="com.binance.connector.logging.util.MsEpochConverter" />
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true" scan="true" scanPeriod="30 seconds">
 
-    <property name="SYSTEM" value="binance-java-connector" />
-    <property name="LOG_PATTERN" value="%date{yyyy-MM-dd HH:mm:ss.SSS}[%epoch] | %-5level | %-10thread{10} | %-36logger{36} - %msg%n" />
-    <property name="BASE_DIR" value="./logs" />
-    <property name="OLD_DIR" value="${SYSTEM}" />
-    <property name="FILE_NAME" value="${SYSTEM}.log" />
-
-
-    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- 输出到控制台 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%level] - %m%n</pattern>
         </encoder>
     </appender>
 
-    <appender name="dailyFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${BASE_DIR}/${FILE_NAME}</file>
-        <append>true</append>
-        <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${BASE_DIR}/${OLD_DIR}/${FILE_NAME}.%d{yyyy-MM-dd}.gz</fileNamePattern>
-            <maxHistory>30</maxHistory>
+
+    <!-- 按日期滚动日志 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 日志存放位置 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 日志文件保留天数 -->
+            <MaxHistory>15</MaxHistory>
+            <!-- 日志文件最大尺寸 -->
+            <maxFileSize>15MB</maxFileSize>
         </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%level] [%thread][%file:%line] - %m%n</pattern>
+        </encoder>
     </appender>
 
-    <appender name="dailyFileAsync" class="ch.qos.logback.classic.AsyncAppender">
-        <queueSize>1000000</queueSize>
-        <discardingThreshold>0</discardingThreshold>
-        <appender-ref ref="dailyFile" />
-    </appender>
-
+    <!-- 配置好前面对应的appender -->
     <root level="INFO">
-        <appender-ref ref="stdout" />
-        <appender-ref ref="dailyFileAsync" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
     </root>
 </configuration>
