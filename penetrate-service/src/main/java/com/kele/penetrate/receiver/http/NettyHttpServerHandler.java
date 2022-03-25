@@ -7,12 +7,11 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
-import io.netty.handler.codec.http.multipart.DefaultHttpDataFactory;
-import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
-import io.netty.handler.codec.http.multipart.InterfaceHttpData;
-import io.netty.handler.codec.http.multipart.MemoryAttribute;
+import io.netty.handler.codec.http.multipart.*;
 import io.netty.util.CharsetUtil;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
@@ -24,9 +23,40 @@ public class NettyHttpServerHandler extends SimpleChannelInboundHandler<FullHttp
      * 处理请求
      */
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest)
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest) throws IOException
     {
+        System.out.println(fullHttpRequest);
         System.out.println("=======================================");
+
+        HttpDataFactory factory = new DefaultHttpDataFactory(true);
+        HttpPostRequestDecoder httpDecoder = new HttpPostRequestDecoder(factory, fullHttpRequest);
+        httpDecoder.setDiscardThreshold(0);
+        final HttpContent chunk = fullHttpRequest;
+        httpDecoder.offer(chunk);
+        if (chunk instanceof LastHttpContent) {
+            List<InterfaceHttpData> interfaceHttpDataList = httpDecoder.getBodyHttpDatas();
+            for (InterfaceHttpData data : interfaceHttpDataList) {
+                if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload) {
+                    FileUpload fileUpload = (FileUpload) data;
+                    try( FileOutputStream fileOutputStream = new FileOutputStream("netty_pic.png") ) {
+                        fileOutputStream.write(fileUpload.get());
+                        fileOutputStream.flush();
+                    }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                //如果数据类型为参数类型，则保存到body对象中
+                if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute){
+                    Attribute attribute = (Attribute) data;
+                    System.out.println(attribute.getName() + ":" + attribute.getValue());
+                }
+            }
+        }
+
+
+
         FullHttpResponse response;
         if (fullHttpRequest.method() == HttpMethod.GET)
         {
