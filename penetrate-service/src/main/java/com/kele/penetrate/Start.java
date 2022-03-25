@@ -7,6 +7,7 @@ import com.kele.penetrate.receiver.http.NettyHttpService;
 import com.kele.penetrate.receiver.https.NettyHttpsService;
 import com.kele.penetrate.service.NettyServiceInit;
 
+
 @SuppressWarnings("unused")
 @Recognizer
 public class Start
@@ -26,5 +27,22 @@ public class Start
         start.nettyHttpService.start();
         start.nettyHttpsService.start();
         start.nettyServiceInit.start();
+
+        //<editor-fold desc="心跳">
+//        Timer timer = new Timer();
+//        timer.schedule(new TimerTask()
+//        {
+//            @SneakyThrows
+//            public void run()
+//            {
+//                //<editor-fold desc="心跳">
+//                JSONObject heartbeat = new JSONObject();
+//                heartbeat.put("ping", System.currentTimeMillis());
+//                replyAll(heartbeat.toJSONString());
+//                //</editor-fold>
+//
+//            }
+//        }, 1000 * 5, 1000 * 5);
+        //</editor-fold>
     }
 }

@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+/**
+ * 扫描当前包下所有的class
+ */
 public class ScanPackage
 {
     public static List<Class<?>> getClassesByPackageName(String packageName)
@@ -57,9 +60,9 @@ public class ScanPackage
                 }
             }
         }
-        catch (Exception arg7)
+        catch (Exception ex)
         {
-            arg7.printStackTrace();
+            ex.printStackTrace();
         }
 
         return classes;
