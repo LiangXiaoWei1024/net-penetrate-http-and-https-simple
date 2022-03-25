@@ -4,3 +4,4 @@ Test*.java
 logs
 .idea
 .iml
+*.iml
