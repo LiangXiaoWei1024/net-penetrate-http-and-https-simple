@@ -27,8 +27,8 @@ public class BeanFactoryImpl
             //<editor-fold desc="扫描所有Recognizer注解的类">
             for (Class<?> clazz : classesByPackageName)
             {
-                Recognizer annotation = clazz.getAnnotation(Recognizer.class);
-                if (annotation == null)
+                Recognizer recognizer = clazz.getAnnotation(Recognizer.class);
+                if (recognizer == null)
                 {
                     continue;
                 }

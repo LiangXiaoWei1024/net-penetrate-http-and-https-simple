@@ -1,6 +1,9 @@
 package com.kele.penetrate.receiver.http;
 
 import com.alibaba.fastjson.JSONObject;
+import com.kele.penetrate.Start;
+import com.kele.penetrate.enumeration.RequestType;
+import com.kele.penetrate.pojo.PipelineTransmission;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -25,63 +28,81 @@ public class NettyHttpServerHandler extends SimpleChannelInboundHandler<FullHttp
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest) throws IOException
     {
-        System.out.println(fullHttpRequest);
-        System.out.println("=======================================");
 
-        HttpDataFactory factory = new DefaultHttpDataFactory(true);
-        HttpPostRequestDecoder httpDecoder = new HttpPostRequestDecoder(factory, fullHttpRequest);
-        httpDecoder.setDiscardThreshold(0);
-        final HttpContent chunk = fullHttpRequest;
-        httpDecoder.offer(chunk);
-        if (chunk instanceof LastHttpContent) {
-            List<InterfaceHttpData> interfaceHttpDataList = httpDecoder.getBodyHttpDatas();
-            for (InterfaceHttpData data : interfaceHttpDataList) {
-                if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload) {
-                    FileUpload fileUpload = (FileUpload) data;
-                    try( FileOutputStream fileOutputStream = new FileOutputStream("netty_pic.png") ) {
-                        fileOutputStream.write(fileUpload.get());
-                        fileOutputStream.flush();
-                    }
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-                //如果数据类型为参数类型，则保存到body对象中
-                if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute){
-                    Attribute attribute = (Attribute) data;
-                    System.out.println(attribute.getName() + ":" + attribute.getValue());
-                }
-            }
-        }
-
-
-
-        FullHttpResponse response;
-        if (fullHttpRequest.method() == HttpMethod.GET)
-        {
-            Map<String, Object> getParamsFromChannel = getGetParamsFromChannel(fullHttpRequest);
-            System.out.println(getParamsFromChannel);
-            String data = "GET method over";
-            ByteBuf buf = Unpooled.copiedBuffer(data, CharsetUtil.UTF_8);
-            response = responseOK(HttpResponseStatus.OK, buf);
-
-        }
-        else if (fullHttpRequest.method() == HttpMethod.POST)
-        {
-            System.out.println(getPostParamsFromChannel(fullHttpRequest));
-            String data = "POST method over";
-            ByteBuf content = Unpooled.copiedBuffer(data, CharsetUtil.UTF_8);
-            response = responseOK(HttpResponseStatus.OK, content);
-
-        }
-        else
-        {
-            response = responseOK(HttpResponseStatus.INTERNAL_SERVER_ERROR, null);
-        }
+        Start.httpEvents.notice(new PipelineTransmission(channelHandlerContext,fullHttpRequest));
+//        System.out.println(fullHttpRequest);
+////        System.out.println("=======================================");
+//        RequestType requestType = AnalysisHttpRequest.getRequestType(fullHttpRequest);
+//        if (requestType == RequestType.GET)
+//        {
+//
+//        }
+//
+//        if (requestType == RequestType.POST)
+//        {
+//
+//        }
+//
+//
+//        HttpDataFactory factory = new DefaultHttpDataFactory(true);
+//        HttpPostRequestDecoder httpDecoder = new HttpPostRequestDecoder(factory, fullHttpRequest);
+//        httpDecoder.setDiscardThreshold(0);
+//        final HttpContent chunk = fullHttpRequest;
+//        httpDecoder.offer(chunk);
+//        if (chunk instanceof LastHttpContent)
+//        {
+//            List<InterfaceHttpData> interfaceHttpDataList = httpDecoder.getBodyHttpDatas();
+//            for (InterfaceHttpData data : interfaceHttpDataList)
+//            {
+//                if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload)
+//                {
+//                    FileUpload fileUpload = (FileUpload) data;
+//                    try (FileOutputStream fileOutputStream = new FileOutputStream("netty_pic.png"))
+//                    {
+//                        fileOutputStream.write(fileUpload.get());
+//                        fileOutputStream.flush();
+//                    }
+//                    catch (IOException e)
+//                    {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                //如果数据类型为参数类型，则保存到body对象中
+//                if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute)
+//                {
+//                    Attribute attribute = (Attribute) data;
+//                    System.out.println(attribute.getName() + ":" + attribute.getValue());
+//                }
+//            }
+//        }
+//
+//
+//        FullHttpResponse response;
+//        if (fullHttpRequest.method() == HttpMethod.GET)
+//        {
+//            Map<String, Object> getParamsFromChannel = getGetParamsFromChannel(fullHttpRequest);
+//            System.out.println(getParamsFromChannel);
+//            String data = "GET method over";
+//            ByteBuf buf = Unpooled.copiedBuffer(data, CharsetUtil.UTF_8);
+//            response = responseOK(HttpResponseStatus.OK, buf);
+//
+//        }
+//        else if (fullHttpRequest.method() == HttpMethod.POST)
+//        {
+//            System.out.println(getPostParamsFromChannel(fullHttpRequest));
+//            String data = "POST method over";
+//            ByteBuf content = Unpooled.copiedBuffer(data, CharsetUtil.UTF_8);
+//            response = responseOK(HttpResponseStatus.OK, content);
+//
+//        }
+//        else
+//        {
+//            response = responseOK(HttpResponseStatus.INTERNAL_SERVER_ERROR, null);
+//        }
         // 发送响应
-        channelHandlerContext.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+//        channelHandlerContext.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
+
 
     /*
      * 获取GET方式传递的参数
