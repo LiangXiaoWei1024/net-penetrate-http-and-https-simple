@@ -1,16 +1,16 @@
 package com.kele.penetrate.service;
 
-import com.alibaba.fastjson.JSONObject;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 @SuppressWarnings("unused")
-public class ServiceHandler extends SimpleChannelInboundHandler<JSONObject>
+public class ServiceHandler extends SimpleChannelInboundHandler<Object>
 {
     //<editor-fold desc="读取通道消息">
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, JSONObject msg)
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object o)
     {
+
     }
     //</editor-fold>
 
@@ -35,5 +35,6 @@ public class ServiceHandler extends SimpleChannelInboundHandler<JSONObject>
         ctx.flush();
         ctx.close();
     }
+
     //</editor-fold>
 }
