@@ -1,6 +1,5 @@
 package com.kele.penetrate.client;
 
-import com.alibaba.fastjson.JSONObject;
 import com.kele.penetrate.config.Config;
 import com.kele.penetrate.factory.Autowired;
 import com.kele.penetrate.factory.Recognizer;
@@ -11,7 +10,6 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @Data
@@ -23,17 +21,11 @@ public class ConnectHandler
     private Bootstrap bootstrap;
     private Channel channel;
     private long lastReplyTime;
-    private ConcurrentHashMap<String, JSONObject> monitoringDataMap = new ConcurrentHashMap<>();
 
     @Autowired
+    private NettyClientChannelInitializerHandler nettyClientChannelInitializerHandler;
+    @Autowired
     private Config config;
-
-
-    //<editor-fold desc="构造">
-    public ConnectHandler()
-    {
-    }
-    //</editor-fold>
 
     //<editor-fold desc="启动">
     public void start()
@@ -44,8 +36,7 @@ public class ConnectHandler
         bootstrap.group(group);
         bootstrap.channel(NioSocketChannel.class);
         bootstrap.option(ChannelOption.TCP_NODELAY, true);
-        //第3步 给NIoSocketChannel初始化handler， 处理读写事件
-        bootstrap.handler(new NettyClientChannelInitializerHandler());
+        bootstrap.handler(nettyClientChannelInitializerHandler);
         doConnect();
     }
     //</editor-fold>

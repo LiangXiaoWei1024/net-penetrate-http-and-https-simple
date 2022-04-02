@@ -5,7 +5,6 @@ import com.kele.penetrate.config.Config;
 import com.kele.penetrate.factory.Autowired;
 import com.kele.penetrate.factory.BeanFactoryImpl;
 import com.kele.penetrate.factory.Recognizer;
-import com.kele.penetrate.pojo.ServiceConnectInfo;
 import lombok.extern.slf4j.Slf4j;
 
 @Recognizer

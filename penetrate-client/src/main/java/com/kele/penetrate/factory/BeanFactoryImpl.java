@@ -39,7 +39,6 @@ public class BeanFactoryImpl
             //<editor-fold desc="注入属性">
             for (Class<?> aClass : classesByPackageName)
             {
-                Object o = beans.get(aClass.getName());
                 Field[] declaredFields = aClass.getDeclaredFields();
                 for (Field field : declaredFields)
                 {
@@ -47,6 +46,11 @@ public class BeanFactoryImpl
                     if (annotation == null)
                     {
                         continue;
+                    }
+                    Object o = beans.get(aClass.getName());
+                    if (o == null)
+                    {
+                        o = beans.get(aClass.getName());
                     }
                     field.setAccessible(true);
                     field.set(o, beans.get(field.getType().getName()));
