@@ -10,11 +10,11 @@
 //
 //@SuppressWarnings("unused")
 //@Slf4j
-//public class ClientHandler extends SimpleChannelInboundHandler<String>
+//public class ClientHandler extends SimpleChannelInboundHandler<Object>
 //{
 //    //<editor-fold desc="接收通道消息">
 //    @Override
-//    protected void channelRead0(ChannelHandlerContext ctx, String msg)
+//    protected void channelRead0(ChannelHandlerContext ctx, Object msg)
 //    {
 //        JSONObject jsonObject = JSONObject.parseObject(msg);
 //

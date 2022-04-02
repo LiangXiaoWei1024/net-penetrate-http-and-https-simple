@@ -1,5 +1,6 @@
 package com.kele.penetrate;
 
+import com.kele.penetrate.client.ConnectHandler;
 import com.kele.penetrate.config.Config;
 import com.kele.penetrate.factory.Autowired;
 import com.kele.penetrate.factory.BeanFactoryImpl;
@@ -16,12 +17,13 @@ public class Start
 
     @Autowired
     private Config config;
+    @Autowired
+    private ConnectHandler connectHandler;
 
 
     public static void main(String[] args)
     {
         Start start = beanFactory.getBean(Start.class);
-        ServiceConnectInfo serviceConnectInfo = start.config.getServiceConnectInfo();
-        System.out.println(serviceConnectInfo);
+        start.connectHandler.start();
     }
 }
