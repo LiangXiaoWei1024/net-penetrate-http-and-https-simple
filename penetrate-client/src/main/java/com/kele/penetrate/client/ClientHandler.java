@@ -36,6 +36,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
     @Override
     public void channelInactive(ChannelHandlerContext ctx)
     {
+        connectHandler.doConnect();
     }
     //</editor-fold>
 
