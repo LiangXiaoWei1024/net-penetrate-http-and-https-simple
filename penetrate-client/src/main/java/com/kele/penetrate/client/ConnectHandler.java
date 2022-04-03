@@ -63,6 +63,12 @@ public class ConnectHandler
     }
     //</editor-fold>
 
+    public void disconnect()
+    {
+        setChannel(null);
+        doConnect();
+    }
+
     //<editor-fold desc="发送消息">
     public void send(Object msg)
     {

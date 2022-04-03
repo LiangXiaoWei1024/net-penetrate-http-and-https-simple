@@ -5,6 +5,7 @@ import com.kele.penetrate.config.Config;
 import com.kele.penetrate.factory.Autowired;
 import com.kele.penetrate.factory.BeanFactoryImpl;
 import com.kele.penetrate.factory.Recognizer;
+import com.kele.penetrate.utils.Events;
 import lombok.extern.slf4j.Slf4j;
 
 @Recognizer
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Start
 {
     private static final BeanFactoryImpl beanFactory = new BeanFactoryImpl();
+    public static final Events<Object> clientEvents = new Events("Client", Object.class, "com.kele.penetrate.client.pipeline");
 
     @Autowired
     private Config config;

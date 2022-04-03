@@ -9,4 +9,14 @@ public class HandshakeResult implements Serializable
 {
     private boolean isSuccess;
     private String accessAddress;
+
+    public HandshakeResult()
+    {
+    }
+
+    public HandshakeResult(boolean isSuccess, String accessAddress)
+    {
+        this.isSuccess = isSuccess;
+        this.accessAddress = accessAddress;
+    }
 }

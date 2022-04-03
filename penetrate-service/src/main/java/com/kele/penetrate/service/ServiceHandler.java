@@ -4,11 +4,13 @@ import com.kele.penetrate.Start;
 import com.kele.penetrate.factory.Autowired;
 import com.kele.penetrate.factory.Recognizer;
 import com.kele.penetrate.pojo.ServicePipeline;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 @SuppressWarnings("unused")
 @Recognizer
+@ChannelHandler.Sharable
 public class ServiceHandler extends SimpleChannelInboundHandler<Object>
 {
     @Autowired

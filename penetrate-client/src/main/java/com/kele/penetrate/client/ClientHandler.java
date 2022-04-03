@@ -1,10 +1,11 @@
 package com.kele.penetrate.client;
 
 
+import com.kele.penetrate.Start;
 import com.kele.penetrate.factory.Autowired;
 import com.kele.penetrate.factory.Recognizer;
 import com.kele.penetrate.protocol.Handshake;
-import com.kele.penetrate.protocol.Heartbeat;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @SuppressWarnings("unused")
 @Slf4j
 @Recognizer
+@ChannelHandler.Sharable
 public class ClientHandler extends SimpleChannelInboundHandler<Object>
 {
     @Autowired
@@ -22,11 +24,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg)
     {
-        if (msg instanceof Heartbeat)
-        {
-            System.out.println("收到心跳包");
-            connectHandler.send(msg);
-        }
+        Start.clientEvents.notice(msg);
     }
     //</editor-fold>
 
@@ -49,7 +47,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
     @Override
     public void channelInactive(ChannelHandlerContext ctx)
     {
-        connectHandler.doConnect();
+        connectHandler.disconnect();
     }
     //</editor-fold>
 
@@ -59,6 +57,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
     {
         ctx.flush();
         ctx.close();
+        System.out.println("aaaaaaa");
     }
     //</editor-fold>
 

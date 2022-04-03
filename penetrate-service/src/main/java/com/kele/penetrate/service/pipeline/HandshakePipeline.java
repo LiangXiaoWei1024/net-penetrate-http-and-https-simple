@@ -38,10 +38,14 @@ public class HandshakePipeline implements Func<ServicePipeline, Boolean>
             {
                 ConnectHandler.ConnectHandlerBuilder connectHandlerBuilder = ConnectHandler.builder();
                 connectHandlerBuilder.ctx(channelHandlerContext);
-                connectHandlerBuilder.mappingIp(handshake.getMappingName());
+                connectHandlerBuilder.mappingIp(handshake.getMappingIp());
                 connectHandlerBuilder.port(handshake.getPort());
                 connectHandlerBuilder.mappingName(handshake.getMappingName());
-                connectManager.add(connectHandlerBuilder.build());
+                ConnectHandler connectHandler = connectHandlerBuilder.build();
+                connectManager.add(connectHandler);
+                //通知服务端映射成功
+                HandshakeResult handshakeResult = new HandshakeResult(true, "http(s)://xxx.xxx.xxx.com/" + handshake.getMappingName());
+                connectHandler.reply(handshakeResult);
             }
             return true;
         }
