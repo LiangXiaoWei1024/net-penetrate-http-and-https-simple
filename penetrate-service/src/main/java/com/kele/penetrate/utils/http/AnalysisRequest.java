@@ -17,14 +17,12 @@ import java.util.Map;
 @Slf4j
 public class AnalysisRequest
 {
-
     //<editor-fold desc="获取请求方法类型">
     public static RequestType getRequestType(FullHttpRequest fullHttpRequest)
     {
         return RequestType.getRequestTypeByCodeStr(fullHttpRequest.method().name().trim());
     }
     //</editor-fold>
-
 
     //<editor-fold desc="获取请求url携带的参数">
     public static Map<String, Object> getParamsFromChannel(FullHttpRequest fullHttpRequest)

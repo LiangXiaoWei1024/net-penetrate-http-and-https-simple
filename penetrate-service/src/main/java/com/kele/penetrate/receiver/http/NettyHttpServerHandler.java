@@ -28,22 +28,9 @@ public class NettyHttpServerHandler extends SimpleChannelInboundHandler<FullHttp
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest) throws IOException
     {
-
         Start.httpEvents.notice(new PipelineTransmission(channelHandlerContext,fullHttpRequest));
 //        System.out.println(fullHttpRequest);
-////        System.out.println("=======================================");
-//        RequestType requestType = AnalysisHttpRequest.getRequestType(fullHttpRequest);
-//        if (requestType == RequestType.GET)
-//        {
-//
-//        }
-//
-//        if (requestType == RequestType.POST)
-//        {
-//
-//        }
-//
-//
+
 //        HttpDataFactory factory = new DefaultHttpDataFactory(true);
 //        HttpPostRequestDecoder httpDecoder = new HttpPostRequestDecoder(factory, fullHttpRequest);
 //        httpDecoder.setDiscardThreshold(0);
