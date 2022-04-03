@@ -1,20 +1,19 @@
 package com.kele.penetrate.service;
 
-import com.kele.penetrate.protocol.Handshake;
+import com.kele.penetrate.Start;
+import com.kele.penetrate.factory.Recognizer;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 @SuppressWarnings("unused")
+@Recognizer
 public class ServiceHandler extends SimpleChannelInboundHandler<Object>
 {
     //<editor-fold desc="读取通道消息">
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object msg)
     {
-        System.out.println("收到消息");
-        if(msg instanceof Handshake){
-            System.out.println("收到客户端握手协议"+((Handshake)msg));
-        }
+        Start.serviceEvents.notice(msg);
     }
     //</editor-fold>
 

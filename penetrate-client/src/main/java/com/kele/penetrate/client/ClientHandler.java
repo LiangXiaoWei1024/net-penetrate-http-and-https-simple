@@ -4,6 +4,7 @@ package com.kele.penetrate.client;
 import com.kele.penetrate.factory.Autowired;
 import com.kele.penetrate.factory.Recognizer;
 import com.kele.penetrate.protocol.Handshake;
+import com.kele.penetrate.protocol.Heartbeat;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,10 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg)
     {
-
+        if (msg instanceof Heartbeat)
+        {
+            connectHandler.send(msg);
+        }
     }
     //</editor-fold>
 

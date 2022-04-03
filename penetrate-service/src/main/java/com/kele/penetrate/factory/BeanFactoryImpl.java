@@ -60,8 +60,13 @@ public class BeanFactoryImpl
         }
     }
 
-    public <T> T getBean(Class<T> tClass)
+    public static <T> T getBean(Class<T> tClass)
     {
         return (T) beans.get(tClass.getName());
+    }
+
+    public static void setBean(Object o)
+    {
+        beans.put(o.getClass().getName(), o);
     }
 }

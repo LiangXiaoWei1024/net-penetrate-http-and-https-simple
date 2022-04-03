@@ -17,6 +17,8 @@ public class NettyServiceInit extends Thread
 {
     @Autowired
     private Config config;
+    @Autowired
+    private NettyServiceChannelInitializerHandler nettyServiceChannelInitializerHandler;
 
     @Override
     public void run()
@@ -28,7 +30,7 @@ public class NettyServiceInit extends Thread
             ServerBootstrap server = new ServerBootstrap();
             server.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(new NettyServiceChannelInitializerHandler());
+                    .childHandler(nettyServiceChannelInitializerHandler);
 
             ChannelFuture future = server.bind(config.getServicePort()).sync();
             log.info("服务器启动成功,端口：" + config.getServicePort());

@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * 握手
+ */
 @Data
 public class Handshake implements Serializable
 {

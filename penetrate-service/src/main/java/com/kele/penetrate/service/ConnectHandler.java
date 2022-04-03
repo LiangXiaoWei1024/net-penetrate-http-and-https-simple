@@ -22,9 +22,8 @@ public class ConnectHandler
         InetSocketAddress insect = (InetSocketAddress) ctx.channel().remoteAddress();
     }
 
-
     //<editor-fold desc="发送消息">
-    public void reply(String msg)
+    public void reply(Object msg)
     {
         ctx.writeAndFlush(msg);
     }

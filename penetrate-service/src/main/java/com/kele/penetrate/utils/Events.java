@@ -1,6 +1,8 @@
 package com.kele.penetrate.utils;
 
+import com.kele.penetrate.factory.BeanFactoryImpl;
 import com.kele.penetrate.factory.Register;
+import com.kele.penetrate.service.pipeline.HandshakePipeline;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.ParameterizedType;
@@ -65,7 +67,12 @@ public class Events<T>
 
                 try
                 {
-                    Func<T, Boolean> func = (Func<T, Boolean>) clazz.newInstance();
+                    Func<T, Boolean> func = (Func<T, Boolean>) BeanFactoryImpl.getBean(clazz);
+                    if (func == null)
+                    {
+                        func = (Func<T, Boolean>) clazz.newInstance();
+                    }
+                    BeanFactoryImpl.setBean(func);
                     events.add(func);
                     log.info(name + "  " + clazz.getName() + "自动注册成功");
                 }
