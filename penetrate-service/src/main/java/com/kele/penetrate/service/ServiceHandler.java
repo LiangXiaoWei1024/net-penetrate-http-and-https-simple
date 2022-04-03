@@ -1,7 +1,9 @@
 package com.kele.penetrate.service;
 
 import com.kele.penetrate.Start;
+import com.kele.penetrate.factory.Autowired;
 import com.kele.penetrate.factory.Recognizer;
+import com.kele.penetrate.pojo.ServicePipeline;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -9,11 +11,15 @@ import io.netty.channel.SimpleChannelInboundHandler;
 @Recognizer
 public class ServiceHandler extends SimpleChannelInboundHandler<Object>
 {
+    @Autowired
+    private ConnectManager connectManager;
+
+
     //<editor-fold desc="读取通道消息">
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object msg)
     {
-        Start.serviceEvents.notice(msg);
+        Start.serviceEvents.notice(new ServicePipeline(msg,channelHandlerContext) );
     }
     //</editor-fold>
 
@@ -28,6 +34,7 @@ public class ServiceHandler extends SimpleChannelInboundHandler<Object>
     @Override
     public void channelInactive(ChannelHandlerContext ctx)
     {
+        connectManager.remove(ctx);
     }
     //</editor-fold>
 
@@ -38,6 +45,5 @@ public class ServiceHandler extends SimpleChannelInboundHandler<Object>
         ctx.flush();
         ctx.close();
     }
-
     //</editor-fold>
 }

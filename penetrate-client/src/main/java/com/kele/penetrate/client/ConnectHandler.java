@@ -68,7 +68,6 @@ public class ConnectHandler
     {
         if (this.channel == null || !this.channel.isActive())
             return;
-        System.out.println("发送消息");
         this.channel.writeAndFlush(msg);
     }
     //</editor-fold>

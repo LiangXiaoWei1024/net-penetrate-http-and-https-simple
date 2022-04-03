@@ -24,6 +24,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
     {
         if (msg instanceof Heartbeat)
         {
+            System.out.println("收到心跳包");
             connectHandler.send(msg);
         }
     }
@@ -38,6 +39,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
         Handshake handshake = new Handshake();
         handshake.setMappingIp("127.0.0.1");
         handshake.setPort(80);
+        handshake.setMappingName("aaa");
         connectHandler.send(handshake);
         //</editor-fold>
     }

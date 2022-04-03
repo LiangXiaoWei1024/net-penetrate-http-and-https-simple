@@ -4,6 +4,7 @@ import com.kele.penetrate.factory.Autowired;
 import com.kele.penetrate.factory.BeanFactoryImpl;
 import com.kele.penetrate.factory.Recognizer;
 import com.kele.penetrate.pojo.PipelineTransmission;
+import com.kele.penetrate.pojo.ServicePipeline;
 import com.kele.penetrate.protocol.Heartbeat;
 import com.kele.penetrate.receiver.http.NettyHttpService;
 import com.kele.penetrate.receiver.https.NettyHttpsService;
@@ -23,7 +24,7 @@ public class Start
     private static final BeanFactoryImpl beanFactory = new BeanFactoryImpl();
     public static final Events<PipelineTransmission> httpEvents = new Events("HTTP", PipelineTransmission.class, "com.kele.penetrate.receiver.pipeline.http");
     public static final Events<PipelineTransmission> httpsEvents = new Events("HTTPS", PipelineTransmission.class, "com.kele.penetrate.receiver.pipeline.https");
-    public static final Events<Object> serviceEvents = new Events("Service", Object.class, "com.kele.penetrate.service.pipeline");
+    public static final Events<ServicePipeline> serviceEvents = new Events("Service", ServicePipeline.class, "com.kele.penetrate.service.pipeline");
 
     @Autowired
     private NettyHttpService nettyHttpService;
@@ -41,7 +42,7 @@ public class Start
         start.nettyHttpService.start();
         start.nettyHttpsService.start();
         start.nettyServiceInit.start();
-
+        start.heartbeat();
     }
 
     public void heartbeat()
@@ -53,8 +54,7 @@ public class Start
             @SneakyThrows
             public void run()
             {
-                Heartbeat heartbeat = new Heartbeat();
-                connectManager.replyAll(heartbeat);
+                connectManager.replyAll(new Heartbeat());
             }
         }, 1000 * 10, 1000 * 10);
         //</editor-fold>

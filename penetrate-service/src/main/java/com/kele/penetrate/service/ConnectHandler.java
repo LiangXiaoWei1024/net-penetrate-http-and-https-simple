@@ -1,26 +1,21 @@
 package com.kele.penetrate.service;
 
 import io.netty.channel.ChannelHandlerContext;
+import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.net.InetSocketAddress;
 
 @Slf4j
 @SuppressWarnings("unused")
 @Data
+@Builder
 public class ConnectHandler
 {
-    private final ChannelHandlerContext ctx;
+    private ChannelHandlerContext ctx;
     private String mappingName;
     private String mappingIp;
-    private String port;
-
-    public ConnectHandler(ChannelHandlerContext ctx)
-    {
-        this.ctx = ctx;
-        InetSocketAddress insect = (InetSocketAddress) ctx.channel().remoteAddress();
-    }
+    private int port;
 
     //<editor-fold desc="发送消息">
     public void reply(Object msg)
@@ -29,4 +24,13 @@ public class ConnectHandler
     }
     //</editor-fold>
 
+    @Override
+    public String toString()
+    {
+        return "ConnectHandler{" +
+                "mappingName='" + mappingName + '\'' +
+                ", mappingIp='" + mappingIp + '\'' +
+                ", port=" + port +
+                '}';
+    }
 }
