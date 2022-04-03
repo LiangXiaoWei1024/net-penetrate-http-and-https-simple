@@ -13,11 +13,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class Events<T>
 {
     private final ConcurrentLinkedQueue<Func<T, Boolean>> events = new ConcurrentLinkedQueue<>();
-    private static List<Class<?>> classesByPackageName;
 
     public Events(String name, Class<T> t, String registerPath)
     {
-        classesByPackageName = ScanPackage.getClassesByPackageName(registerPath);
+        List<Class<?>> classesByPackageName = ScanPackage.getClassesByPackageName(registerPath);
         for (Class<?> clazz : classesByPackageName)
         {
             boolean isSimilar = false;
