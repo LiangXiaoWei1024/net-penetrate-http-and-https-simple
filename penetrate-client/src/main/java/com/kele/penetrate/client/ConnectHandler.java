@@ -52,7 +52,6 @@ public class ConnectHandler
         {
             if (futureListener.isSuccess())
             {
-                this.channel = futureListener.channel();
                 log.info("与服务器连接成功：" + config.getServiceConnectInfo().getIp() + ":" + config.getServiceConnectInfo().getPort());
             }
             else
@@ -69,7 +68,7 @@ public class ConnectHandler
     {
         if (this.channel == null || !this.channel.isActive())
             return;
-
+        System.out.println("发送消息");
         this.channel.writeAndFlush(msg);
     }
     //</editor-fold>

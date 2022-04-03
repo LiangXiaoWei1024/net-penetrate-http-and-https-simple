@@ -9,5 +9,5 @@ public class Handshake implements Serializable
 {
     private String mappingName;
     private String mappingIp;
-    private String port;
+    private Integer port;
 }

@@ -3,6 +3,7 @@ package com.kele.penetrate.client;
 
 import com.kele.penetrate.factory.Autowired;
 import com.kele.penetrate.factory.Recognizer;
+import com.kele.penetrate.protocol.Handshake;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,13 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
     @Override
     public void channelActive(ChannelHandlerContext ctx)
     {
-
+        connectHandler.setChannel(ctx.channel());
+        //<editor-fold desc="通道激活与客户端握手，告知转发信息">
+        Handshake handshake = new Handshake();
+        handshake.setMappingIp("127.0.0.1");
+        handshake.setPort(80);
+        connectHandler.send(handshake);
+        //</editor-fold>
     }
     //</editor-fold>
 
