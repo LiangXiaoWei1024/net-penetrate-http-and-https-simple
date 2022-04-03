@@ -72,14 +72,7 @@ public class AnalysisRequest
     //<editor-fold desc="获取请求路径">
     public static String getRequestUrl(FullHttpRequest fullHttpRequest)
     {
-        String uri = fullHttpRequest.uri();
-        String[] urlArr = uri.split("/");
-        uri = "";
-        for (int i = 2; i < urlArr.length; i++)
-        {
-            uri += "/" + urlArr[i];
-        }
-        return uri;
+        return fullHttpRequest.uri();
     }
     //</editor-fold>
 }
