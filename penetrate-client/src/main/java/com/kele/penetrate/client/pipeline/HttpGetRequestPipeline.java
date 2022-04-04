@@ -7,6 +7,7 @@ import com.kele.penetrate.factory.Register;
 import com.kele.penetrate.protocol.HttpGetRequest;
 import com.kele.penetrate.protocol.HttpGetRequestResult;
 import com.kele.penetrate.utils.Func;
+import com.kele.penetrate.utils.HttpUtils;
 import kotlin.Pair;
 import okhttp3.*;
 
@@ -31,6 +32,12 @@ public class HttpGetRequestPipeline implements Func<Object, Boolean>
         {
             HttpGetRequest httpGetRequest = (HttpGetRequest) msg;
             System.out.println("收到httpGET->"+httpGetRequest);
+
+            HttpUtils httpUtils = new HttpUtils();
+            httpUtils.get(httpGetRequest.getRequestUrl(),httpGetRequest.getHeaders(),(o)->{
+
+            });
+
             OkHttpClient client = new OkHttpClient();
             Request.Builder builder = new Request.Builder();
             builder.url(httpGetRequest.getRequestUrl());
