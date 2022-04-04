@@ -39,9 +39,9 @@ public class AnalysisRequest
     //</editor-fold>
 
     //<editor-fold desc="获取请求头信息">
-    public static Map<String, Object> getRequestHeaders(FullHttpRequest fullHttpRequest)
+    public static Map<String, String> getRequestHeaders(FullHttpRequest fullHttpRequest)
     {
-        Map<String, Object> headers = new HashMap<>();
+        Map<String, String> headers = new HashMap<>();
         Iterator<Map.Entry<String, String>> entryIterator = fullHttpRequest.headers().iteratorAsString();
         while (entryIterator.hasNext())
         {

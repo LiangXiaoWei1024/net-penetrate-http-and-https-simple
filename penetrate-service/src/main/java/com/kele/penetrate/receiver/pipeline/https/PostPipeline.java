@@ -28,7 +28,7 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
         if (AnalysisHttpsRequest.getRequestType(fullHttpRequest) == RequestType.POST)
         {
             System.out.println("进入http post");
-            Map<String, Object> requestHeaders = AnalysisHttpsRequest.getRequestHeaders(fullHttpRequest);
+            Map<String, String> requestHeaders = AnalysisHttpsRequest.getRequestHeaders(fullHttpRequest);
             String homeUser = AnalysisHttpsRequest.getHomeUser(fullHttpRequest);
             String contentType = fullHttpRequest.headers().get("Content-Type");
             //<editor-fold desc="处理 x-www-form-urlencoded">
@@ -49,24 +49,23 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
             }
             //</editor-fold>
 
-            //<editor-fold desc="处理 x-www-form-urlencoded">
+            //<editor-fold desc="处理 multipart/form-data">
             if (contentType.contains(RequestContentType.MULTIPART_FORM_DATA.getCode()))
             {
-
-                        HttpDataFactory factory = new DefaultHttpDataFactory(true);
-        HttpPostRequestDecoder httpDecoder = new HttpPostRequestDecoder(factory, fullHttpRequest);
-        httpDecoder.setDiscardThreshold(0);
-        final HttpContent chunk = fullHttpRequest;
-        httpDecoder.offer(chunk);
-        if (chunk instanceof LastHttpContent)
-        {
-            List<InterfaceHttpData> interfaceHttpDataList = httpDecoder.getBodyHttpDatas();
-            for (InterfaceHttpData data : interfaceHttpDataList)
-            {
-                if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload)
+                HttpDataFactory factory = new DefaultHttpDataFactory(true);
+                HttpPostRequestDecoder httpDecoder = new HttpPostRequestDecoder(factory, fullHttpRequest);
+                httpDecoder.setDiscardThreshold(0);
+                final HttpContent chunk = fullHttpRequest;
+                httpDecoder.offer(chunk);
+                if (chunk instanceof LastHttpContent)
                 {
-                    FileUpload fileUpload = (FileUpload) data;
-                    System.out.println(fileUpload.getFilename());
+                    List<InterfaceHttpData> interfaceHttpDataList = httpDecoder.getBodyHttpDatas();
+                    for (InterfaceHttpData data : interfaceHttpDataList)
+                    {
+                        if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload)
+                        {
+                            FileUpload fileUpload = (FileUpload) data;
+                            System.out.println(fileUpload.getFilename());
 //                    try (FileOutputStream fileOutputStream = new FileOutputStream("netty_pic.png"))
 //                    {
 //                        fileOutputStream.write(fileUpload.get());
@@ -76,16 +75,16 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
 //                    {
 //                        e.printStackTrace();
 //                    }
-                    System.out.println();
+                            System.out.println();
+                        }
+                        //如果数据类型为参数类型，则保存到body对象中
+                        if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute)
+                        {
+                            Attribute attribute = (Attribute) data;
+                            System.out.println(attribute);
+                        }
+                    }
                 }
-                //如果数据类型为参数类型，则保存到body对象中
-                if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute)
-                {
-                    Attribute attribute = (Attribute) data;
-                    System.out.println(attribute);
-                }
-            }
-        }
 
             }
             //</editor-fold>

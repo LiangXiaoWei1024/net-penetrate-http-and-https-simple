@@ -1,8 +1,14 @@
 package com.kele.penetrate.receiver.pipeline.http;
 
 import com.kele.penetrate.enumeration.RequestType;
+import com.kele.penetrate.factory.Autowired;
+import com.kele.penetrate.factory.Recognizer;
 import com.kele.penetrate.factory.Register;
 import com.kele.penetrate.pojo.PipelineTransmission;
+import com.kele.penetrate.protocol.HttpGetRequest;
+import com.kele.penetrate.service.ConnectHandler;
+import com.kele.penetrate.service.ConnectManager;
+import com.kele.penetrate.utils.UUIDUtils;
 import com.kele.penetrate.utils.http.AnalysisHttpRequest;
 import com.kele.penetrate.utils.Func;
 import com.kele.penetrate.utils.PageTemplate;
@@ -16,8 +22,14 @@ import java.util.Map;
 @Register
 @SuppressWarnings("unused")
 @Slf4j
+@Recognizer
 public class GetPipeline implements Func<PipelineTransmission, Boolean>
 {
+
+    @Autowired
+    private ConnectManager connectManager;
+    @Autowired
+    private UUIDUtils uuidUtils;
 
     @Override
     public Boolean func(PipelineTransmission pipelineTransmission)
@@ -36,14 +48,25 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
             }
             else
             {
-                Map<String, Object> requestHeaders = AnalysisHttpRequest.getRequestHeaders(fullHttpRequest);
-                String homeUser = AnalysisHttpRequest.getHomeUser(fullHttpRequest);
-                if(homeUser == null){
+                Map<String, String> requestHeaders = AnalysisHttpRequest.getRequestHeaders(fullHttpRequest);
+                String mappingName = AnalysisHttpRequest.getHomeUser(fullHttpRequest);
+                if (mappingName == null || !connectManager.isExist(mappingName))
+                {
                     channelHandlerContext.writeAndFlush(PageTemplate.getNotFoundTemplate()).addListener(ChannelFutureListener.CLOSE);
                 }
-                String requestUrl = AnalysisHttpRequest.getRequestUrl(fullHttpRequest);
-                //转发到客户端
+                else
+                {
+                    String requestUrl = AnalysisHttpRequest.getRequestUrl(fullHttpRequest);
+                    ConnectHandler connectHandler = connectManager.get(mappingName);
+                    requestUrl = "http://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
 
+                    HttpGetRequest httpGetRequest = new HttpGetRequest();
+                    httpGetRequest.setRequestId(uuidUtils.getUUID());
+                    httpGetRequest.setRequestUrl(requestUrl);
+                    httpGetRequest.setHeaders(requestHeaders);
+                    connectManager.recordMsg(httpGetRequest, channelHandlerContext);
+                    connectHandler.reply(httpGetRequest);
+                }
             }
 
             return true;

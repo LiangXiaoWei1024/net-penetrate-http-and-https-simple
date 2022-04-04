@@ -36,8 +36,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
         //<editor-fold desc="通道激活与客户端握手，告知转发信息">
         Handshake handshake = new Handshake();
         handshake.setMappingIp("127.0.0.1");
-        handshake.setPort(80);
-        handshake.setMappingName("aaa");
+        handshake.setPort(20001);
+        handshake.setMappingName("test");
         connectHandler.send(handshake);
         //</editor-fold>
     }
