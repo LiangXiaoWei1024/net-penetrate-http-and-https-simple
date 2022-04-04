@@ -2,7 +2,8 @@ package com.kele.penetrate.utils;
 
 import com.kele.penetrate.factory.BeanFactoryImpl;
 import com.kele.penetrate.factory.Register;
-import com.kele.penetrate.service.pipeline.HandshakePipeline;
+import lombok.Builder;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.ParameterizedType;
@@ -14,7 +15,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Slf4j
 public class Events<T>
 {
-    private final ConcurrentLinkedQueue<Func<T, Boolean>> events = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<OrderFunc<T>> events = new ConcurrentLinkedQueue<>();
 
     public Events(String name, Class<T> t, String registerPath)
     {
@@ -71,9 +72,9 @@ public class Events<T>
                     if (func == null)
                     {
                         func = (Func<T, Boolean>) clazz.newInstance();
+                        BeanFactoryImpl.setBean(func);
                     }
-                    BeanFactoryImpl.setBean(func);
-                    events.add(func);
+                    add(new OrderFunc.OrderFuncBuilder().func(func).order(register.value()).build());
                     log.info(name + "  " + clazz.getName() + "自动注册成功");
                 }
                 catch (Exception ex)
@@ -84,9 +85,38 @@ public class Events<T>
         }
     }
 
+    private synchronized void add(OrderFunc orderFunc)
+    {
+        events.add(orderFunc);
+
+        Object[] objects = events.toArray();
+        for (int i = 0; i < objects.length - 1; i++)
+        {
+            for (int j = 0; j < objects.length - 1 - i; j++)
+            {
+                if ((((OrderFunc)objects[j]).getOrder()) < ((OrderFunc)objects[j+1]).getOrder())
+                {
+                    Object temp = objects[j];
+                    objects[j] = objects[j + 1];
+                    objects[j + 1] = temp;
+                }
+            }
+        }
+        events.clear();
+        for (Object order : objects)
+        {
+            events.add((OrderFunc<T>)order);
+        }
+    }
+
     public synchronized void add(Func<T, Boolean> func)
     {
-        events.add(func);
+        events.add(new OrderFunc.OrderFuncBuilder().func(func).order(0).build());
+    }
+
+    public synchronized void add(Func<T, Boolean> func, int order)
+    {
+        events.add(new OrderFunc.OrderFuncBuilder().func(func).order(order).build());
     }
 
     public synchronized void remove(Func<T, Boolean> func)
@@ -96,9 +126,9 @@ public class Events<T>
 
     public synchronized void notice(T t)
     {
-        for (Func<T, Boolean> func : events)
+        for (OrderFunc orderFunc : events)
         {
-            if (func.func(t))
+            if (orderFunc.getFunc().func(t))
             {
                 break;
             }
