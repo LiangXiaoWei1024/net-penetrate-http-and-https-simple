@@ -43,6 +43,7 @@ public class Start
         start.nettyHttpsService.start();
         start.nettyServiceInit.start();
         start.heartbeat();
+        start.clearUntreatedMsg();
     }
 
     public void heartbeat()
@@ -58,5 +59,18 @@ public class Start
             }
         }, 1000 * 10, 1000 * 10);
         //</editor-fold>
+    }
+
+    public void clearUntreatedMsg()
+    {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask()
+        {
+            @SneakyThrows
+            public void run()
+            {
+                connectManager.clearUntreatedMsg();
+            }
+        }, 1000 * 60, 1000 * 60);
     }
 }
