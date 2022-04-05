@@ -44,7 +44,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
         handshake.setVersion(config.getVersion());
         handshake.setMappingIp(config.getDefaultInfo().getForwardIp());
         handshake.setPort(config.getDefaultInfo().getPort());
-        handshake.setMappingName(uuidUtils.generateShortUuid());
+//        handshake.setMappingName(uuidUtils.generateShortUuid());
+        handshake.setMappingName("test");
         connectHandler.send(handshake);
         //</editor-fold>
     }

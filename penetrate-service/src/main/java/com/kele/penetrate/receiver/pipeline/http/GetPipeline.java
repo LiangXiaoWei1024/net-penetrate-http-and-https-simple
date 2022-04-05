@@ -58,14 +58,23 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
                 {
                     String requestUrl = AnalysisHttpGetRequest.getRequestUrl(fullHttpRequest);
                     ConnectHandler connectHandler = connectManager.get(mappingName);
-                    requestUrl = "http://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
+                    if (connectHandler != null)
+                    {
+                        requestUrl = "http://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
 
-                    HttpGetRequest httpGetRequest = new HttpGetRequest();
-                    httpGetRequest.setRequestId(uuidUtils.getUUID());
-                    httpGetRequest.setRequestUrl(requestUrl);
-                    httpGetRequest.setHeaders(requestHeaders);
-                    connectManager.recordMsg(httpGetRequest, channelHandlerContext);
-                    connectHandler.reply(httpGetRequest);
+                        HttpGetRequest httpGetRequest = new HttpGetRequest();
+                        httpGetRequest.setRequestId(uuidUtils.getUUID());
+                        httpGetRequest.setRequestUrl(requestUrl);
+                        httpGetRequest.setHeaders(requestHeaders);
+                        connectManager.recordMsg(httpGetRequest, channelHandlerContext);
+                        connectHandler.reply(httpGetRequest);
+                    }
+                    else
+                    {
+                        FullHttpResponse serviceUnavailableTemplate = PageTemplate.getNotFoundTemplate();
+                        channelHandlerContext.writeAndFlush(serviceUnavailableTemplate).addListener(ChannelFutureListener.CLOSE);
+                    }
+
                 }
             }
 

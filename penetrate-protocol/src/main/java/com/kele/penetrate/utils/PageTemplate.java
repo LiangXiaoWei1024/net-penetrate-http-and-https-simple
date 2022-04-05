@@ -29,6 +29,12 @@ public class PageTemplate
             "<hr><center>kele</center>\n" +
             "</body></html>";
 
+    private static final String unableProcessTemplate = "<html><head><title>无法处理的请求(可以联系管理员反馈一下问题，以便下个版本更新)</title></head>\n" +
+            "<body bgcolor=\"white\">\n" +
+            "<center><h1>无法处理的请求(可以联系管理员反馈一下问题，以便下个版本更新)</h1></center>\n" +
+            "<hr><center>kele</center>\n" +
+            "</body></html>";
+
 
     public static FullHttpResponse getAccessDeniedTemplate()
     {
@@ -53,5 +59,14 @@ public class PageTemplate
         response.headers().set("Content_Length", response.content().readableBytes());
         return response;
     }
+
+    public static FullHttpResponse getUnableProcess()
+    {
+        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.PRECONDITION_FAILED, Unpooled.copiedBuffer(unableProcessTemplate.getBytes(StandardCharsets.UTF_8)));
+        response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.getCode());
+        response.headers().set("Content_Length", response.content().readableBytes());
+        return response;
+    }
+
 
 }

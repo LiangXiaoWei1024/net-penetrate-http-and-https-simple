@@ -8,5 +8,6 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class HttpPostRequest extends BaseRequest
 {
-    private Map<String,String> headers;
+    private Map<String, String> headers;
+    private String requestUrl;
 }

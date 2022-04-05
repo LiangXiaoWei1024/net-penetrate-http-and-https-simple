@@ -52,6 +52,19 @@ public class HttpUtils
     }
     //</editor-fold>
 
+    //<editor-fold desc="POST">
+    public void postForm(String url, Map<String, String> headers, Map<String, String> formBody, Action1<RequestResult> action1)
+    {
+        FormBody.Builder formBodyBuilder = new FormBody.Builder();
+        formBody.forEach(formBodyBuilder::add);
+        Request.Builder requestBuilder = new Request.Builder();
+        requestBuilder.url(url);
+        requestBuilder.post(formBodyBuilder.build());
+        headers.forEach(requestBuilder::addHeader);
+        execute(requestBuilder.build(), action1);
+    }
+    //</editor-fold>
+
     //<editor-fold desc="执行">
     private void execute(Request request, Action1<RequestResult> action1)
     {
