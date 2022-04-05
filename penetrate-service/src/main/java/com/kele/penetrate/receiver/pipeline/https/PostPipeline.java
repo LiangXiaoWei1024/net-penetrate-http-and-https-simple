@@ -5,7 +5,7 @@ import com.kele.penetrate.enumeration.RequestType;
 import com.kele.penetrate.factory.Register;
 import com.kele.penetrate.pojo.PipelineTransmission;
 import com.kele.penetrate.utils.Func;
-import com.kele.penetrate.utils.http.AnalysisHttpsRequest;
+import com.kele.penetrate.utils.http.AnalysisHttpPostRequest;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpContent;
@@ -25,11 +25,11 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
     {
         FullHttpRequest fullHttpRequest = pipelineTransmission.getFullHttpRequest();
         ChannelHandlerContext channelHandlerContext = pipelineTransmission.getChannelHandlerContext();
-        if (AnalysisHttpsRequest.getRequestType(fullHttpRequest) == RequestType.POST)
+        if (AnalysisHttpPostRequest.getRequestType(fullHttpRequest) == RequestType.POST)
         {
             System.out.println("进入http post");
-            Map<String, String> requestHeaders = AnalysisHttpsRequest.getRequestHeaders(fullHttpRequest);
-            String homeUser = AnalysisHttpsRequest.getHomeUser(fullHttpRequest);
+            Map<String, String> requestHeaders = AnalysisHttpPostRequest.getRequestHeaders(fullHttpRequest);
+            String homeUser = AnalysisHttpPostRequest.getHomeUser(fullHttpRequest);
             String contentType = fullHttpRequest.headers().get("Content-Type");
             //<editor-fold desc="处理 x-www-form-urlencoded">
             if (contentType.contains(RequestContentType.X_WWW_FORM_URLENCODED.getCode()))

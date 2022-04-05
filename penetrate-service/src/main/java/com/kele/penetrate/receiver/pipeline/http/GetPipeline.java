@@ -9,7 +9,7 @@ import com.kele.penetrate.protocol.HttpGetRequest;
 import com.kele.penetrate.service.ConnectHandler;
 import com.kele.penetrate.service.ConnectManager;
 import com.kele.penetrate.utils.UUIDUtils;
-import com.kele.penetrate.utils.http.AnalysisHttpRequest;
+import com.kele.penetrate.utils.http.AnalysisHttpGetRequest;
 import com.kele.penetrate.utils.Func;
 import com.kele.penetrate.utils.PageTemplate;
 import io.netty.channel.ChannelFutureListener;
@@ -37,7 +37,7 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
         FullHttpRequest fullHttpRequest = pipelineTransmission.getFullHttpRequest();
         ChannelHandlerContext channelHandlerContext = pipelineTransmission.getChannelHandlerContext();
 
-        if (AnalysisHttpRequest.getRequestType(fullHttpRequest) == RequestType.GET)
+        if (AnalysisHttpGetRequest.getRequestType(fullHttpRequest) == RequestType.GET)
         {
             HttpHeaders headers = fullHttpRequest.headers();
             String contentType = headers.get("Content-Type");
@@ -48,15 +48,15 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
             }
             else
             {
-                Map<String, String> requestHeaders = AnalysisHttpRequest.getRequestHeaders(fullHttpRequest);
-                String mappingName = AnalysisHttpRequest.getHomeUser(fullHttpRequest);
+                Map<String, String> requestHeaders = AnalysisHttpGetRequest.getRequestHeaders(fullHttpRequest);
+                String mappingName = AnalysisHttpGetRequest.getHomeUser(fullHttpRequest);
                 if (mappingName == null || !connectManager.isExist(mappingName))
                 {
                     channelHandlerContext.writeAndFlush(PageTemplate.getNotFoundTemplate()).addListener(ChannelFutureListener.CLOSE);
                 }
                 else
                 {
-                    String requestUrl = AnalysisHttpRequest.getRequestUrl(fullHttpRequest);
+                    String requestUrl = AnalysisHttpGetRequest.getRequestUrl(fullHttpRequest);
                     ConnectHandler connectHandler = connectManager.get(mappingName);
                     requestUrl = "http://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
 
