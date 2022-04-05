@@ -1,14 +1,15 @@
 package com.kele.penetrate.utils.http;
 
 
+import com.kele.penetrate.protocol.RequestFile;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.HttpContent;
-import io.netty.handler.codec.http.LastHttpContent;
 import io.netty.handler.codec.http.multipart.*;
 import io.netty.util.CharsetUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import java.util.Map;
  * 解析http POST请求
  */
 @SuppressWarnings("unused")
+@Slf4j
 public class AnalysisHttpPostRequest extends AnalysisRequest
 {
 
@@ -40,40 +42,56 @@ public class AnalysisHttpPostRequest extends AnalysisRequest
     //</editor-fold>
 
     //<editor-fold desc="获取请求体 multipart/form-data">
-    public static Map<String, String> getMultipartBody(FullHttpRequest fullHttpRequest)
+    public static List<RequestFile> getMultipartBodyFiles(FullHttpRequest fullHttpRequest)
+    {
+        List<RequestFile> body = new ArrayList<>();
+        HttpDataFactory factory = new DefaultHttpDataFactory(true);
+        HttpPostRequestDecoder httpDecoder = new HttpPostRequestDecoder(factory, fullHttpRequest);
+        httpDecoder.setDiscardThreshold(0);
+        httpDecoder.offer(fullHttpRequest);
+        List<InterfaceHttpData> interfaceHttpDataList = httpDecoder.getBodyHttpDatas();
+        for (InterfaceHttpData data : interfaceHttpDataList)
+        {
+            if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload)
+            {
+                FileUpload fileUpload = (FileUpload) data;
+                RequestFile requestFile = new RequestFile();
+                try
+                {
+                    requestFile.setFileByte(fileUpload.get());
+                    requestFile.setFileName(fileUpload.getFilename());
+                    requestFile.setName(fileUpload.getName());
+                }
+                catch (IOException e)
+                {
+                    log.error("获取文件异常", e);
+                }
+                body.add(requestFile);
+            }
+        }
+        return body;
+    }
+
+    public static Map<String, String> getMultipartBodyAttribute(FullHttpRequest fullHttpRequest)
     {
         Map<String, String> body = new HashMap<>();
         HttpDataFactory factory = new DefaultHttpDataFactory(true);
         HttpPostRequestDecoder httpDecoder = new HttpPostRequestDecoder(factory, fullHttpRequest);
         httpDecoder.setDiscardThreshold(0);
-        final HttpContent chunk = fullHttpRequest;
-        httpDecoder.offer(chunk);
-        if (chunk instanceof LastHttpContent)
+        httpDecoder.offer(fullHttpRequest);
+        List<InterfaceHttpData> interfaceHttpDataList = httpDecoder.getBodyHttpDatas();
+        for (InterfaceHttpData data : interfaceHttpDataList)
         {
-            List<InterfaceHttpData> interfaceHttpDataList = httpDecoder.getBodyHttpDatas();
-            for (InterfaceHttpData data : interfaceHttpDataList)
+            if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute)
             {
-                if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload)
+                Attribute attribute = (Attribute) data;
+                try
                 {
-                    FileUpload fileUpload = (FileUpload) data;
-                    String filename = fileUpload.getFilename();
-                    String name = fileUpload.getName();
-                    try
-                    {
-                        byte[] bytes = fileUpload.get();
-                        System.out.println(bytes.length);
-                    }
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    System.out.println(filename);
+                    body.put(attribute.getName(), attribute.getValue());
                 }
-                //如果数据类型为参数类型，则保存到body对象中
-                if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute)
+                catch (IOException e)
                 {
-                    Attribute attribute = (Attribute) data;
-                    System.out.println(attribute);
+                    log.error("获取亲求属性错误", e);
                 }
             }
         }

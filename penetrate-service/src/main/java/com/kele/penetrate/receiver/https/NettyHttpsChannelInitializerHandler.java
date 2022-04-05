@@ -26,6 +26,6 @@ public class NettyHttpsChannelInitializerHandler extends ChannelInitializer<Sock
         // 解决大码流的问题，ChunkedWriteHandler：向客户端发送HTML5文件
         socketChannel.pipeline().addLast(new ChunkedWriteHandler());
         // 自定义处理handler
-//        socketChannel.pipeline().addLast(new NettyHttpServerHandler());
+        socketChannel.pipeline().addLast(new NettyHttpsServerHandler());
     }
 }

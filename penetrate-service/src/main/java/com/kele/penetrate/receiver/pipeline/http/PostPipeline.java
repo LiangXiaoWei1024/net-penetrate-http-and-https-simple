@@ -4,11 +4,13 @@ import com.kele.penetrate.enumeration.RequestContentType;
 import com.kele.penetrate.enumeration.RequestType;
 import com.kele.penetrate.factory.annotation.Register;
 import com.kele.penetrate.pojo.PipelineTransmission;
+import com.kele.penetrate.protocol.RequestFile;
 import com.kele.penetrate.utils.http.AnalysisHttpPostRequest;
 import com.kele.penetrate.utils.Func;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
 
+import java.util.List;
 import java.util.Map;
 
 @Register
@@ -25,21 +27,21 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
         {
             System.out.println("进入http post");
             Map<String, String> requestHeaders = AnalysisHttpPostRequest.getRequestHeaders(fullHttpRequest);
-            String homeUser = AnalysisHttpPostRequest.getHomeUser(fullHttpRequest);
+            String mappingName = AnalysisHttpPostRequest.getHomeUser(fullHttpRequest);
             String contentType = fullHttpRequest.headers().get("Content-Type");
             System.out.println(contentType);
             //<editor-fold desc="处理 x-www-form-urlencoded">
             if (contentType.contains(RequestContentType.X_WWW_FORM_URLENCODED.getCode()))
             {
                 Map<String, String> formBody = AnalysisHttpPostRequest.getFormBody(fullHttpRequest);
-                System.out.println(formBody);
             }
             //</editor-fold>
 
             //<editor-fold desc="处理 multipart/form-data">
             else if (contentType.contains(RequestContentType.MULTIPART_FORM_DATA.getCode()))
             {
-                Map<String, String> multipartBody = AnalysisHttpPostRequest.getMultipartBody(fullHttpRequest);
+                Map<String, String> multipartBody = AnalysisHttpPostRequest.getMultipartBodyAttribute(fullHttpRequest);
+                List<RequestFile> multipartBodyFiles = AnalysisHttpPostRequest.getMultipartBodyFiles(fullHttpRequest);
 
             }
             //</editor-fold>
