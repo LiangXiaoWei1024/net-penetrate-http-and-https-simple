@@ -5,7 +5,6 @@ import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
 import com.kele.penetrate.protocol.HttpPostRequestMultipart;
-import com.kele.penetrate.protocol.HttpPostRequestText;
 import com.kele.penetrate.utils.Func;
 import com.kele.penetrate.utils.HttpUtils;
 
@@ -25,11 +24,11 @@ public class HttpPostRequestMultipartPipeline implements Func<Object, Boolean>
         if (msg instanceof HttpPostRequestMultipart)
         {
             HttpPostRequestMultipart httpPostRequestMultipart = (HttpPostRequestMultipart) msg;
-//            httpUtils.postText(httpPostRequestText.getRequestUrl(), httpPostRequestText.getHeaders(),httpPostRequestText.getDataText(), requestResult ->
-//            {
-//                requestResult.setRequestId(httpPostRequestText.getRequestId());
-//                connectHandler.send(requestResult);
-//            });
+            httpUtils.postMultipart(httpPostRequestMultipart.getRequestUrl(), httpPostRequestMultipart.getHeaders(), httpPostRequestMultipart.getBodyMap(), httpPostRequestMultipart.getBodyFile(), requestResult ->
+            {
+                requestResult.setRequestId(httpPostRequestMultipart.getRequestId());
+                connectHandler.send(requestResult);
+            });
             return true;
         }
         return false;

@@ -76,14 +76,25 @@ public class HttpUtils
         execute(requestBuilder.build(), action1);
     }
 
-    public void postMultipart(String url, Map<String, String> headers, Map<String,String> bodyText, List<RequestFile> bodyFiles, Action1<RequestResult> action1)
+    public void postMultipart(String url, Map<String, String> headers, Map<String, String> bodyMap, List<RequestFile> bodyFiles, Action1<RequestResult> action1)
     {
-//        RequestBody body = RequestBody.create(text, MediaType.parse(headers.get("Content-Type")));
-//        Request.Builder requestBuilder = new Request.Builder();
-//        requestBuilder.url(url);
-//        requestBuilder.post(body);
-//        headers.forEach(requestBuilder::addHeader);
-//        execute(requestBuilder.build(), action1);
+        MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
+        multipartBodyBuilder.setType(MultipartBody.FORM);
+
+        if (bodyFiles != null)
+        {
+            for (RequestFile requestFile : bodyFiles)
+            {
+                multipartBodyBuilder.addFormDataPart(requestFile.getName(),requestFile.getFileName(),RequestBody.create(requestFile.getFileByte(),MediaType.parse("multipart/form-data")));
+            }
+        }
+        bodyMap.forEach(multipartBodyBuilder::addFormDataPart);
+
+        Request.Builder requestBuilder = new Request.Builder();
+        requestBuilder.url(url);
+        requestBuilder.post(multipartBodyBuilder.build());
+        headers.forEach(requestBuilder::addHeader);
+        execute(requestBuilder.build(), action1);
     }
 
 
