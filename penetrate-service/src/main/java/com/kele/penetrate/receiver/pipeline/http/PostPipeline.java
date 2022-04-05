@@ -7,6 +7,7 @@ import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
 import com.kele.penetrate.pojo.PipelineTransmission;
 import com.kele.penetrate.protocol.HttpPostRequestForm;
+import com.kele.penetrate.protocol.HttpPostRequestText;
 import com.kele.penetrate.protocol.RequestFile;
 import com.kele.penetrate.service.ConnectHandler;
 import com.kele.penetrate.service.ConnectManager;
@@ -47,7 +48,10 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
             String mappingName = AnalysisHttpPostRequest.getHomeUser(fullHttpRequest);
             String contentType = fullHttpRequest.headers().get("Content-Type");
             ConnectHandler connectHandler = connectManager.get(mappingName);
-            if(connectHandler != null){
+            String requestUrl = AnalysisHttpGetRequest.getRequestUrl(fullHttpRequest);
+            requestUrl = "http://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
+            if (connectHandler != null)
+            {
                 //<editor-fold desc="处理 x-www-form-urlencoded">
                 if (contentType.contains(RequestContentType.X_WWW_FORM_URLENCODED.getCode()))
                 {
@@ -55,8 +59,7 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
                     httpPostRequestForm.setRequestId(uuidUtils.getUUID());
                     httpPostRequestForm.setHeaders(requestHeaders);
                     httpPostRequestForm.setDataBody(AnalysisHttpPostRequest.getFormBody(fullHttpRequest));
-                    String requestUrl = AnalysisHttpGetRequest.getRequestUrl(fullHttpRequest);
-                    httpPostRequestForm.setRequestUrl("http://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl);
+                    httpPostRequestForm.setRequestUrl(requestUrl);
 
                     connectManager.recordMsg(httpPostRequestForm, channelHandlerContext);
                     connectHandler.reply(httpPostRequestForm);
@@ -68,7 +71,6 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
                 {
                     Map<String, String> multipartBody = AnalysisHttpPostRequest.getMultipartBodyAttribute(fullHttpRequest);
                     List<RequestFile> multipartBodyFiles = AnalysisHttpPostRequest.getMultipartBodyFiles(fullHttpRequest);
-
                 }
                 //</editor-fold>
 
@@ -79,7 +81,13 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
                         contentType.contains(RequestContentType.TEXT_PLAIN.getCode())
                 )
                 {
-                    String textBody = AnalysisHttpPostRequest.getTextBody(fullHttpRequest);
+                    HttpPostRequestText httpPostRequestText = new HttpPostRequestText();
+                    httpPostRequestText.setRequestId(uuidUtils.getUUID());
+                    httpPostRequestText.setRequestUrl(requestUrl);
+                    httpPostRequestText.setHeaders(requestHeaders);
+                    httpPostRequestText.setDataText(AnalysisHttpPostRequest.getTextBody(fullHttpRequest));
+                    connectManager.recordMsg(httpPostRequestText, channelHandlerContext);
+                    connectHandler.reply(httpPostRequestText);
                 }
                 //</editor-fold>
 
@@ -90,7 +98,9 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
                     channelHandlerContext.writeAndFlush(PageTemplate.getUnableProcess()).addListener(ChannelFutureListener.CLOSE);
                 }
                 //</editor-fold>
-            }else{
+            }
+            else
+            {
                 FullHttpResponse serviceUnavailableTemplate = PageTemplate.getNotFoundTemplate();
                 channelHandlerContext.writeAndFlush(serviceUnavailableTemplate).addListener(ChannelFutureListener.CLOSE);
             }

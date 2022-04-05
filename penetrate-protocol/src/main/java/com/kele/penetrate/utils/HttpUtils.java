@@ -63,6 +63,16 @@ public class HttpUtils
         headers.forEach(requestBuilder::addHeader);
         execute(requestBuilder.build(), action1);
     }
+
+    public void postText(String url, Map<String, String> headers, String text, Action1<RequestResult> action1)
+    {
+        RequestBody body = RequestBody.create(text, MediaType.parse(headers.get("Content-Type")));
+        Request.Builder requestBuilder = new Request.Builder();
+        requestBuilder.url(url);
+        requestBuilder.post(body);
+        headers.forEach(requestBuilder::addHeader);
+        execute(requestBuilder.build(), action1);
+    }
     //</editor-fold>
 
     //<editor-fold desc="执行">
