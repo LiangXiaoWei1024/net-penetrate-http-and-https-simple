@@ -57,8 +57,8 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
                 }
                 else
                 {
-                    String requestUrl = AnalysisHttpGetRequest.getRequestUrl(fullHttpRequest);
                     ConnectHandler connectHandler = connectManager.get(mappingName);
+                    String requestUrl = AnalysisHttpGetRequest.getRequestUrl(fullHttpRequest,connectHandler.isFilterMappingName());
                     if (connectHandler != null)
                     {
                         requestUrl = HypertextTransferProtocolType.HTTP.getCode() + "://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
@@ -75,7 +75,6 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
                         FullHttpResponse serviceUnavailableTemplate = PageTemplate.getNotFoundTemplate();
                         channelHandlerContext.writeAndFlush(serviceUnavailableTemplate).addListener(ChannelFutureListener.CLOSE);
                     }
-
                 }
             }
 

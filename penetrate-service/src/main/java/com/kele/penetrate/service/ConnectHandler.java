@@ -16,6 +16,7 @@ public class ConnectHandler
     private String mappingName;
     private String mappingIp;
     private int port;
+    private boolean isFilterMappingName;
 
     //<editor-fold desc="发送消息">
     public void reply(Object msg)

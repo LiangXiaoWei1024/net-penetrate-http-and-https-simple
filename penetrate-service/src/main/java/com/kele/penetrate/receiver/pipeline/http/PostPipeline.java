@@ -48,7 +48,7 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
             String mappingName = AnalysisHttpPostRequest.getHomeUser(fullHttpRequest);
             String contentType = fullHttpRequest.headers().get("Content-Type");
             ConnectHandler connectHandler = connectManager.get(mappingName);
-            String requestUrl = AnalysisHttpGetRequest.getRequestUrl(fullHttpRequest);
+            String requestUrl = AnalysisHttpGetRequest.getRequestUrl(fullHttpRequest, connectHandler.isFilterMappingName());
             requestUrl = HypertextTransferProtocolType.HTTP.getCode() + "://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
             if (connectHandler != null)
             {

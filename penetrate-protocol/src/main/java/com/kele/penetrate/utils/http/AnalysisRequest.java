@@ -68,9 +68,18 @@ public class AnalysisRequest
     //</editor-fold>
 
     //<editor-fold desc="获取请求路径">
-    public static String getRequestUrl(FullHttpRequest fullHttpRequest)
+    public static String getRequestUrl(FullHttpRequest fullHttpRequest,boolean isFilterMappingName)
     {
-        return fullHttpRequest.uri();
+        StringBuilder uri = new StringBuilder(fullHttpRequest.uri());
+        if(isFilterMappingName){
+            String[] split = uri.toString().split("/");
+            uri = new StringBuilder();
+            for (int i = 1; i < split.length; i++)
+            {
+                uri.append(split[i]);
+            }
+        }
+        return uri.toString();
     }
     //</editor-fold>
 }

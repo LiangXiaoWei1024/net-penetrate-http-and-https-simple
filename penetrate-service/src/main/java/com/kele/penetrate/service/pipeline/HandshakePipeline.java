@@ -57,11 +57,19 @@ public class HandshakePipeline implements Func<ServicePipeline, Boolean>
                     connectHandlerBuilder.mappingIp(handshake.getMappingIp());
                     connectHandlerBuilder.port(handshake.getPort());
                     connectHandlerBuilder.mappingName(handshake.getMappingName());
+                    connectHandlerBuilder.isFilterMappingName(handshake.isFilterMappingName());
                     ConnectHandler connectHandler = connectHandlerBuilder.build();
                     connectManager.add(connectHandler);
                     //映射成功
                     handshakeResult.setSuccess(true);
-                    handshakeResult.setAccessAddress("http(s)://xxx.xxx.xxx.com/" + handshake.getMappingName());
+                    if (!handshake.isFilterMappingName())
+                    {
+                        handshakeResult.setAccessAddress("http(s)://xxx.xxx.xxx.com/" + handshake.getMappingName());
+                    }
+                    else
+                    {
+                        handshakeResult.setAccessAddress("http(s)://xxx.xxx.xxx.com/");
+                    }
                 }
             }
             channelHandlerContext.writeAndFlush(handshakeResult);
