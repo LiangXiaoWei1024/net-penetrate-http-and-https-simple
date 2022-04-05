@@ -1,8 +1,8 @@
 package com.kele.penetrate;
 
-import com.kele.penetrate.factory.Autowired;
 import com.kele.penetrate.factory.BeanFactoryImpl;
-import com.kele.penetrate.factory.Recognizer;
+import com.kele.penetrate.factory.annotation.Autowired;
+import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.pojo.PipelineTransmission;
 import com.kele.penetrate.pojo.ServicePipeline;
 import com.kele.penetrate.protocol.Heartbeat;

@@ -1,8 +1,8 @@
 package com.kele.penetrate.service;
 
 import com.kele.penetrate.Start;
-import com.kele.penetrate.factory.Autowired;
-import com.kele.penetrate.factory.Recognizer;
+import com.kele.penetrate.factory.annotation.Autowired;
+import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.pojo.ServicePipeline;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;

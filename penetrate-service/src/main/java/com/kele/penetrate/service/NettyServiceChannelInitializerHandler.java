@@ -1,7 +1,7 @@
 package com.kele.penetrate.service;
 
-import com.kele.penetrate.factory.Autowired;
-import com.kele.penetrate.factory.Recognizer;
+import com.kele.penetrate.factory.annotation.Autowired;
+import com.kele.penetrate.factory.annotation.Recognizer;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;

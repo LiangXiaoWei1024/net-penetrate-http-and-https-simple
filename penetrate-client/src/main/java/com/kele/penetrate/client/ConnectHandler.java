@@ -1,8 +1,8 @@
 package com.kele.penetrate.client;
 
 import com.kele.penetrate.config.Config;
-import com.kele.penetrate.factory.Autowired;
-import com.kele.penetrate.factory.Recognizer;
+import com.kele.penetrate.factory.annotation.Autowired;
+import com.kele.penetrate.factory.annotation.Recognizer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;

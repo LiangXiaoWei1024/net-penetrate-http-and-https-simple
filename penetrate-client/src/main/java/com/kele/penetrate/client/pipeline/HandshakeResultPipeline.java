@@ -1,6 +1,6 @@
 package com.kele.penetrate.client.pipeline;
 
-import com.kele.penetrate.factory.Register;
+import com.kele.penetrate.factory.annotation.Register;
 import com.kele.penetrate.protocol.HandshakeResult;
 import com.kele.penetrate.utils.Func;
 import lombok.extern.slf4j.Slf4j;

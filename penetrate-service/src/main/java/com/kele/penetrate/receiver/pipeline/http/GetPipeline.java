@@ -1,9 +1,9 @@
 package com.kele.penetrate.receiver.pipeline.http;
 
 import com.kele.penetrate.enumeration.RequestType;
-import com.kele.penetrate.factory.Autowired;
-import com.kele.penetrate.factory.Recognizer;
-import com.kele.penetrate.factory.Register;
+import com.kele.penetrate.factory.annotation.Autowired;
+import com.kele.penetrate.factory.annotation.Recognizer;
+import com.kele.penetrate.factory.annotation.Register;
 import com.kele.penetrate.pojo.PipelineTransmission;
 import com.kele.penetrate.protocol.HttpGetRequest;
 import com.kele.penetrate.service.ConnectHandler;

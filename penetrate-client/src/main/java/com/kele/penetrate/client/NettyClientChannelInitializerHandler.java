@@ -1,8 +1,7 @@
 package com.kele.penetrate.client;
 
-import com.kele.penetrate.factory.Autowired;
-import com.kele.penetrate.factory.Recognizer;
-import io.netty.channel.ChannelHandler;
+import com.kele.penetrate.factory.annotation.Autowired;
+import com.kele.penetrate.factory.annotation.Recognizer;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
@@ -15,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
 @Recognizer
-
 public class NettyClientChannelInitializerHandler extends ChannelInitializer<NioSocketChannel>
 {
     @Autowired

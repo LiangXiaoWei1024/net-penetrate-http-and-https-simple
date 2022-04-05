@@ -1,6 +1,6 @@
 package com.kele.penetrate.receiver.pipeline.https;
 
-import com.kele.penetrate.factory.Register;
+import com.kele.penetrate.factory.annotation.Register;
 import com.kele.penetrate.pojo.PipelineTransmission;
 import com.kele.penetrate.utils.Func;
 

@@ -2,7 +2,7 @@ package com.kele.penetrate.receiver.pipeline.http;
 
 import com.kele.penetrate.enumeration.RequestContentType;
 import com.kele.penetrate.enumeration.RequestType;
-import com.kele.penetrate.factory.Register;
+import com.kele.penetrate.factory.annotation.Register;
 import com.kele.penetrate.pojo.PipelineTransmission;
 import com.kele.penetrate.utils.http.AnalysisHttpPostRequest;
 import com.kele.penetrate.utils.Func;

@@ -1,7 +1,7 @@
 package com.kele.penetrate.config;
 
 import com.alibaba.fastjson.JSONObject;
-import com.kele.penetrate.factory.Recognizer;
+import com.kele.penetrate.factory.annotation.Recognizer;
 import lombok.Data;
 
 import java.io.BufferedReader;

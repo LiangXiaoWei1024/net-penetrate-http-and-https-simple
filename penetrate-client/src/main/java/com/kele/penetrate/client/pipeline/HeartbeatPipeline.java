@@ -1,9 +1,9 @@
 package com.kele.penetrate.client.pipeline;
 
 import com.kele.penetrate.client.ConnectHandler;
-import com.kele.penetrate.factory.Autowired;
-import com.kele.penetrate.factory.Recognizer;
-import com.kele.penetrate.factory.Register;
+import com.kele.penetrate.factory.annotation.Autowired;
+import com.kele.penetrate.factory.annotation.Recognizer;
+import com.kele.penetrate.factory.annotation.Register;
 import com.kele.penetrate.protocol.Heartbeat;
 import com.kele.penetrate.utils.Func;
 import lombok.extern.slf4j.Slf4j;
