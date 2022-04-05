@@ -13,4 +13,8 @@ public class DefaultInfo
      * 默认转发ip
      */
     private String forwardIp;
+    /**
+     * 默认转发端口
+     */
+    private Integer port;
 }

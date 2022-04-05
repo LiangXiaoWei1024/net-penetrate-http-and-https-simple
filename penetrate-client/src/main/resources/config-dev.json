@@ -4,6 +4,10 @@
     "port": 8080
   },
   "defaultInfo": {
-    "forwardIp": "127.0.0.1"
+    "forwardIp": "127.0.0.1",
+    "port": 20001
+  },
+  "version": {
+    "value": "1.0.0"
   }
 }

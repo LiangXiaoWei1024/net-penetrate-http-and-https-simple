@@ -2,6 +2,7 @@ package com.kele.penetrate.config;
 
 import com.alibaba.fastjson.JSONObject;
 import com.kele.penetrate.factory.annotation.Recognizer;
+import com.kele.penetrate.pojo.VersionInfo;
 import lombok.Data;
 
 import java.io.BufferedReader;
@@ -19,14 +20,19 @@ public class Config
     private int servicePort;
     private int httpPort;
     private int httpsPort;
+    private VersionInfo versionInfo = new VersionInfo();
 
     public Config()
     {
         String jsonStr = getDataFromFile();
         JSONObject configJson = JSONObject.parseObject(jsonStr);
+        JSONObject versionInfo = configJson.getJSONObject("versionInfo");
         servicePort = configJson.getJSONObject("service").getInteger("port");
         httpPort = configJson.getJSONObject("http").getInteger("port");
         httpsPort = configJson.getJSONObject("https").getInteger("port");
+
+        this.versionInfo.setVersion(versionInfo.getString("version"));
+        this.versionInfo.setContent(versionInfo.getString("content"));
     }
 
     private String getDataFromFile()

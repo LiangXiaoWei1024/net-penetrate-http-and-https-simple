@@ -20,6 +20,7 @@ public class Config
 {
     private final ServiceConnectInfo serviceConnectInfo = new ServiceConnectInfo();
     private final DefaultInfo defaultInfo = new DefaultInfo();
+    private String version;
 
     public Config()
     {
@@ -30,6 +31,8 @@ public class Config
         this.serviceConnectInfo.setIp(serviceConnectInfo.getString("ip"));
         this.serviceConnectInfo.setPort(serviceConnectInfo.getInteger("port"));
         this.defaultInfo.setForwardIp(defaultInfo.getString("forwardIp"));
+        this.version = configJson.getJSONObject("version").getString("value");
+        this.defaultInfo.setPort(defaultInfo.getInteger("port"));
     }
 
     private String getDataFromFile()

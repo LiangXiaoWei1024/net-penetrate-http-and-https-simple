@@ -11,4 +11,5 @@ public class Handshake implements Serializable
     private String mappingName;
     private String mappingIp;
     private Integer port;
+    private String version;
 }

@@ -2,9 +2,11 @@ package com.kele.penetrate.client;
 
 
 import com.kele.penetrate.Start;
+import com.kele.penetrate.config.Config;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.protocol.Handshake;
+import com.kele.penetrate.utils.UUIDUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -19,6 +21,10 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
 {
     @Autowired
     private ConnectHandler connectHandler;
+    @Autowired
+    private Config config;
+    @Autowired
+    private UUIDUtils uuidUtils;
 
     //<editor-fold desc="接收通道消息">
     @Override
@@ -35,9 +41,10 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
         connectHandler.setChannel(ctx.channel());
         //<editor-fold desc="通道激活与客户端握手，告知转发信息">
         Handshake handshake = new Handshake();
-        handshake.setMappingIp("127.0.0.1");
-        handshake.setPort(20001);
-        handshake.setMappingName("test");
+        handshake.setVersion(config.getVersion());
+        handshake.setMappingIp(config.getDefaultInfo().getForwardIp());
+        handshake.setPort(config.getDefaultInfo().getPort());
+        handshake.setMappingName(uuidUtils.generateShortUuid());
         connectHandler.send(handshake);
         //</editor-fold>
     }
