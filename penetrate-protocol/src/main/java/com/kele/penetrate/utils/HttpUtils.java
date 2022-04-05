@@ -1,6 +1,7 @@
 package com.kele.penetrate.utils;
 
 import com.kele.penetrate.factory.annotation.Recognizer;
+import com.kele.penetrate.protocol.RequestFile;
 import com.kele.penetrate.protocol.RequestResult;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -73,6 +75,18 @@ public class HttpUtils
         headers.forEach(requestBuilder::addHeader);
         execute(requestBuilder.build(), action1);
     }
+
+    public void postMultipart(String url, Map<String, String> headers, Map<String,String> bodyText, List<RequestFile> bodyFiles, Action1<RequestResult> action1)
+    {
+//        RequestBody body = RequestBody.create(text, MediaType.parse(headers.get("Content-Type")));
+//        Request.Builder requestBuilder = new Request.Builder();
+//        requestBuilder.url(url);
+//        requestBuilder.post(body);
+//        headers.forEach(requestBuilder::addHeader);
+//        execute(requestBuilder.build(), action1);
+    }
+
+
     //</editor-fold>
 
     //<editor-fold desc="执行">

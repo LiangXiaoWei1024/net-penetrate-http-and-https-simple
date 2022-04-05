@@ -7,6 +7,7 @@ import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
 import com.kele.penetrate.pojo.PipelineTransmission;
 import com.kele.penetrate.protocol.HttpPostRequestForm;
+import com.kele.penetrate.protocol.HttpPostRequestMultipart;
 import com.kele.penetrate.protocol.HttpPostRequestText;
 import com.kele.penetrate.protocol.RequestFile;
 import com.kele.penetrate.service.ConnectHandler;
@@ -69,8 +70,15 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
                 //<editor-fold desc="处理 multipart/form-data">
                 else if (contentType.contains(RequestContentType.MULTIPART_FORM_DATA.getCode()))
                 {
-                    Map<String, String> multipartBody = AnalysisHttpPostRequest.getMultipartBodyAttribute(fullHttpRequest);
-                    List<RequestFile> multipartBodyFiles = AnalysisHttpPostRequest.getMultipartBodyFiles(fullHttpRequest);
+                    HttpPostRequestMultipart httpPostRequestMultipart = new HttpPostRequestMultipart();
+                    httpPostRequestMultipart.setRequestId(uuidUtils.getUUID());
+                    httpPostRequestMultipart.setRequestUrl(requestUrl);
+                    httpPostRequestMultipart.setHeaders(requestHeaders);
+                    httpPostRequestMultipart.setBodyMap(AnalysisHttpPostRequest.getMultipartBodyAttribute(fullHttpRequest));
+                    httpPostRequestMultipart.setBodyFile(AnalysisHttpPostRequest.getMultipartBodyFiles(fullHttpRequest));
+
+                    connectManager.recordMsg(httpPostRequestMultipart, channelHandlerContext);
+                    connectHandler.reply(httpPostRequestMultipart);
                 }
                 //</editor-fold>
 
