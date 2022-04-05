@@ -1,5 +1,6 @@
 package com.kele.penetrate.receiver.pipeline.http;
 
+import com.kele.penetrate.enumeration.HypertextTransferProtocolType;
 import com.kele.penetrate.enumeration.RequestType;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
@@ -60,7 +61,7 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
                     ConnectHandler connectHandler = connectManager.get(mappingName);
                     if (connectHandler != null)
                     {
-                        requestUrl = "http://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
+                        requestUrl = HypertextTransferProtocolType.HTTP.getCode() + "://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
 
                         HttpGetRequest httpGetRequest = new HttpGetRequest();
                         httpGetRequest.setRequestId(uuidUtils.getUUID());

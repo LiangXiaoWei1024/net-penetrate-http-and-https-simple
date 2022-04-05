@@ -1,5 +1,6 @@
 package com.kele.penetrate.receiver.pipeline.http;
 
+import com.kele.penetrate.enumeration.HypertextTransferProtocolType;
 import com.kele.penetrate.enumeration.RequestContentType;
 import com.kele.penetrate.enumeration.RequestType;
 import com.kele.penetrate.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import com.kele.penetrate.pojo.PipelineTransmission;
 import com.kele.penetrate.protocol.HttpPostRequestForm;
 import com.kele.penetrate.protocol.HttpPostRequestMultipart;
 import com.kele.penetrate.protocol.HttpPostRequestText;
-import com.kele.penetrate.protocol.RequestFile;
 import com.kele.penetrate.service.ConnectHandler;
 import com.kele.penetrate.service.ConnectManager;
 import com.kele.penetrate.utils.PageTemplate;
@@ -23,7 +23,6 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
 import java.util.Map;
 
 @Register
@@ -50,7 +49,7 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
             String contentType = fullHttpRequest.headers().get("Content-Type");
             ConnectHandler connectHandler = connectManager.get(mappingName);
             String requestUrl = AnalysisHttpGetRequest.getRequestUrl(fullHttpRequest);
-            requestUrl = "http://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
+            requestUrl = HypertextTransferProtocolType.HTTP.getCode() + "://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
             if (connectHandler != null)
             {
                 //<editor-fold desc="处理 x-www-form-urlencoded">
