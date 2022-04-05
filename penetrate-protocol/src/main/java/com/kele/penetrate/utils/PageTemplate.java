@@ -48,7 +48,7 @@ public class PageTemplate
 
     public static FullHttpResponse getServiceUnavailableTemplate()
     {
-        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.SERVICE_UNAVAILABLE, Unpooled.copiedBuffer(notFound.getBytes(StandardCharsets.UTF_8)));
+        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.SERVICE_UNAVAILABLE, Unpooled.copiedBuffer(serviceUnavailableTemplate.getBytes(StandardCharsets.UTF_8)));
         response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.getCode());
         response.headers().set("Content_Length", response.content().readableBytes());
         return response;
