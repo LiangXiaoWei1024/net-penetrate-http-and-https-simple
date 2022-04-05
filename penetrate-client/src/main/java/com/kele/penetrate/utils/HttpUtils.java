@@ -1,5 +1,6 @@
 package com.kele.penetrate.utils;
 
+import com.kele.penetrate.factory.Recognizer;
 import com.kele.penetrate.protocol.RequestResult;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -11,11 +12,13 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Data
 @SuppressWarnings("unused")
 @Slf4j
+@Recognizer
 public class HttpUtils
 {
     private static final OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
@@ -25,8 +28,8 @@ public class HttpUtils
     {
         //设置超时时间
         clientBuilder.connectTimeout(10, TimeUnit.SECONDS);
-        clientBuilder.readTimeout(60, TimeUnit.SECONDS);
-        clientBuilder.writeTimeout(60, TimeUnit.SECONDS);
+        clientBuilder.readTimeout(6, TimeUnit.SECONDS);
+        clientBuilder.writeTimeout(6, TimeUnit.SECONDS);
         client = clientBuilder.build();
     }
 
@@ -75,14 +78,11 @@ public class HttpUtils
         RequestResult requestResult = new RequestResult();
         requestResult.setCode(response.code());
         Map<String, String> headers = new HashMap<>();
-        response.headers().forEach(pair ->
-        {
-            headers.put(pair.getFirst(), pair.getSecond());
-        });
+        response.headers().forEach(pair -> headers.put(pair.getFirst(), pair.getSecond()));
         requestResult.setHeaders(headers);
         try
         {
-            requestResult.setData(response.body().bytes());
+            requestResult.setData(Objects.requireNonNull(response.body()).bytes());
         }
         catch (IOException e)
         {
@@ -94,11 +94,15 @@ public class HttpUtils
     private void failResultHandle(IOException exception, Action1<RequestResult> action1)
     {
         RequestResult requestResult = new RequestResult();
-        if(exception instanceof ConnectException){
-            requestResult.setCode(1);
+        if (exception instanceof ConnectException)
+        {
+            requestResult.setFailMessage("connect timeout");
+            requestResult.setCode(408);
         }
-        if(exception instanceof SocketTimeoutException){//判断超时异常
-            requestResult.setCode(2);
+        if (exception instanceof SocketTimeoutException)
+        {
+            requestResult.setFailMessage("request timeout");
+            requestResult.setCode(408);
         }
         action1.action(requestResult);
     }

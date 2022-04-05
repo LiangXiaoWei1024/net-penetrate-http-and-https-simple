@@ -24,6 +24,9 @@ public class HttpGetRequestPipeline implements Func<Object, Boolean>
 
     @Autowired
     private ConnectHandler connectHandler;
+    @Autowired
+    private HttpUtils httpUtils;
+
 
     @Override
     public Boolean func(Object msg)
@@ -31,50 +34,13 @@ public class HttpGetRequestPipeline implements Func<Object, Boolean>
         if (msg instanceof HttpGetRequest)
         {
             HttpGetRequest httpGetRequest = (HttpGetRequest) msg;
-            System.out.println("收到httpGET->"+httpGetRequest);
+            System.out.println("收到httpGET->" + httpGetRequest);
 
-            HttpUtils httpUtils = new HttpUtils();
-            httpUtils.get(httpGetRequest.getRequestUrl(),httpGetRequest.getHeaders(),(o)->{
-
+            httpUtils.get(httpGetRequest.getRequestUrl(), httpGetRequest.getHeaders(), requestResult ->
+            {
+                requestResult.setRequestId(httpGetRequest.getRequestId());
+                connectHandler.send(requestResult);
             });
-
-            OkHttpClient client = new OkHttpClient();
-            Request.Builder builder = new Request.Builder();
-            builder.url(httpGetRequest.getRequestUrl());
-            builder.get();
-            if (httpGetRequest.getHeaders() != null)
-            {
-                httpGetRequest.getHeaders().forEach((k, v) ->
-                {
-                    builder.addHeader(k, v);
-                });
-            }
-            Call call = client.newCall(builder.build());
-            try
-            {
-                Response execute = call.execute();
-                Headers headers = execute.headers();
-                Map<String, String> h = new HashMap<>();
-                Iterator<Pair<String, String>> iterator = headers.iterator();
-                while (iterator.hasNext())
-                {
-                    Pair<String, String> next = iterator.next();
-                    h.put(next.getFirst(), next.getSecond());
-                }
-                byte[] bytes = execute.body().bytes();
-
-                HttpGetRequestResult httpGetRequestResult = new HttpGetRequestResult();
-                httpGetRequestResult.setRequestId(httpGetRequest.getRequestId());
-                httpGetRequestResult.setData(bytes);
-                httpGetRequestResult.setHeaders(h);
-                connectHandler.send(httpGetRequestResult);
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-
-
             return true;
         }
         return false;
