@@ -16,6 +16,8 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import lombok.extern.slf4j.Slf4j;
 
+import java.nio.charset.StandardCharsets;
+
 
 @SuppressWarnings("unused")
 @Slf4j
@@ -34,15 +36,37 @@ public class RequestResultPipeline implements Func<ServicePipeline, Boolean>
         if (msg instanceof RequestResult)
         {
             RequestResult requestResult = (RequestResult) msg;
-            FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, Unpooled.copiedBuffer(requestResult.getData()));
-            if (requestResult.getHeaders() != null)
+            if (requestResult.isSuccess())
             {
-                requestResult.getHeaders().forEach((k, v) ->
-                        response.headers().set(k, v));
+                FullHttpResponse responseSuccess = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, Unpooled.copiedBuffer(requestResult.getData()));
+                if (requestResult.getHeaders() != null)
+                {
+                    requestResult.getHeaders().forEach((k, v) ->
+                            responseSuccess.headers().set(k, v));
+                }
+                ConnectManager.MsgManager recordMsg = connectManager.getRecordMsg(requestResult.getRequestId());
+                if (recordMsg != null && recordMsg.getChannelHandlerContext() != null)
+                {
+                    recordMsg.getChannelHandlerContext().writeAndFlush(responseSuccess).addListener(ChannelFutureListener.CLOSE);
+                }
             }
-            ConnectManager.MsgManager recordMsg = connectManager.getRecordMsg(requestResult.getRequestId());
-            if(recordMsg != null && recordMsg.getChannelHandlerContext() != null){
-                recordMsg.getChannelHandlerContext().writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+            else
+            {
+                FullHttpResponse responseFail = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, Unpooled.copiedBuffer(requestResult.getFailMessage().getBytes(StandardCharsets.UTF_8)));
+                ConnectManager.MsgManager recordMsg = connectManager.getRecordMsg(requestResult.getRequestId());
+                if (requestResult.getFailMessage().contains("request timeout"))
+                {
+                    responseFail.setStatus(HttpResponseStatus.REQUEST_TIMEOUT);
+                }
+                if (requestResult.getFailMessage().contains("connect timeout"))
+                {
+                    responseFail.setStatus(HttpResponseStatus.GATEWAY_TIMEOUT);
+                }
+
+                if (recordMsg != null && recordMsg.getChannelHandlerContext() != null)
+                {
+                    recordMsg.getChannelHandlerContext().writeAndFlush(responseFail).addListener(ChannelFutureListener.CLOSE);
+                }
             }
             return true;
         }

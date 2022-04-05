@@ -28,8 +28,8 @@ public class HttpUtils
     {
         //设置超时时间
         clientBuilder.connectTimeout(10, TimeUnit.SECONDS);
-        clientBuilder.readTimeout(6, TimeUnit.SECONDS);
-        clientBuilder.writeTimeout(6, TimeUnit.SECONDS);
+        clientBuilder.readTimeout(60, TimeUnit.SECONDS);
+        clientBuilder.writeTimeout(60, TimeUnit.SECONDS);
         client = clientBuilder.build();
     }
 
@@ -77,6 +77,7 @@ public class HttpUtils
     {
         RequestResult requestResult = new RequestResult();
         requestResult.setCode(response.code());
+        requestResult.setSuccess(true);
         Map<String, String> headers = new HashMap<>();
         response.headers().forEach(pair -> headers.put(pair.getFirst(), pair.getSecond()));
         requestResult.setHeaders(headers);
