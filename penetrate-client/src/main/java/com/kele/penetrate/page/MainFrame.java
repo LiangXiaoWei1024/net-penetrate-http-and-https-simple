@@ -19,7 +19,7 @@ public class MainFrame extends JFrame
     {
         setTitle("penetrate");
         setLayout(null);
-        setSize(500, 350);
+        setSize(516, 389);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -41,15 +41,15 @@ public class MainFrame extends JFrame
         JTextField mappingNameField = new JTextField();
         mappingNameField.setBounds(80, 5, 200, 30);
         mappingNameField.setText(UUIDUtils.generateShortUuid());
-        mappingNameField.setFocusable(false);
+//        mappingNameField.setFocusable(false);
 
 
         JLabel filterMappingNameLabel = new JLabel("是否过滤映射名称");
         filterMappingNameLabel.setBounds(320, 5, 130, 30);
         JRadioButton filterMappingNameRadioButton = new JRadioButton();
-        filterMappingNameRadioButton.setBounds(450, 5, 30, 30);
+        filterMappingNameRadioButton.setBounds(450, 10, 20, 20);
         filterMappingNameRadioButton.setSelected(true);
-        filterMappingNameRadioButton.setFocusable(false);
+//        filterMappingNameRadioButton.setFocusable(false);
 
 
         JLabel ipLabel = new JLabel("IP");
@@ -57,7 +57,7 @@ public class MainFrame extends JFrame
         JTextField ipField = new JTextField();
         ipField.setBounds(80, 45, 200, 30);
         ipField.setText("127.0.0.1");
-        ipField.setFocusable(false);
+//        ipField.setFocusable(false);
 
 
         JLabel portLabel = new JLabel("端口");
@@ -65,11 +65,12 @@ public class MainFrame extends JFrame
         JTextField portField = new JTextField();
         portField.setBounds(360, 45, 130, 30);
         portField.setText("8080");
-        portField.setFocusable(false);
+//        portField.setFocusable(false);
 
 
         JButton runButton = new JButton("启动");
         runButton.setBounds(200, 80, 120, 35);
+//        portField.setFocusable(false);
 
 
         upPanel.add(mappingNameLabel);
@@ -81,6 +82,7 @@ public class MainFrame extends JFrame
         upPanel.add(filterMappingNameLabel);
         upPanel.add(filterMappingNameRadioButton);
         upPanel.add(runButton);
+        upPanel.setFocusable(true);
         this.add(upPanel);
     }
 

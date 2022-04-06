@@ -31,7 +31,7 @@ public class Tray
             PopupMenu popupMenu = new PopupMenu();
 
             //<editor-fold desc="打开">
-            popupMenu.add(createMenuItem("打开", e ->
+            popupMenu.add(createMenuItem("open", e ->
             {
                 if (!mainFrame.isShowing())
                 {
@@ -45,7 +45,7 @@ public class Tray
             //</editor-fold>
 
             //<editor-fold desc="帮助">
-            popupMenu.add(createMenuItem("帮助", e ->
+            popupMenu.add(createMenuItem("help", e ->
             {
                 if (!helpFrame.isShowing())
                 {
@@ -59,7 +59,7 @@ public class Tray
             //</editor-fold>
 
             //<editor-fold desc="退出">
-            popupMenu.add(createMenuItem("退出", e -> System.exit(0)));
+            popupMenu.add(createMenuItem("exit", e -> System.exit(0)));
             //</editor-fold>
 
             TrayIcon trayIcon = new TrayIcon(icon, "penetrate", popupMenu);
