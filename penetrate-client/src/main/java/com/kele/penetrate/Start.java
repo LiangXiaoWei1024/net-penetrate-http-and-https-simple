@@ -5,8 +5,10 @@ import com.kele.penetrate.config.Config;
 import com.kele.penetrate.factory.BeanFactoryImpl;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
+import com.kele.penetrate.page.Tray;
 import com.kele.penetrate.utils.Events;
 import lombok.extern.slf4j.Slf4j;
+
 
 @Recognizer
 @Slf4j
@@ -20,6 +22,8 @@ public class Start
     private Config config;
     @Autowired
     private ConnectHandler connectHandler;
+    @Autowired
+    private Tray tray;
 
 
     public static void main(String[] args)
