@@ -65,7 +65,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
     {
         ctx.flush();
         ctx.close();
-        System.out.println("aaaaaaa");
     }
     //</editor-fold>
 

@@ -6,6 +6,7 @@ import com.kele.penetrate.enumeration.RequestType;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
+import com.kele.penetrate.pojo.MultipartBody;
 import com.kele.penetrate.pojo.PipelineTransmission;
 import com.kele.penetrate.protocol.HttpPostRequestForm;
 import com.kele.penetrate.protocol.HttpPostRequestMultipart;
@@ -43,15 +44,14 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
         ChannelHandlerContext channelHandlerContext = pipelineTransmission.getChannelHandlerContext();
         if (AnalysisHttpPostRequest.getRequestType(fullHttpRequest) == RequestType.POST)
         {
-            System.out.println("进入http post");
             Map<String, String> requestHeaders = AnalysisHttpPostRequest.getRequestHeaders(fullHttpRequest);
             String mappingName = AnalysisHttpPostRequest.getHomeUser(fullHttpRequest);
             String contentType = fullHttpRequest.headers().get("Content-Type");
             ConnectHandler connectHandler = connectManager.get(mappingName);
-            String requestUrl = AnalysisHttpGetRequest.getRequestUrl(fullHttpRequest, connectHandler.isFilterMappingName());
-            requestUrl = HypertextTransferProtocolType.HTTP.getCode() + "://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
             if (connectHandler != null)
             {
+                String requestUrl = AnalysisHttpGetRequest.getRequestUrl(fullHttpRequest, connectHandler.isFilterMappingName());
+                requestUrl = HypertextTransferProtocolType.HTTP.getCode() + "://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
                 //<editor-fold desc="处理 x-www-form-urlencoded">
                 if (contentType.contains(RequestContentType.X_WWW_FORM_URLENCODED.getCode()))
                 {
@@ -70,11 +70,12 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
                 else if (contentType.contains(RequestContentType.MULTIPART_FORM_DATA.getCode()))
                 {
                     HttpPostRequestMultipart httpPostRequestMultipart = new HttpPostRequestMultipart();
+                    MultipartBody multipartBody = AnalysisHttpPostRequest.getMultipartBody(fullHttpRequest);
                     httpPostRequestMultipart.setRequestId(uuidUtils.getUUID());
                     httpPostRequestMultipart.setRequestUrl(requestUrl);
                     httpPostRequestMultipart.setHeaders(requestHeaders);
-                    httpPostRequestMultipart.setBodyMap(AnalysisHttpPostRequest.getMultipartBodyAttribute(fullHttpRequest));
-                    httpPostRequestMultipart.setBodyFile(AnalysisHttpPostRequest.getMultipartBodyFiles(fullHttpRequest));
+                    httpPostRequestMultipart.setBodyMap(multipartBody.getBodyMap());
+                    httpPostRequestMultipart.setBodyFile(multipartBody.getBodyFiles());
 
                     connectManager.recordMsg(httpPostRequestMultipart, channelHandlerContext);
                     connectHandler.reply(httpPostRequestMultipart);

@@ -1,8 +1,8 @@
 package com.kele.penetrate.utils.http;
 
 
+import com.kele.penetrate.pojo.MultipartBody;
 import com.kele.penetrate.protocol.RequestFile;
-import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.multipart.*;
 import io.netty.util.CharsetUtil;
@@ -42,9 +42,15 @@ public class AnalysisHttpPostRequest extends AnalysisRequest
     //</editor-fold>
 
     //<editor-fold desc="获取请求体 multipart/form-data">
-    public static List<RequestFile> getMultipartBodyFiles(FullHttpRequest fullHttpRequest)
+    public static MultipartBody getMultipartBody(FullHttpRequest fullHttpRequest)
     {
-        List<RequestFile> body = new ArrayList<>();
+        Map<String, String> bodyMap = new HashMap<>();
+        List<RequestFile> bodyFiles = new ArrayList<>();
+
+        MultipartBody body = new MultipartBody();
+        body.setBodyMap(bodyMap);
+        body.setBodyFiles(bodyFiles);
+
         HttpDataFactory factory = new DefaultHttpDataFactory(true);
         HttpPostRequestDecoder httpDecoder = new HttpPostRequestDecoder(factory, fullHttpRequest);
         httpDecoder.setDiscardThreshold(0);
@@ -52,6 +58,18 @@ public class AnalysisHttpPostRequest extends AnalysisRequest
         List<InterfaceHttpData> interfaceHttpDataList = httpDecoder.getBodyHttpDatas();
         for (InterfaceHttpData data : interfaceHttpDataList)
         {
+            if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute)
+            {
+                Attribute attribute = (Attribute) data;
+                try
+                {
+                    bodyMap.put(attribute.getName(), attribute.getValue());
+                }
+                catch (IOException e)
+                {
+                    log.error("获取请求属性错误", e);
+                }
+            }
             if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload)
             {
                 FileUpload fileUpload = (FileUpload) data;
@@ -66,34 +84,9 @@ public class AnalysisHttpPostRequest extends AnalysisRequest
                 {
                     log.error("获取文件异常", e);
                 }
-                body.add(requestFile);
+                bodyFiles.add(requestFile);
             }
-        }
-        return body;
-    }
 
-    public static Map<String, String> getMultipartBodyAttribute(FullHttpRequest fullHttpRequest)
-    {
-        Map<String, String> body = new HashMap<>();
-        HttpDataFactory factory = new DefaultHttpDataFactory(true);
-        HttpPostRequestDecoder httpDecoder = new HttpPostRequestDecoder(factory, fullHttpRequest);
-        httpDecoder.setDiscardThreshold(0);
-        httpDecoder.offer(fullHttpRequest);
-        List<InterfaceHttpData> interfaceHttpDataList = httpDecoder.getBodyHttpDatas();
-        for (InterfaceHttpData data : interfaceHttpDataList)
-        {
-            if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute)
-            {
-                Attribute attribute = (Attribute) data;
-                try
-                {
-                    body.put(attribute.getName(), attribute.getValue());
-                }
-                catch (IOException e)
-                {
-                    log.error("获取亲求属性错误", e);
-                }
-            }
         }
         return body;
     }
@@ -103,10 +96,7 @@ public class AnalysisHttpPostRequest extends AnalysisRequest
     //<editor-fold desc="获取请求体 application(json xml javaScript),text(plain html)">
     public static String getTextBody(FullHttpRequest fullHttpRequest)
     {
-        ByteBuf content = fullHttpRequest.content();
-        byte[] reqContent = new byte[content.readableBytes()];
-        content.readBytes(reqContent);
-        return content.toString(CharsetUtil.UTF_8);
+        return fullHttpRequest.content().toString(CharsetUtil.UTF_8);
     }
     //</editor-fold>
 }

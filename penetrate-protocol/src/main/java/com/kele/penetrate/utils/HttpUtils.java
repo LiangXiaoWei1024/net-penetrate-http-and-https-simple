@@ -68,6 +68,8 @@ public class HttpUtils
 
     public void postText(String url, Map<String, String> headers, String text, Action1<RequestResult> action1)
     {
+        System.out.println(text);
+        System.out.println(headers.get("Content-Type"));
         RequestBody body = RequestBody.create(text, MediaType.parse(headers.get("Content-Type")));
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(url);

@@ -112,7 +112,7 @@ public class ConnectManager
                 Map.Entry<String, MsgManager> next = iterator.next();
                 if (System.currentTimeMillis() - next.getValue().getAddTime() >= threshold)
                 {
-                    iterator.remove();
+                    requestIdBindConnect.remove(next.getKey());
                 }
             }
 
