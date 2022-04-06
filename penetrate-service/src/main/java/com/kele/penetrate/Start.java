@@ -22,8 +22,7 @@ import java.util.TimerTask;
 public class Start
 {
     private static final BeanFactoryImpl beanFactory = new BeanFactoryImpl();
-    public static final Events<PipelineTransmission> httpEvents = new Events("HTTP", PipelineTransmission.class, "com.kele.penetrate.receiver.pipeline.http");
-    public static final Events<PipelineTransmission> httpsEvents = new Events("HTTPS", PipelineTransmission.class, "com.kele.penetrate.receiver.pipeline.https");
+    public static final Events<PipelineTransmission> hypertextProtocolEvents = new Events("HTTP", PipelineTransmission.class, "com.kele.penetrate.receiver.pipeline");
     public static final Events<ServicePipeline> serviceEvents = new Events("Service", ServicePipeline.class, "com.kele.penetrate.service.pipeline");
 
     @Autowired

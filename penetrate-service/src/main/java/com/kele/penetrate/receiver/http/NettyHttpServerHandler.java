@@ -1,6 +1,7 @@
 package com.kele.penetrate.receiver.http;
 
 import com.kele.penetrate.Start;
+import com.kele.penetrate.enumeration.HypertextTransferProtocolType;
 import com.kele.penetrate.pojo.PipelineTransmission;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -14,7 +15,7 @@ public class NettyHttpServerHandler extends SimpleChannelInboundHandler<FullHttp
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest)
     {
-        Start.httpEvents.notice(new PipelineTransmission(channelHandlerContext, fullHttpRequest));
+        Start.hypertextProtocolEvents.notice(new PipelineTransmission(channelHandlerContext, fullHttpRequest, HypertextTransferProtocolType.HTTP));
     }
 
 

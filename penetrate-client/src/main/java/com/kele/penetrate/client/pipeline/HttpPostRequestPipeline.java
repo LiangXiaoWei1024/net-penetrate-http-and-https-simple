@@ -1,18 +1,17 @@
 package com.kele.penetrate.client.pipeline;
 
 import com.kele.penetrate.client.ConnectHandler;
-import com.kele.penetrate.enumeration.HypertextTransferProtocolType;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
-import com.kele.penetrate.protocol.HttpPostRequestForm;
+import com.kele.penetrate.protocol.HttpPostRequest;
 import com.kele.penetrate.utils.Func;
 import com.kele.penetrate.utils.HttpUtils;
 
 @Register
 @Recognizer
 @SuppressWarnings("unused")
-public class HttpPostRequestFormPipeline implements Func<Object, Boolean>
+public class HttpPostRequestPipeline implements Func<Object, Boolean>
 {
     @Autowired
     private ConnectHandler connectHandler;
@@ -22,13 +21,13 @@ public class HttpPostRequestFormPipeline implements Func<Object, Boolean>
     @Override
     public Boolean func(Object msg)
     {
-        if (msg instanceof HttpPostRequestForm)
+        if (msg instanceof HttpPostRequest)
         {
-            HttpPostRequestForm httpPostRequestForm = (HttpPostRequestForm) msg;
+            HttpPostRequest httpPostRequest = (HttpPostRequest) msg;
 
-            httpUtils.postForm(httpPostRequestForm.getRequestUrl(), httpPostRequestForm.getHeaders(), httpPostRequestForm.getDataBody(), requestResult ->
+            httpUtils.post(httpPostRequest.getRequestUrl(), httpPostRequest.getHeaders(), requestResult ->
             {
-                requestResult.setRequestId(httpPostRequestForm.getRequestId());
+                requestResult.setRequestId(httpPostRequest.getRequestId());
                 connectHandler.send(requestResult);
             });
             return true;

@@ -1,6 +1,7 @@
 package com.kele.penetrate.client.pipeline;
 
 import com.kele.penetrate.client.ConnectHandler;
+import com.kele.penetrate.enumeration.HypertextTransferProtocolType;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
@@ -18,7 +19,6 @@ public class HttpGetRequestPipeline implements Func<Object, Boolean>
     private ConnectHandler connectHandler;
     @Autowired
     private HttpUtils httpUtils;
-
 
     @Override
     public Boolean func(Object msg)

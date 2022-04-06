@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
+import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -25,6 +26,8 @@ public class HttpUtils
 {
     private static final OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
     private final OkHttpClient client;
+    private final X509TrustManager manager = SSLSocketClientUtil.getX509TrustManager();
+
 
     public HttpUtils()
     {
@@ -32,6 +35,8 @@ public class HttpUtils
         clientBuilder.connectTimeout(10, TimeUnit.SECONDS);
         clientBuilder.readTimeout(60, TimeUnit.SECONDS);
         clientBuilder.writeTimeout(60, TimeUnit.SECONDS);
+        clientBuilder.sslSocketFactory(SSLSocketClientUtil.getSocketFactory(manager), manager);
+        clientBuilder.hostnameVerifier(SSLSocketClientUtil.getHostnameVerifier());
         client = clientBuilder.build();
     }
 
@@ -55,6 +60,16 @@ public class HttpUtils
     //</editor-fold>
 
     //<editor-fold desc="POST">
+    public void post(String url, Map<String, String> headers, Action1<RequestResult> action1)
+    {
+        Request.Builder requestBuilder = new Request.Builder();
+        requestBuilder.url(url);
+        requestBuilder.post(RequestBody.create("", null));
+        headers.forEach(requestBuilder::addHeader);
+        execute(requestBuilder.build(), action1);
+    }
+
+
     public void postForm(String url, Map<String, String> headers, Map<String, String> formBody, Action1<RequestResult> action1)
     {
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
@@ -87,7 +102,7 @@ public class HttpUtils
         {
             for (RequestFile requestFile : bodyFiles)
             {
-                multipartBodyBuilder.addFormDataPart(requestFile.getName(),requestFile.getFileName(),RequestBody.create(requestFile.getFileByte(),MediaType.parse("multipart/form-data")));
+                multipartBodyBuilder.addFormDataPart(requestFile.getName(), requestFile.getFileName(), RequestBody.create(requestFile.getFileByte(), MediaType.parse("multipart/form-data")));
             }
         }
         bodyMap.forEach(multipartBodyBuilder::addFormDataPart);

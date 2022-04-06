@@ -1,4 +1,4 @@
-package com.kele.penetrate.receiver.pipeline.https;
+package com.kele.penetrate.receiver.pipeline;
 
 import com.kele.penetrate.factory.annotation.Register;
 import com.kele.penetrate.pojo.PipelineTransmission;

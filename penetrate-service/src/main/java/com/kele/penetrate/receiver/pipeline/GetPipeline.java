@@ -1,4 +1,4 @@
-package com.kele.penetrate.receiver.pipeline.http;
+package com.kele.penetrate.receiver.pipeline;
 
 import com.kele.penetrate.enumeration.HypertextTransferProtocolType;
 import com.kele.penetrate.enumeration.RequestType;
@@ -37,7 +37,7 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
     {
         FullHttpRequest fullHttpRequest = pipelineTransmission.getFullHttpRequest();
         ChannelHandlerContext channelHandlerContext = pipelineTransmission.getChannelHandlerContext();
-
+        HypertextTransferProtocolType hypertextTransferProtocolType = pipelineTransmission.getHypertextTransferProtocolType();
         if (AnalysisHttpGetRequest.getRequestType(fullHttpRequest) == RequestType.GET)
         {
             HttpHeaders headers = fullHttpRequest.headers();
@@ -58,10 +58,10 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
                 else
                 {
                     ConnectHandler connectHandler = connectManager.get(mappingName);
-                    String requestUrl = AnalysisHttpGetRequest.getRequestUrl(fullHttpRequest,connectHandler.isFilterMappingName());
                     if (connectHandler != null)
                     {
-                        requestUrl = HypertextTransferProtocolType.HTTP.getCode() + "://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
+                        String requestUrl = AnalysisHttpGetRequest.getRequestUrl(fullHttpRequest, connectHandler.isFilterMappingName());
+                        requestUrl = hypertextTransferProtocolType.getCode() + "://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
 
                         HttpGetRequest httpGetRequest = new HttpGetRequest();
                         httpGetRequest.setRequestId(uuidUtils.getUUID());
