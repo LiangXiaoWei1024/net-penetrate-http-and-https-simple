@@ -64,11 +64,13 @@ public class HandshakePipeline implements Func<ServicePipeline, Boolean>
                     handshakeResult.setSuccess(true);
                     if (!handshake.isFilterMappingName())
                     {
-                        handshakeResult.setAccessAddress("http(s)://xxx.xxx.xxx.com/" + handshake.getMappingName());
+                        handshakeResult.setAccessAddress(handshakeResult.getAccessAddress() + "- http://101.35.221.134:" + config.getHttpPort() + "/" + handshake.getMappingName() + "\r\n");
+                        handshakeResult.setAccessAddress(handshakeResult.getAccessAddress() + "- https://101.35.221.134:" + config.getHttpsPort() + "/" + handshake.getMappingName() + "\r\n");
                     }
                     else
                     {
-                        handshakeResult.setAccessAddress("http(s)://xxx.xxx.xxx.com/");
+                        handshakeResult.setAccessAddress(handshakeResult.getAccessAddress() + "- http://101.35.221.134:" + config.getHttpPort() + "/ \r\n");
+                        handshakeResult.setAccessAddress(handshakeResult.getAccessAddress() + "- https://101.35.221.134:" + config.getHttpsPort() + "/ \r\n");
                     }
                 }
             }

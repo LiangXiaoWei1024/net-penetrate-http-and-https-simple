@@ -18,11 +18,11 @@ public class HandshakeResultPipeline implements Func<Object, Boolean>
             HandshakeResult handshakeResult = (HandshakeResult) msg;
             if (handshakeResult.isSuccess())
             {
-                log.info("映射成功，访问地址：" + handshakeResult.getAccessAddress());
+                log.info("与服务器连接开启成功,访问地址: \r\n" + handshakeResult.getAccessAddress());
             }
             else
             {
-                log.info("映射失败，名称已经被占用，请更换一个映射名称");
+                log.info("与服务器连接失败: \r\n" + handshakeResult.getFailMessage());
             }
             return true;
         }
