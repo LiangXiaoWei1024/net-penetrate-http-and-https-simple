@@ -18,14 +18,14 @@ import java.util.Map;
 public class AnalysisRequest
 {
     //<editor-fold desc="获取请求方法类型">
-    public static RequestType getRequestType(FullHttpRequest fullHttpRequest)
+    public RequestType getRequestType(FullHttpRequest fullHttpRequest)
     {
         return RequestType.getRequestTypeByCodeStr(fullHttpRequest.method().name().trim());
     }
     //</editor-fold>
 
     //<editor-fold desc="获取请求url携带的参数">
-    public static Map<String, Object> getParamsFromChannel(FullHttpRequest fullHttpRequest)
+    public Map<String, Object> getParamsFromChannel(FullHttpRequest fullHttpRequest)
     {
         Map<String, Object> params = new HashMap<>();
         QueryStringDecoder decoder = new QueryStringDecoder(fullHttpRequest.uri());
@@ -39,7 +39,7 @@ public class AnalysisRequest
     //</editor-fold>
 
     //<editor-fold desc="获取请求头信息">
-    public static Map<String, String> getRequestHeaders(FullHttpRequest fullHttpRequest)
+    public Map<String, String> getRequestHeaders(FullHttpRequest fullHttpRequest)
     {
         Map<String, String> headers = new HashMap<>();
         Iterator<Map.Entry<String, String>> entryIterator = fullHttpRequest.headers().iteratorAsString();
@@ -53,7 +53,7 @@ public class AnalysisRequest
     //</editor-fold>
 
     //<editor-fold desc="获取归属用户">
-    public static String getHomeUser(FullHttpRequest fullHttpRequest)
+    public String getHomeUser(FullHttpRequest fullHttpRequest)
     {
         try
         {
@@ -68,10 +68,11 @@ public class AnalysisRequest
     //</editor-fold>
 
     //<editor-fold desc="获取请求路径">
-    public static String getRequestUrl(FullHttpRequest fullHttpRequest,boolean isFilterMappingName)
+    public String getRequestUrl(FullHttpRequest fullHttpRequest, boolean isFilterMappingName)
     {
         StringBuilder uri = new StringBuilder(fullHttpRequest.uri());
-        if(isFilterMappingName){
+        if (isFilterMappingName)
+        {
             String[] split = uri.toString().split("/");
             uri = new StringBuilder();
             for (int i = 1; i < split.length; i++)

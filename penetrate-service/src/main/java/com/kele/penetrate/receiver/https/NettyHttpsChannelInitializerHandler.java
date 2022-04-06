@@ -1,5 +1,7 @@
 package com.kele.penetrate.receiver.https;
 
+import com.kele.penetrate.factory.annotation.Autowired;
+import com.kele.penetrate.factory.annotation.Recognizer;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
@@ -9,8 +11,13 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
+@SuppressWarnings("unused")
+@Recognizer
 public class NettyHttpsChannelInitializerHandler extends ChannelInitializer<SocketChannel>
 {
+
+    @Autowired
+    private NettyHttpsServerHandler nettyHttpsServerHandler;
 
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception
@@ -26,6 +33,6 @@ public class NettyHttpsChannelInitializerHandler extends ChannelInitializer<Sock
         // 解决大码流的问题，ChunkedWriteHandler：向客户端发送HTML5文件
         socketChannel.pipeline().addLast(new ChunkedWriteHandler());
         // 自定义处理handler
-        socketChannel.pipeline().addLast(new NettyHttpsServerHandler());
+        socketChannel.pipeline().addLast(nettyHttpsServerHandler);
     }
 }

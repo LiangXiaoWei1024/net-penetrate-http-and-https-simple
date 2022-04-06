@@ -18,6 +18,8 @@ public class NettyHttpsService extends Thread
 {
     @Autowired
     private Config config;
+    @Autowired
+    private NettyHttpsChannelInitializerHandler nettyHttpsChannelInitializerHandler;
 
     @Override
     public void run()
@@ -31,7 +33,7 @@ public class NettyHttpsService extends Thread
             ServerBootstrap server = new ServerBootstrap();
             server.group(parentGroup, childGroup)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(new NettyHttpsChannelInitializerHandler());
+                    .childHandler(nettyHttpsChannelInitializerHandler);
 
             ChannelFuture future = server.bind(config.getHttpsPort()).sync();
             log.info("https接收器启动成功,端口：" + config.getHttpsPort());

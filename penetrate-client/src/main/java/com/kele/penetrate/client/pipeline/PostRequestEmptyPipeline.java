@@ -4,14 +4,14 @@ import com.kele.penetrate.client.ConnectHandler;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
-import com.kele.penetrate.protocol.PostRequest;
+import com.kele.penetrate.protocol.PostRequestEmpty;
 import com.kele.penetrate.utils.Func;
 import com.kele.penetrate.utils.HttpUtils;
 
 @Register
 @Recognizer
 @SuppressWarnings("unused")
-public class PostRequestPipeline implements Func<Object, Boolean>
+public class PostRequestEmptyPipeline implements Func<Object, Boolean>
 {
     @Autowired
     private ConnectHandler connectHandler;
@@ -21,13 +21,13 @@ public class PostRequestPipeline implements Func<Object, Boolean>
     @Override
     public Boolean func(Object msg)
     {
-        if (msg instanceof PostRequest)
+        if (msg instanceof PostRequestEmpty)
         {
-            PostRequest postRequest = (PostRequest) msg;
+            PostRequestEmpty postRequestEmpty = (PostRequestEmpty) msg;
 
-            httpUtils.post(postRequest.getRequestUrl(), postRequest.getHeaders(), requestResult ->
+            httpUtils.post(postRequestEmpty.getRequestUrl(), postRequestEmpty.getHeaders(), requestResult ->
             {
-                requestResult.setRequestId(postRequest.getRequestId());
+                requestResult.setRequestId(postRequestEmpty.getRequestId());
                 connectHandler.send(requestResult);
             });
             return true;

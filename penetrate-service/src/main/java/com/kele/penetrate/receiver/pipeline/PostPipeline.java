@@ -8,15 +8,11 @@ import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
 import com.kele.penetrate.pojo.MultipartBody;
 import com.kele.penetrate.pojo.PipelineTransmission;
-import com.kele.penetrate.protocol.PostRequest;
-import com.kele.penetrate.protocol.PostRequestForm;
-import com.kele.penetrate.protocol.PostRequestMultipart;
-import com.kele.penetrate.protocol.PostRequestText;
+import com.kele.penetrate.protocol.*;
 import com.kele.penetrate.service.ConnectHandler;
 import com.kele.penetrate.service.ConnectManager;
 import com.kele.penetrate.utils.PageTemplate;
 import com.kele.penetrate.utils.UUIDUtils;
-import com.kele.penetrate.utils.http.AnalysisHttpGetRequest;
 import com.kele.penetrate.utils.http.AnalysisHttpPostRequest;
 import com.kele.penetrate.utils.Func;
 import io.netty.channel.ChannelFutureListener;
@@ -37,6 +33,10 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
     private UUIDUtils uuidUtils;
     @Autowired
     private ConnectManager connectManager;
+    @Autowired
+    private PageTemplate pageTemplate;
+    @Autowired
+    private AnalysisHttpPostRequest analysisHttpPostRequest;
 
     @Override
     public Boolean func(PipelineTransmission pipelineTransmission)
@@ -45,26 +45,26 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
         ChannelHandlerContext channelHandlerContext = pipelineTransmission.getChannelHandlerContext();
         HypertextTransferProtocolType hypertextTransferProtocolType = pipelineTransmission.getHypertextTransferProtocolType();
 
-        if (AnalysisHttpPostRequest.getRequestType(fullHttpRequest) == RequestType.POST)
+        if (analysisHttpPostRequest.getRequestType(fullHttpRequest) == RequestType.POST)
         {
-            Map<String, String> requestHeaders = AnalysisHttpPostRequest.getRequestHeaders(fullHttpRequest);
-            String mappingName = AnalysisHttpPostRequest.getHomeUser(fullHttpRequest);
+            Map<String, String> requestHeaders = analysisHttpPostRequest.getRequestHeaders(fullHttpRequest);
+            String mappingName = analysisHttpPostRequest.getHomeUser(fullHttpRequest);
             String contentType = fullHttpRequest.headers().get("Content-Type");
             ConnectHandler connectHandler = connectManager.get(mappingName);
 
             if (connectHandler != null)
             {
-                String requestUrl = AnalysisHttpGetRequest.getRequestUrl(fullHttpRequest, connectHandler.isFilterMappingName());
+                String requestUrl = analysisHttpPostRequest.getRequestUrl(fullHttpRequest, connectHandler.isFilterMappingName());
                 requestUrl = hypertextTransferProtocolType.getCode() + "://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
                 if (contentType == null)
                 {
-                    PostRequest postRequest = new PostRequest();
-                    postRequest.setRequestId(uuidUtils.getUUID());
-                    postRequest.setRequestUrl(requestUrl);
-                    postRequest.setHeaders(requestHeaders);
+                    PostRequestEmpty postRequestEmpty = new PostRequestEmpty();
+                    postRequestEmpty.setRequestId(uuidUtils.getUUID());
+                    postRequestEmpty.setRequestUrl(requestUrl);
+                    postRequestEmpty.setHeaders(requestHeaders);
 
-                    connectManager.recordMsg(postRequest, channelHandlerContext);
-                    connectHandler.reply(postRequest);
+                    connectManager.recordMsg(postRequestEmpty, channelHandlerContext);
+                    connectHandler.reply(postRequestEmpty);
                 }
                 else
                 {
@@ -75,7 +75,7 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
                         PostRequestForm postRequestForm = new PostRequestForm();
                         postRequestForm.setRequestId(uuidUtils.getUUID());
                         postRequestForm.setHeaders(requestHeaders);
-                        postRequestForm.setDataBody(AnalysisHttpPostRequest.getFormBody(fullHttpRequest));
+                        postRequestForm.setDataBody(analysisHttpPostRequest.getFormBody(fullHttpRequest));
                         postRequestForm.setRequestUrl(requestUrl);
 
                         connectManager.recordMsg(postRequestForm, channelHandlerContext);
@@ -87,7 +87,7 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
                     else if (contentType.contains(RequestContentType.MULTIPART_FORM_DATA.getCode()))
                     {
                         PostRequestMultipart postRequestMultipart = new PostRequestMultipart();
-                        MultipartBody multipartBody = AnalysisHttpPostRequest.getMultipartBody(fullHttpRequest);
+                        MultipartBody multipartBody = analysisHttpPostRequest.getMultipartBody(fullHttpRequest);
                         postRequestMultipart.setRequestId(uuidUtils.getUUID());
                         postRequestMultipart.setRequestUrl(requestUrl);
                         postRequestMultipart.setHeaders(requestHeaders);
@@ -110,7 +110,7 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
                         postRequestText.setRequestId(uuidUtils.getUUID());
                         postRequestText.setRequestUrl(requestUrl);
                         postRequestText.setHeaders(requestHeaders);
-                        postRequestText.setDataText(AnalysisHttpPostRequest.getTextBody(fullHttpRequest));
+                        postRequestText.setDataText(analysisHttpPostRequest.getTextBody(fullHttpRequest));
                         connectManager.recordMsg(postRequestText, channelHandlerContext);
                         connectHandler.reply(postRequestText);
                     }
@@ -120,14 +120,14 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
                     else
                     {
                         log.error("无法处理的Content-Type：" + contentType);
-                        channelHandlerContext.writeAndFlush(PageTemplate.getUnableProcess()).addListener(ChannelFutureListener.CLOSE);
+                        channelHandlerContext.writeAndFlush(pageTemplate.getUnableProcess()).addListener(ChannelFutureListener.CLOSE);
                     }
                     //</editor-fold>
                 }
             }
             else
             {
-                FullHttpResponse serviceUnavailableTemplate = PageTemplate.getNotFoundTemplate();
+                FullHttpResponse serviceUnavailableTemplate = pageTemplate.getNotFoundTemplate();
                 channelHandlerContext.writeAndFlush(serviceUnavailableTemplate).addListener(ChannelFutureListener.CLOSE);
             }
             return true;

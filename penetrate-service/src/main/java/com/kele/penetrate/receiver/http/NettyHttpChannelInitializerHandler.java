@@ -1,13 +1,19 @@
 package com.kele.penetrate.receiver.http;
 
+import com.kele.penetrate.factory.annotation.Autowired;
+import com.kele.penetrate.factory.annotation.Recognizer;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.stream.ChunkedWriteHandler;
-
+@SuppressWarnings("unused")
+@Recognizer
 public class NettyHttpChannelInitializerHandler extends ChannelInitializer<SocketChannel>
 {
+    @Autowired
+    private NettyHttpServerHandler nettyHttpServerHandler;
+
     @Override
     protected void initChannel(SocketChannel socketChannel)
     {
@@ -18,6 +24,6 @@ public class NettyHttpChannelInitializerHandler extends ChannelInitializer<Socke
         // 解决大码流的问题，ChunkedWriteHandler：向客户端发送HTML5文件
         socketChannel.pipeline().addLast(new ChunkedWriteHandler());
         // 自定义处理handler
-        socketChannel.pipeline().addLast(new NettyHttpServerHandler());
+        socketChannel.pipeline().addLast(nettyHttpServerHandler);
     }
 }

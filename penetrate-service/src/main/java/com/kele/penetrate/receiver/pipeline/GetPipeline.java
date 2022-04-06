@@ -31,6 +31,10 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
     private ConnectManager connectManager;
     @Autowired
     private UUIDUtils uuidUtils;
+    @Autowired
+    private PageTemplate pageTemplate;
+    @Autowired
+    private AnalysisHttpGetRequest analysisHttpGetRequest;
 
     @Override
     public Boolean func(PipelineTransmission pipelineTransmission)
@@ -38,29 +42,30 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
         FullHttpRequest fullHttpRequest = pipelineTransmission.getFullHttpRequest();
         ChannelHandlerContext channelHandlerContext = pipelineTransmission.getChannelHandlerContext();
         HypertextTransferProtocolType hypertextTransferProtocolType = pipelineTransmission.getHypertextTransferProtocolType();
-        if (AnalysisHttpGetRequest.getRequestType(fullHttpRequest) == RequestType.GET)
+
+        if (analysisHttpGetRequest.getRequestType(fullHttpRequest) == RequestType.GET)
         {
             HttpHeaders headers = fullHttpRequest.headers();
             String contentType = headers.get("Content-Type");
             if (contentType != null)
             {
                 log.error("get 不支持携带请求体");
-                channelHandlerContext.writeAndFlush(PageTemplate.getAccessDeniedTemplate()).addListener(ChannelFutureListener.CLOSE);
+                channelHandlerContext.writeAndFlush(pageTemplate.getAccessDeniedTemplate()).addListener(ChannelFutureListener.CLOSE);
             }
             else
             {
-                Map<String, String> requestHeaders = AnalysisHttpGetRequest.getRequestHeaders(fullHttpRequest);
-                String mappingName = AnalysisHttpGetRequest.getHomeUser(fullHttpRequest);
+                Map<String, String> requestHeaders = analysisHttpGetRequest.getRequestHeaders(fullHttpRequest);
+                String mappingName = analysisHttpGetRequest.getHomeUser(fullHttpRequest);
                 if (mappingName == null || !connectManager.isExist(mappingName))
                 {
-                    channelHandlerContext.writeAndFlush(PageTemplate.getNotFoundTemplate()).addListener(ChannelFutureListener.CLOSE);
+                    channelHandlerContext.writeAndFlush(pageTemplate.getNotFoundTemplate()).addListener(ChannelFutureListener.CLOSE);
                 }
                 else
                 {
                     ConnectHandler connectHandler = connectManager.get(mappingName);
                     if (connectHandler != null)
                     {
-                        String requestUrl = AnalysisHttpGetRequest.getRequestUrl(fullHttpRequest, connectHandler.isFilterMappingName());
+                        String requestUrl = analysisHttpGetRequest.getRequestUrl(fullHttpRequest, connectHandler.isFilterMappingName());
                         requestUrl = hypertextTransferProtocolType.getCode() + "://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
 
                         GetRequest getRequest = new GetRequest();
@@ -73,7 +78,7 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
                     }
                     else
                     {
-                        FullHttpResponse serviceUnavailableTemplate = PageTemplate.getNotFoundTemplate();
+                        FullHttpResponse serviceUnavailableTemplate = pageTemplate.getNotFoundTemplate();
                         channelHandlerContext.writeAndFlush(serviceUnavailableTemplate).addListener(ChannelFutureListener.CLOSE);
                     }
                 }

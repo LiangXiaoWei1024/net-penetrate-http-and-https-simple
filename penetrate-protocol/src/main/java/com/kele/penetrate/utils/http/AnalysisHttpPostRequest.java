@@ -1,6 +1,7 @@
 package com.kele.penetrate.utils.http;
 
 
+import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.pojo.MultipartBody;
 import com.kele.penetrate.protocol.RequestFile;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -19,11 +20,12 @@ import java.util.Map;
  */
 @SuppressWarnings("unused")
 @Slf4j
+@Recognizer
 public class AnalysisHttpPostRequest extends AnalysisRequest
 {
 
     //<editor-fold desc="获取请求体 x-www-form-urlencoded">
-    public static Map<String, String> getFormBody(FullHttpRequest fullHttpRequest)
+    public Map<String, String> getFormBody(FullHttpRequest fullHttpRequest)
     {
         Map<String, String> body = new HashMap<>();
         HttpDataFactory factory = new DefaultHttpDataFactory(false);
@@ -42,7 +44,7 @@ public class AnalysisHttpPostRequest extends AnalysisRequest
     //</editor-fold>
 
     //<editor-fold desc="获取请求体 multipart/form-data">
-    public static MultipartBody getMultipartBody(FullHttpRequest fullHttpRequest)
+    public MultipartBody getMultipartBody(FullHttpRequest fullHttpRequest)
     {
         Map<String, String> bodyMap = new HashMap<>();
         List<RequestFile> bodyFiles = new ArrayList<>();
@@ -94,7 +96,7 @@ public class AnalysisHttpPostRequest extends AnalysisRequest
 
 
     //<editor-fold desc="获取请求体 application(json xml javaScript),text(plain html)">
-    public static String getTextBody(FullHttpRequest fullHttpRequest)
+    public String getTextBody(FullHttpRequest fullHttpRequest)
     {
         return fullHttpRequest.content().toString(CharsetUtil.UTF_8);
     }

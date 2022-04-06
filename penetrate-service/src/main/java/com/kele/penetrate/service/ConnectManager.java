@@ -78,9 +78,12 @@ public class ConnectManager
         synchronized (CONNECT_LOCK)
         {
             ConnectHandler connectHandler = channelIdBindConnectHandler.get(ctx.channel().id());
-            channelIdBindConnectHandler.remove(ctx.channel().id());
-            mappingNameBindConnectHandler.remove(connectHandler.getMappingName());
-            log.info("连接断开," + "共有" + channelIdBindConnectHandler.size() + "个连接,{" + connectHandler + "}");
+            if (connectHandler != null)
+            {
+                channelIdBindConnectHandler.remove(ctx.channel().id());
+                mappingNameBindConnectHandler.remove(connectHandler.getMappingName());
+                log.info("连接断开," + "共有" + channelIdBindConnectHandler.size() + "个连接,{" + connectHandler + "}");
+            }
         }
 
     }

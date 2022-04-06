@@ -1,6 +1,7 @@
 package com.kele.penetrate.utils;
 
 import com.kele.penetrate.enumeration.ResponseContentType;
+import com.kele.penetrate.factory.annotation.Recognizer;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpResponse;
@@ -9,6 +10,7 @@ import io.netty.handler.codec.http.HttpVersion;
 
 import java.nio.charset.StandardCharsets;
 
+@Recognizer
 public class PageTemplate
 {
     private static final String accessDeniedTemplate = "<html><head><title>403 Access Denied(GET请求不支持请求体)</title></head>\n" +
@@ -36,7 +38,7 @@ public class PageTemplate
             "</body></html>";
 
 
-    public static FullHttpResponse getAccessDeniedTemplate()
+    public  FullHttpResponse getAccessDeniedTemplate()
     {
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.FORBIDDEN, Unpooled.copiedBuffer(accessDeniedTemplate.getBytes(StandardCharsets.UTF_8)));
         response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.getCode());
@@ -44,7 +46,7 @@ public class PageTemplate
         return response;
     }
 
-    public static FullHttpResponse getNotFoundTemplate()
+    public  FullHttpResponse getNotFoundTemplate()
     {
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.FORBIDDEN, Unpooled.copiedBuffer(notFound.getBytes(StandardCharsets.UTF_8)));
         response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.getCode());
@@ -52,7 +54,7 @@ public class PageTemplate
         return response;
     }
 
-    public static FullHttpResponse getServiceUnavailableTemplate()
+    public  FullHttpResponse getServiceUnavailableTemplate()
     {
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.SERVICE_UNAVAILABLE, Unpooled.copiedBuffer(serviceUnavailableTemplate.getBytes(StandardCharsets.UTF_8)));
         response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.getCode());
@@ -60,7 +62,7 @@ public class PageTemplate
         return response;
     }
 
-    public static FullHttpResponse getUnableProcess()
+    public  FullHttpResponse getUnableProcess()
     {
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.PRECONDITION_FAILED, Unpooled.copiedBuffer(unableProcessTemplate.getBytes(StandardCharsets.UTF_8)));
         response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.getCode());
