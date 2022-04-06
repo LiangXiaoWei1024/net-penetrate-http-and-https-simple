@@ -7,7 +7,7 @@ import java.util.Map;
 
 @Data
 @SuppressWarnings("unused")
-public class HttpPostRequestMultipart extends HttpPostRequest
+public class PostRequestMultipart extends PostRequest
 {
     private Map<String, String> bodyMap;
     private List<RequestFile> bodyFile;

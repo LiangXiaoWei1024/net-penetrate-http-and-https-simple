@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 @SuppressWarnings("unused")
-public class HttpPostRequestText extends HttpPostRequest
+public class PostRequestText extends PostRequest
 {
     private String dataText;
 }

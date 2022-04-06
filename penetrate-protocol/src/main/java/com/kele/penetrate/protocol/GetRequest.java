@@ -7,7 +7,7 @@ import java.util.Map;
 
 @Data
 @SuppressWarnings("unused")
-public class HttpGetRequest extends BaseRequest
+public class GetRequest extends BaseRequest
 {
     private String requestUrl;
     private Map<String,String> headers;

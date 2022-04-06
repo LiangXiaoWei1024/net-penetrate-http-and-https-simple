@@ -1,18 +1,17 @@
 package com.kele.penetrate.client.pipeline;
 
 import com.kele.penetrate.client.ConnectHandler;
-import com.kele.penetrate.enumeration.HypertextTransferProtocolType;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
-import com.kele.penetrate.protocol.HttpPostRequestMultipart;
+import com.kele.penetrate.protocol.PostRequestMultipart;
 import com.kele.penetrate.utils.Func;
 import com.kele.penetrate.utils.HttpUtils;
 
 @Register
 @Recognizer
 @SuppressWarnings("unused")
-public class HttpPostRequestMultipartPipeline implements Func<Object, Boolean>
+public class PostRequestMultipartPipeline implements Func<Object, Boolean>
 {
     @Autowired
     private ConnectHandler connectHandler;
@@ -23,13 +22,13 @@ public class HttpPostRequestMultipartPipeline implements Func<Object, Boolean>
     @Override
     public Boolean func(Object msg)
     {
-        if (msg instanceof HttpPostRequestMultipart)
+        if (msg instanceof PostRequestMultipart)
         {
-            HttpPostRequestMultipart httpPostRequestMultipart = (HttpPostRequestMultipart) msg;
+            PostRequestMultipart postRequestMultipart = (PostRequestMultipart) msg;
 
-            httpUtils.postMultipart(httpPostRequestMultipart.getRequestUrl(), httpPostRequestMultipart.getHeaders(), httpPostRequestMultipart.getBodyMap(), httpPostRequestMultipart.getBodyFile(), requestResult ->
+            httpUtils.postMultipart(postRequestMultipart.getRequestUrl(), postRequestMultipart.getHeaders(), postRequestMultipart.getBodyMap(), postRequestMultipart.getBodyFile(), requestResult ->
             {
-                requestResult.setRequestId(httpPostRequestMultipart.getRequestId());
+                requestResult.setRequestId(postRequestMultipart.getRequestId());
                 connectHandler.send(requestResult);
             });
 

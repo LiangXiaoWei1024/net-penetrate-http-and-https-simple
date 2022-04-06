@@ -8,10 +8,10 @@ import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
 import com.kele.penetrate.pojo.MultipartBody;
 import com.kele.penetrate.pojo.PipelineTransmission;
-import com.kele.penetrate.protocol.HttpPostRequest;
-import com.kele.penetrate.protocol.HttpPostRequestForm;
-import com.kele.penetrate.protocol.HttpPostRequestMultipart;
-import com.kele.penetrate.protocol.HttpPostRequestText;
+import com.kele.penetrate.protocol.PostRequest;
+import com.kele.penetrate.protocol.PostRequestForm;
+import com.kele.penetrate.protocol.PostRequestMultipart;
+import com.kele.penetrate.protocol.PostRequestText;
 import com.kele.penetrate.service.ConnectHandler;
 import com.kele.penetrate.service.ConnectManager;
 import com.kele.penetrate.utils.PageTemplate;
@@ -58,13 +58,13 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
                 requestUrl = hypertextTransferProtocolType.getCode() + "://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
                 if (contentType == null)
                 {
-                    HttpPostRequest httpPostRequest = new HttpPostRequest();
-                    httpPostRequest.setRequestId(uuidUtils.getUUID());
-                    httpPostRequest.setRequestUrl(requestUrl);
-                    httpPostRequest.setHeaders(requestHeaders);
+                    PostRequest postRequest = new PostRequest();
+                    postRequest.setRequestId(uuidUtils.getUUID());
+                    postRequest.setRequestUrl(requestUrl);
+                    postRequest.setHeaders(requestHeaders);
 
-                    connectManager.recordMsg(httpPostRequest, channelHandlerContext);
-                    connectHandler.reply(httpPostRequest);
+                    connectManager.recordMsg(postRequest, channelHandlerContext);
+                    connectHandler.reply(postRequest);
                 }
                 else
                 {
@@ -72,30 +72,30 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
                     //<editor-fold desc="处理 x-www-form-urlencoded">
                     if (contentType.contains(RequestContentType.X_WWW_FORM_URLENCODED.getCode()))
                     {
-                        HttpPostRequestForm httpPostRequestForm = new HttpPostRequestForm();
-                        httpPostRequestForm.setRequestId(uuidUtils.getUUID());
-                        httpPostRequestForm.setHeaders(requestHeaders);
-                        httpPostRequestForm.setDataBody(AnalysisHttpPostRequest.getFormBody(fullHttpRequest));
-                        httpPostRequestForm.setRequestUrl(requestUrl);
+                        PostRequestForm postRequestForm = new PostRequestForm();
+                        postRequestForm.setRequestId(uuidUtils.getUUID());
+                        postRequestForm.setHeaders(requestHeaders);
+                        postRequestForm.setDataBody(AnalysisHttpPostRequest.getFormBody(fullHttpRequest));
+                        postRequestForm.setRequestUrl(requestUrl);
 
-                        connectManager.recordMsg(httpPostRequestForm, channelHandlerContext);
-                        connectHandler.reply(httpPostRequestForm);
+                        connectManager.recordMsg(postRequestForm, channelHandlerContext);
+                        connectHandler.reply(postRequestForm);
                     }
                     //</editor-fold>
 
                     //<editor-fold desc="处理 multipart/form-data">
                     else if (contentType.contains(RequestContentType.MULTIPART_FORM_DATA.getCode()))
                     {
-                        HttpPostRequestMultipart httpPostRequestMultipart = new HttpPostRequestMultipart();
+                        PostRequestMultipart postRequestMultipart = new PostRequestMultipart();
                         MultipartBody multipartBody = AnalysisHttpPostRequest.getMultipartBody(fullHttpRequest);
-                        httpPostRequestMultipart.setRequestId(uuidUtils.getUUID());
-                        httpPostRequestMultipart.setRequestUrl(requestUrl);
-                        httpPostRequestMultipart.setHeaders(requestHeaders);
-                        httpPostRequestMultipart.setBodyMap(multipartBody.getBodyMap());
-                        httpPostRequestMultipart.setBodyFile(multipartBody.getBodyFiles());
+                        postRequestMultipart.setRequestId(uuidUtils.getUUID());
+                        postRequestMultipart.setRequestUrl(requestUrl);
+                        postRequestMultipart.setHeaders(requestHeaders);
+                        postRequestMultipart.setBodyMap(multipartBody.getBodyMap());
+                        postRequestMultipart.setBodyFile(multipartBody.getBodyFiles());
 
-                        connectManager.recordMsg(httpPostRequestMultipart, channelHandlerContext);
-                        connectHandler.reply(httpPostRequestMultipart);
+                        connectManager.recordMsg(postRequestMultipart, channelHandlerContext);
+                        connectHandler.reply(postRequestMultipart);
                     }
                     //</editor-fold>
 
@@ -106,13 +106,13 @@ public class PostPipeline implements Func<PipelineTransmission, Boolean>
                             contentType.contains(RequestContentType.TEXT_PLAIN.getCode())
                     )
                     {
-                        HttpPostRequestText httpPostRequestText = new HttpPostRequestText();
-                        httpPostRequestText.setRequestId(uuidUtils.getUUID());
-                        httpPostRequestText.setRequestUrl(requestUrl);
-                        httpPostRequestText.setHeaders(requestHeaders);
-                        httpPostRequestText.setDataText(AnalysisHttpPostRequest.getTextBody(fullHttpRequest));
-                        connectManager.recordMsg(httpPostRequestText, channelHandlerContext);
-                        connectHandler.reply(httpPostRequestText);
+                        PostRequestText postRequestText = new PostRequestText();
+                        postRequestText.setRequestId(uuidUtils.getUUID());
+                        postRequestText.setRequestUrl(requestUrl);
+                        postRequestText.setHeaders(requestHeaders);
+                        postRequestText.setDataText(AnalysisHttpPostRequest.getTextBody(fullHttpRequest));
+                        connectManager.recordMsg(postRequestText, channelHandlerContext);
+                        connectHandler.reply(postRequestText);
                     }
                     //</editor-fold>
 

@@ -6,7 +6,7 @@ import java.util.Map;
 
 @Data
 @SuppressWarnings("unused")
-public class HttpPostRequestForm extends HttpPostRequest
+public class PostRequestForm extends PostRequest
 {
     private Map<String, String> dataBody;
 }
