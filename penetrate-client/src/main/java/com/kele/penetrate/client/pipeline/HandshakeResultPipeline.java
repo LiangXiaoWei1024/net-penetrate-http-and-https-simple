@@ -18,7 +18,7 @@ public class HandshakeResultPipeline implements Func<Object, Boolean>
             HandshakeResult handshakeResult = (HandshakeResult) msg;
             if (handshakeResult.isSuccess())
             {
-                log.info("与服务器连接开启成功,访问地址: \r\n" + handshakeResult.getAccessAddress());
+                log.info("\r\n- 与服务器连接开启成功,访问地址: \r\n" + handshakeResult.getAccessAddress());
             }
             else
             {

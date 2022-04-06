@@ -62,16 +62,17 @@ public class HandshakePipeline implements Func<ServicePipeline, Boolean>
                     connectManager.add(connectHandler);
                     //映射成功
                     handshakeResult.setSuccess(true);
-                    if (!handshake.isFilterMappingName())
+                    if (handshake.isFilterMappingName())
                     {
-                        handshakeResult.setAccessAddress(handshakeResult.getAccessAddress() + "- http://101.35.221.134:" + config.getHttpPort() + "/" + handshake.getMappingName() + "\r\n");
-                        handshakeResult.setAccessAddress(handshakeResult.getAccessAddress() + "- https://101.35.221.134:" + config.getHttpsPort() + "/" + handshake.getMappingName() + "\r\n");
+                        handshakeResult.setAccessAddress("- http://101.35.221.134:" + config.getHttpPort() + "/" + handshake.getMappingName() + "/ -> http://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/\r\n");
+                        handshakeResult.setAccessAddress(handshakeResult.getAccessAddress() + "- https://101.35.221.134:" + config.getHttpsPort() + "/" + handshake.getMappingName() + "/ -> https://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/\r\n");
                     }
                     else
                     {
-                        handshakeResult.setAccessAddress(handshakeResult.getAccessAddress() + "- http://101.35.221.134:" + config.getHttpPort() + "/ \r\n");
-                        handshakeResult.setAccessAddress(handshakeResult.getAccessAddress() + "- https://101.35.221.134:" + config.getHttpsPort() + "/ \r\n");
+                        handshakeResult.setAccessAddress("- http://101.35.221.134:" + config.getHttpPort() + "/" + handshake.getMappingName() + "/  -> http://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/" + handshake.getMappingName() + "/ \r\n");
+                        handshakeResult.setAccessAddress(handshakeResult.getAccessAddress() + "- https://101.35.221.134:" + config.getHttpsPort() + "/" + handshake.getMappingName() + "/ -> https://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/" + handshake.getMappingName() + "/ \r\n");
                     }
+
                 }
             }
             channelHandlerContext.writeAndFlush(handshakeResult);
