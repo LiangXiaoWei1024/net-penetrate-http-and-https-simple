@@ -16,7 +16,7 @@ import java.awt.event.ActionListener;
 @Recognizer
 public class Tray
 {
-    private static final Image icon = new ImageIcon(Tray.class.getResource("/img.png")).getImage();
+    public static final Image icon = new ImageIcon(Tray.class.getResource("/icon.png")).getImage();
     @Autowired
     private MainFrame mainFrame;
     @Autowired

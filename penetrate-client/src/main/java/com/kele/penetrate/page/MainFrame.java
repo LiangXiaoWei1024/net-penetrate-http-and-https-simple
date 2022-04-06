@@ -23,6 +23,7 @@ public class MainFrame extends JFrame
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+        setIconImage(Tray.icon);
         createUpPanel();
         createDownPanel();
         setVisible(true);
