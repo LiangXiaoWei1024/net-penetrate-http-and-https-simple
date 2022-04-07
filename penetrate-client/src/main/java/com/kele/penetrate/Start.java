@@ -39,8 +39,8 @@ public class Start
         Start start = BeanFactoryImpl.getBean(Start.class);
         start.mainFrame.init();
         start.clientLogPageManager.addLog("当前版本" + start.config.getVersion());
-        start.clientLogPageManager.addLog("如有问题可以联系V:1049705180,QQ群:704592910" + start.config.getVersion());
-        start.clientLogPageManager.addLog("请输入信息后启动,也可以用默认配置,但是请映射到本地正确的ip+端口" + start.config.getVersion());
+        start.clientLogPageManager.addLog("如有问题可以联系V:1049705180,QQ群:704592910");
+        start.clientLogPageManager.addLog("请输入信息后启动,也可以用默认配置,但是请映射到本地正确的ip+端口");
         start.connectHandler.start();
 
     }

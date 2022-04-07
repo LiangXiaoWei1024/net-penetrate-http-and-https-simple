@@ -23,6 +23,8 @@ public class MainFrame extends JFrame
     private JRadioButton filterMappingNameRadioButton;
     private JTextArea logTextArea;
     private JButton runButton;
+    private int changeWidth;
+    private int changeHeight;
 
     @Autowired
     private UUIDUtils uuidUtils;
@@ -32,13 +34,18 @@ public class MainFrame extends JFrame
 
     public MainFrame() throws HeadlessException
     {
+        if(isWindows()){
+            changeWidth = 16;
+            changeHeight = 6;
+        }
         setTitle("penetrate(大家可以加一下QQ群:704592910)");
         setLayout(null);
-        setSize(530, 400);
+        setSize(530 + changeWidth, 400 + changeHeight);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         setIconImage(Tray.icon);
+
     }
 
     public void init()
@@ -95,7 +102,7 @@ public class MainFrame extends JFrame
         JLabel filterMappingNameLabel = new JLabel("是否过滤映射名称");
         filterMappingNameLabel.setBounds(320, 5, 130, 30);
         filterMappingNameRadioButton = new JRadioButton();
-        filterMappingNameRadioButton.setBounds(450, 8, 25, 25);
+        filterMappingNameRadioButton.setBounds(450, 10, 30, 20);
         filterMappingNameRadioButton.setSelected(true);
 
 
@@ -160,5 +167,12 @@ public class MainFrame extends JFrame
 
         downPanel.add(logTextAreaScrollPane);
         this.add(downPanel);
+    }
+
+    private static final String os = System.getProperty("os.name");
+
+    private boolean isWindows()
+    {
+        return os.toLowerCase().contains("windows");
     }
 }
