@@ -3,6 +3,8 @@ package com.kele.penetrate.client;
 import com.kele.penetrate.config.Config;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
+import com.kele.penetrate.page.ClientLogPageManager;
+import com.kele.penetrate.protocol.Handshake;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -21,11 +23,14 @@ public class ConnectHandler
     private Bootstrap bootstrap;
     private Channel channel;
     private long lastReplyTime;
+    private Handshake handshake;
 
     @Autowired
     private NettyClientChannelInitializerHandler nettyClientChannelInitializerHandler;
     @Autowired
     private Config config;
+    @Autowired
+    private ClientLogPageManager clientLogPageManager;
 
     //<editor-fold desc="启动">
     public void start()
@@ -56,6 +61,7 @@ public class ConnectHandler
             }
             else
             {
+                clientLogPageManager.addLog("5秒之后自动重连");
                 log.info("5秒之后自动重连：" + config.getServiceConnectInfo().getIp() + ":" + config.getServiceConnectInfo().getPort());
                 futureListener.channel().eventLoop().schedule(this::doConnect, 5, TimeUnit.SECONDS);
             }
@@ -65,6 +71,7 @@ public class ConnectHandler
 
     public void disconnect()
     {
+        clientLogPageManager.addLog("连接断开,自动重连中...");
         setChannel(null);
         doConnect();
     }

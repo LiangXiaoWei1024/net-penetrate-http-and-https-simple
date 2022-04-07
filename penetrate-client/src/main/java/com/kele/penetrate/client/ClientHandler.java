@@ -5,6 +5,7 @@ import com.kele.penetrate.Start;
 import com.kele.penetrate.config.Config;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
+import com.kele.penetrate.page.MainFrame;
 import com.kele.penetrate.protocol.Handshake;
 import com.kele.penetrate.utils.UUIDUtils;
 import io.netty.channel.ChannelHandler;
@@ -25,6 +26,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
     private Config config;
     @Autowired
     private UUIDUtils uuidUtils;
+    @Autowired
+    private MainFrame mainFrame;
 
     //<editor-fold desc="接收通道消息">
     @Override
@@ -40,14 +43,11 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
     {
         connectHandler.setChannel(ctx.channel());
         //<editor-fold desc="通道激活与客户端握手，告知转发信息">
-        Handshake handshake = new Handshake();
-        handshake.setVersion(config.getVersion());
-        handshake.setMappingIp(config.getDefaultInfo().getForwardIp());
-        handshake.setPort(config.getDefaultInfo().getPort());
-        handshake.setFilterMappingName(true);
-//        handshake.setMappingName(uuidUtils.generateShortUuid());
-        handshake.setMappingName("test");
-        connectHandler.send(handshake);
+        if (connectHandler.getHandshake() != null)
+        {
+            connectHandler.send(connectHandler.getHandshake());
+        }
+
         //</editor-fold>
     }
     //</editor-fold>
