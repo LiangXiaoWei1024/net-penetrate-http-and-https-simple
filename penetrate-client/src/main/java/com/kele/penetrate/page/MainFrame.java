@@ -152,6 +152,12 @@ public class MainFrame extends JFrame
             String ip = getIp();
             String port = getPort();
             boolean isFilterMappingName = isFilterMappingName();
+            if (!connectHandler.isConnect())
+            {
+                clientLogPageManager.addLog("与服务器未连接成功");
+                setAllEditable(true);
+                return;
+            }
 
             if (!checkUtils.checkMappingName(mappingName))
             {

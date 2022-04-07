@@ -63,9 +63,17 @@ public class ConnectManager
         synchronized (CONNECT_LOCK)
         {
             channelIdBindConnectHandler.put(connectHandler.getCtx().channel().id(), connectHandler);
-            mappingNameBindConnectHandler.put(connectHandler.getMappingName(), connectHandler);
-            log.info("新的连接进来," + "共有" + channelIdBindConnectHandler.size() + "个连接,{" + connectHandler + "}");
+            if (connectHandler.getMappingName() != null)
+            {
+                mappingNameBindConnectHandler.put(connectHandler.getMappingName(), connectHandler);
+                log.info("新的连接进来," + "共有" + channelIdBindConnectHandler.size() + "个连接,{" + connectHandler + "}");
+            }
         }
+    }
+
+    public ConnectHandler get(ChannelId channelId)
+    {
+        return channelIdBindConnectHandler.get(channelId);
     }
 
     public ConnectHandler get(String mappingName)

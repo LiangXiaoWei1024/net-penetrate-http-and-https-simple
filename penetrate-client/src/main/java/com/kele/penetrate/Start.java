@@ -10,7 +10,6 @@ import com.kele.penetrate.page.MainFrame;
 import com.kele.penetrate.page.Tray;
 import com.kele.penetrate.utils.Events;
 import lombok.extern.slf4j.Slf4j;
-import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 
 
 
@@ -36,10 +35,12 @@ public class Start
 
     public static void main(String[] args) throws Exception
     {
-        if (System.getProperty("os.name").toLowerCase().contains("windows"))
-        {
-            BeautyEyeLNFHelper.launchBeautyEyeLNF();
-        }
+        //<editor-fold desc="swing 样式包，弃用，对新的jdk有问题">
+//        if (System.getProperty("os.name").toLowerCase().contains("windows"))
+//        {
+//            BeautyEyeLNFHelper.launchBeautyEyeLNF();
+//        }
+        //</editor-fold>
 
         Start start = BeanFactoryImpl.getBean(Start.class);
         start.mainFrame.init();

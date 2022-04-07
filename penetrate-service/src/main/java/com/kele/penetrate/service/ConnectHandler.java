@@ -1,7 +1,6 @@
 package com.kele.penetrate.service;
 
 import io.netty.channel.ChannelHandlerContext;
-import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @SuppressWarnings("unused")
 @Data
-@Builder
 public class ConnectHandler
 {
     private ChannelHandlerContext ctx;
@@ -17,6 +15,12 @@ public class ConnectHandler
     private String mappingIp;
     private int port;
     private boolean isFilterMappingName;
+
+
+    public ConnectHandler(ChannelHandlerContext ctx)
+    {
+        this.ctx = ctx;
+    }
 
     //<editor-fold desc="发送消息">
     public void reply(Object msg)

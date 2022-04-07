@@ -69,8 +69,16 @@ public class ConnectHandler
     }
     //</editor-fold>
 
+    public boolean isConnect(){
+        if(channel == null){
+            return false;
+        }
+        return channel.isActive();
+    }
+
     public void disconnect()
     {
+        log.info("与服务器断开链接");
         clientLogPageManager.addLog("连接断开,自动重连中...");
         setChannel(null);
         doConnect();

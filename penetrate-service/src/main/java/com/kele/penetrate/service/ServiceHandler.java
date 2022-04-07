@@ -29,6 +29,7 @@ public class ServiceHandler extends SimpleChannelInboundHandler<Object>
     @Override
     public void channelActive(ChannelHandlerContext ctx)
     {
+        connectManager.add(new ConnectHandler(ctx));
     }
     //</editor-fold>
 

@@ -60,13 +60,12 @@ public class HandshakePipeline implements Func<ServicePipeline, Boolean>
                 }
                 else
                 {
-                    ConnectHandler.ConnectHandlerBuilder connectHandlerBuilder = ConnectHandler.builder();
-                    connectHandlerBuilder.ctx(channelHandlerContext);
-                    connectHandlerBuilder.mappingIp(handshake.getMappingIp());
-                    connectHandlerBuilder.port(handshake.getPort());
-                    connectHandlerBuilder.mappingName(handshake.getMappingName());
-                    connectHandlerBuilder.isFilterMappingName(handshake.isFilterMappingName());
-                    ConnectHandler connectHandler = connectHandlerBuilder.build();
+                    ConnectHandler connectHandler = connectManager.get(channelHandlerContext.channel().id());
+                    connectHandler.setCtx(channelHandlerContext);
+                    connectHandler.setMappingIp(handshake.getMappingIp());
+                    connectHandler.setPort(handshake.getPort());
+                    connectHandler.setMappingName(handshake.getMappingName());
+                    connectHandler.setFilterMappingName(handshake.isFilterMappingName());
                     connectManager.add(connectHandler);
                     //映射成功
                     handshakeResult.setSuccess(true);
