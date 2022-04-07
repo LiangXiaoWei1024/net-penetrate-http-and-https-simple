@@ -12,7 +12,6 @@ import com.kele.penetrate.utils.Events;
 import lombok.extern.slf4j.Slf4j;
 import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 
-import javax.swing.*;
 
 
 @Recognizer
@@ -37,9 +36,11 @@ public class Start
 
     public static void main(String[] args) throws Exception
     {
-        if(System.getProperty("os.name").toLowerCase().contains("windows")){
+        if (System.getProperty("os.name").toLowerCase().contains("windows"))
+        {
             BeautyEyeLNFHelper.launchBeautyEyeLNF();
         }
+
         Start start = BeanFactoryImpl.getBean(Start.class);
         start.mainFrame.init();
         start.clientLogPageManager.addLog("当前版本" + start.config.getVersion());
