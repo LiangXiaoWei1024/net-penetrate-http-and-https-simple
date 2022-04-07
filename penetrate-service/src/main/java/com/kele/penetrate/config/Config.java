@@ -32,7 +32,7 @@ public class Config
         httpsPort = configJson.getJSONObject("https").getInteger("port");
 
         this.versionInfo.setVersion(versionInfo.getString("version"));
-        this.versionInfo.setContent(versionInfo.getString("content"));
+        this.versionInfo.setContents(versionInfo.getJSONArray("contents"));
     }
 
     private String getDataFromFile()

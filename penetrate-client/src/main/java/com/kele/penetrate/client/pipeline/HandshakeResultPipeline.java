@@ -1,6 +1,9 @@
 package com.kele.penetrate.client.pipeline;
 
+import com.kele.penetrate.factory.annotation.Autowired;
+import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
+import com.kele.penetrate.page.ClientLogPageManager;
 import com.kele.penetrate.protocol.HandshakeResult;
 import com.kele.penetrate.utils.Func;
 import lombok.extern.slf4j.Slf4j;
@@ -8,8 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @SuppressWarnings("unused")
 @Register
+@Recognizer
 public class HandshakeResultPipeline implements Func<Object, Boolean>
 {
+    @Autowired
+    private ClientLogPageManager clientLogPageManager;
+
     @Override
     public Boolean func(Object msg)
     {
@@ -18,11 +25,13 @@ public class HandshakeResultPipeline implements Func<Object, Boolean>
             HandshakeResult handshakeResult = (HandshakeResult) msg;
             if (handshakeResult.isSuccess())
             {
-                log.info("\r\n- 与服务器连接开启成功,访问地址: \r\n" + handshakeResult.getAccessAddress());
+                clientLogPageManager.addLog("启动成功 :");
+                clientLogPageManager.addLog(handshakeResult.getFailMessages());
             }
             else
             {
-                log.info("与服务器连接失败: \r\n" + handshakeResult.getFailMessage());
+                clientLogPageManager.addLog("启动失败 :");
+                clientLogPageManager.addLog(handshakeResult.getFailMessages());
             }
             return true;
         }

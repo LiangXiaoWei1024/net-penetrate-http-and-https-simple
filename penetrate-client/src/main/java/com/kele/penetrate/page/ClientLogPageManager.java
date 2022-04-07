@@ -27,4 +27,16 @@ public class ClientLogPageManager
         logList.add(log);
         mainFrame.setLogTextArea(logList);
     }
+
+    public void addLog(List<String> logs)
+    {
+        if (logs != null)
+        {
+            for (String log : logs)
+            {
+                addLog(log);
+            }
+        }
+    }
+
 }
