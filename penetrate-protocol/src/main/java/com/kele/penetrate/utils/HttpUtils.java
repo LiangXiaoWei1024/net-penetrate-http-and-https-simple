@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
+import javax.net.ssl.SSLException;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.net.ConnectException;
@@ -167,6 +168,11 @@ public class HttpUtils
         {
             requestResult.setFailMessage("request timeout");
             requestResult.setCode(408);
+        }
+
+        if(exception instanceof SSLException){
+            requestResult.setFailMessage("Unsupported or unrecognized SSL message");
+            requestResult.setCode(401);
         }
         action1.action(requestResult);
     }

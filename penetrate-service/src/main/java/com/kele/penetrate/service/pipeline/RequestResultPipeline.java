@@ -62,6 +62,11 @@ public class RequestResultPipeline implements Func<ServicePipeline, Boolean>
                 {
                     responseFail.setStatus(HttpResponseStatus.GATEWAY_TIMEOUT);
                 }
+                if (requestResult.getFailMessage().contains("Unsupported or unrecognized SSL message"))
+                {
+                    responseFail.setStatus(HttpResponseStatus.FAILED_DEPENDENCY);
+                }
+
 
                 if (recordMsg != null && recordMsg.getChannelHandlerContext() != null)
                 {
