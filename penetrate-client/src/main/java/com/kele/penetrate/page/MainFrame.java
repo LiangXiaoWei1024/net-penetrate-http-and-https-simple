@@ -34,7 +34,7 @@ public class MainFrame extends JFrame
 
     public MainFrame() throws HeadlessException
     {
-        if(isWindows()){
+        if(System.getProperty("os.name").toLowerCase().contains("windows")){
             changeWidth = 16;
             changeHeight = 6;
         }
@@ -167,12 +167,5 @@ public class MainFrame extends JFrame
 
         downPanel.add(logTextAreaScrollPane);
         this.add(downPanel);
-    }
-
-    private static final String os = System.getProperty("os.name");
-
-    private boolean isWindows()
-    {
-        return os.toLowerCase().contains("windows");
     }
 }

@@ -12,6 +12,8 @@ import com.kele.penetrate.utils.Events;
 import lombok.extern.slf4j.Slf4j;
 import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 
+import javax.swing.*;
+
 
 @Recognizer
 @Slf4j
@@ -35,13 +37,14 @@ public class Start
 
     public static void main(String[] args) throws Exception
     {
-        BeautyEyeLNFHelper.launchBeautyEyeLNF();
+        if(System.getProperty("os.name").toLowerCase().contains("windows")){
+            BeautyEyeLNFHelper.launchBeautyEyeLNF();
+        }
         Start start = BeanFactoryImpl.getBean(Start.class);
         start.mainFrame.init();
         start.clientLogPageManager.addLog("当前版本" + start.config.getVersion());
         start.clientLogPageManager.addLog("如有问题可以联系V:1049705180,QQ群:704592910");
         start.clientLogPageManager.addLog("请输入信息后启动,也可以用默认配置,但是请映射到本地正确的ip+端口");
         start.connectHandler.start();
-
     }
 }
