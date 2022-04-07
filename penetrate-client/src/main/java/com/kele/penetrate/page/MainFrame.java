@@ -151,9 +151,7 @@ public class MainFrame extends JFrame
             String mappingName = getMappingName();
             String ip = getIp();
             String port = getPort();
-            Boolean isFilterMappingName = isFilterMappingName();
-
-            System.out.println(mappingName + "--" + ip + "--" + port + "---" + isFilterMappingName);
+            boolean isFilterMappingName = isFilterMappingName();
 
             if (!checkUtils.checkMappingName(mappingName))
             {

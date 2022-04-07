@@ -22,7 +22,7 @@ public class LogRequestPipeline implements Func<Object, Boolean>
         if (msg instanceof BaseRequest)
         {
             BaseRequest baseRequest = (BaseRequest) msg;
-            clientLogPageManager.addLog("收到请求:" + baseRequest.getRequestUrl());
+            clientLogPageManager.addLog("收到请求:  " + baseRequest.getRequestUrl());
         }
         return false;
     }

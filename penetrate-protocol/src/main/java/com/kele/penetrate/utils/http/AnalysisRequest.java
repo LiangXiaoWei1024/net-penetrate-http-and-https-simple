@@ -75,9 +75,9 @@ public class AnalysisRequest
         {
             String[] split = uri.toString().split("/");
             uri = new StringBuilder();
-            for (int i = 1; i < split.length; i++)
+            for (int i = 2; i < split.length; i++)
             {
-                uri.append(split[i]);
+                uri.append("/").append(split[i]);
             }
         }
         return uri.toString();
