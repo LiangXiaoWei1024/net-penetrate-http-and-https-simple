@@ -9,8 +9,6 @@ import lombok.Data;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 @Recognizer
@@ -34,7 +32,7 @@ public class MainFrame extends JFrame
 
     public MainFrame() throws HeadlessException
     {
-        setTitle("penetrate");
+        setTitle("penetrate(大家可以加一下QQ群:704592910)");
         setLayout(null);
         setSize(530, 400);
         setResizable(false);
@@ -90,7 +88,7 @@ public class MainFrame extends JFrame
         JLabel mappingNameLabel = new JLabel("映射名称");
         mappingNameLabel.setBounds(10, 5, 100, 30);
         mappingNameTextField = new JTextField();
-        mappingNameTextField.setBounds(80, 5, 200, 30);
+        mappingNameTextField.setBounds(80, 7, 200, 25);
         mappingNameTextField.setText(uuidUtils.generateShortUuid());
 
 
@@ -104,19 +102,19 @@ public class MainFrame extends JFrame
         JLabel ipLabel = new JLabel("IP");
         ipLabel.setBounds(10, 45, 50, 30);
         ipTextField = new JTextField();
-        ipTextField.setBounds(80, 45, 200, 30);
+        ipTextField.setBounds(80, 47, 200, 25);
         ipTextField.setText("127.0.0.1");
 
 
         JLabel portLabel = new JLabel("端口");
         portLabel.setBounds(320, 45, 50, 30);
         portTextField = new JTextField();
-        portTextField.setBounds(360, 45, 130, 30);
+        portTextField.setBounds(360, 47, 130, 25);
         portTextField.setText("8080");
 
 
         runButton = new JButton("启动");
-        runButton.setBounds(200, 80, 120, 35);
+        runButton.setBounds(200, 85, 100, 25);
         runButton.addActionListener(e ->
         {
             mappingNameTextField.setEditable(false);
