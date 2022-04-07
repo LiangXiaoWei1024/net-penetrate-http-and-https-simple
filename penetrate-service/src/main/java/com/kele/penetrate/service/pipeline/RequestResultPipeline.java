@@ -52,7 +52,7 @@ public class RequestResultPipeline implements Func<ServicePipeline, Boolean>
             }
             else
             {
-                FullHttpResponse responseFail = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, Unpooled.copiedBuffer(requestResult.getFailMessage().getBytes(StandardCharsets.UTF_8)));
+                FullHttpResponse responseFail = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.FAILED_DEPENDENCY, Unpooled.copiedBuffer(requestResult.getFailMessage().getBytes(StandardCharsets.UTF_8)));
                 ConnectManager.MsgManager recordMsg = connectManager.getRecordMsg(requestResult.getRequestId());
                 if (requestResult.getFailMessage().contains("request timeout"))
                 {

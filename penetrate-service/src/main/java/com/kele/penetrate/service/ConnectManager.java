@@ -89,8 +89,11 @@ public class ConnectManager
             if (connectHandler != null)
             {
                 channelIdBindConnectHandler.remove(ctx.channel().id());
-                mappingNameBindConnectHandler.remove(connectHandler.getMappingName());
-                log.info("连接断开," + "共有" + channelIdBindConnectHandler.size() + "个连接,{" + connectHandler + "}");
+                if (connectHandler.getMappingName() != null)
+                {
+                    mappingNameBindConnectHandler.remove(connectHandler.getMappingName());
+                    log.info("连接断开," + "共有" + channelIdBindConnectHandler.size() + "个连接,{" + connectHandler + "}");
+                }
             }
         }
 
