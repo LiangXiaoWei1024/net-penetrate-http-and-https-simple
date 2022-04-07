@@ -8,7 +8,8 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class UUIDUtils
 {
-    public static String getUUID(){
+    public String getUUID()
+    {
         return UUID.randomUUID().toString().replace("-", "");
     }
 
@@ -21,7 +22,7 @@ public class UUIDUtils
             "W", "X", "Y", "Z"};
 
 
-    public static String generateShortUuid()
+    public String generateShortUuid()
     {
         StringBuffer shortBuffer = new StringBuffer();
         String uuid = UUID.randomUUID().toString().replace("-", "");

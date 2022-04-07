@@ -5,6 +5,8 @@ import com.kele.penetrate.config.Config;
 import com.kele.penetrate.factory.BeanFactoryImpl;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
+import com.kele.penetrate.page.ClientLogPageManager;
+import com.kele.penetrate.page.MainFrame;
 import com.kele.penetrate.page.Tray;
 import com.kele.penetrate.utils.Events;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +26,20 @@ public class Start
     private ConnectHandler connectHandler;
     @Autowired
     private Tray tray;
+    @Autowired
+    private MainFrame mainFrame;
+    @Autowired
+    private ClientLogPageManager clientLogPageManager;
 
 
     public static void main(String[] args)
     {
-        Start start = beanFactory.getBean(Start.class);
+        Start start = BeanFactoryImpl.getBean(Start.class);
+        start.mainFrame.init();
+        start.clientLogPageManager.addLog("当前版本" + start.config.getVersion());
+        start.clientLogPageManager.addLog("如有问题可以联系V:1049705180,QQ群:704592910" + start.config.getVersion());
+        start.clientLogPageManager.addLog("请输入信息后启动,也可以用默认配置,但是请映射到本地正确的ip+端口" + start.config.getVersion());
         start.connectHandler.start();
+
     }
 }

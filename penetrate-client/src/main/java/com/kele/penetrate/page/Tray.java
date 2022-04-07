@@ -19,9 +19,6 @@ public class Tray
     public static final Image icon = new ImageIcon(Tray.class.getResource("/icon.png")).getImage();
     @Autowired
     private MainFrame mainFrame;
-    @Autowired
-    private HelpFrame helpFrame;
-
 
     public Tray()
     {
@@ -35,25 +32,7 @@ public class Tray
             {
                 if (!mainFrame.isShowing())
                 {
-                    if (helpFrame.isShowing())
-                    {
-                        helpFrame.setVisible(false);
-                    }
                     mainFrame.setVisible(true);
-                }
-            }));
-            //</editor-fold>
-
-            //<editor-fold desc="帮助">
-            popupMenu.add(createMenuItem("help", e ->
-            {
-                if (!helpFrame.isShowing())
-                {
-                    if (mainFrame.isShowing())
-                    {
-                        mainFrame.setVisible(false);
-                    }
-                    helpFrame.setVisible(true);
                 }
             }));
             //</editor-fold>
