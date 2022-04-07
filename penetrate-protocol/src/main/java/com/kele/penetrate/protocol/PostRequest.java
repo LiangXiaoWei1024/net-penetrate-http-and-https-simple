@@ -9,5 +9,4 @@ import java.util.Map;
 public class PostRequest extends BaseRequest
 {
     private Map<String, String> headers;
-    private String requestUrl;
 }

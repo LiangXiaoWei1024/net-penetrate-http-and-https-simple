@@ -8,4 +8,5 @@ import java.io.Serializable;
 public class BaseRequest implements Serializable
 {
     private String requestId;
+    private String requestUrl;
 }
