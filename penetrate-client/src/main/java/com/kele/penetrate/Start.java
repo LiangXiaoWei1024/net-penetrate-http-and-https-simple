@@ -10,6 +10,7 @@ import com.kele.penetrate.page.MainFrame;
 import com.kele.penetrate.page.Tray;
 import com.kele.penetrate.utils.Events;
 import lombok.extern.slf4j.Slf4j;
+import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 
 
 @Recognizer
@@ -32,8 +33,9 @@ public class Start
     private ClientLogPageManager clientLogPageManager;
 
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
+        BeautyEyeLNFHelper.launchBeautyEyeLNF();
         Start start = BeanFactoryImpl.getBean(Start.class);
         start.mainFrame.init();
         start.clientLogPageManager.addLog("当前版本" + start.config.getVersion());
