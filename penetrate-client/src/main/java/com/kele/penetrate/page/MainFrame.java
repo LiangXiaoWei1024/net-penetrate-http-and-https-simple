@@ -165,7 +165,7 @@ public class MainFrame extends JFrame
             boolean isFilterMappingName = isFilterMappingName();
             if (!connectHandler.isConnect())
             {
-                clientLogPageManager.addLog("与服务器未连接成功");
+                clientLogPageManager.addLog("与服务器失败,不能成功启动...");
                 setAllEditable(true);
                 return;
             }
@@ -188,6 +188,7 @@ public class MainFrame extends JFrame
                 setAllEditable(true);
                 return;
             }
+
             Handshake handshake = new Handshake();
             handshake.setVersion(config.getVersion());
             handshake.setMappingIp(ip);
