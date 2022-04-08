@@ -30,6 +30,8 @@ public class HandshakeResultPipeline implements Func<Object, Boolean>
             {
                 clientLogPageManager.addLog("启动成功 :");
                 clientLogPageManager.addLog(handshakeResult.getFailMessages());
+                mainFrame.getRunButton().setText("暂停");
+                mainFrame.getRunButton().setEnabled(true);
             }
             else
             {

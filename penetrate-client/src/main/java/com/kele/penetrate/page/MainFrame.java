@@ -4,6 +4,7 @@ import com.kele.penetrate.client.ConnectHandler;
 import com.kele.penetrate.config.Config;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
+import com.kele.penetrate.protocol.CancelMapping;
 import com.kele.penetrate.protocol.Handshake;
 import com.kele.penetrate.utils.CheckUtils;
 import com.kele.penetrate.utils.UUIDUtils;
@@ -30,6 +31,7 @@ public class MainFrame extends JFrame
     private JRadioButton filterMappingNameRadioButton;
     private JTextArea logTextArea;
     private JButton runButton;
+    private JScrollPane logTextAreaScrollPane;
     private int changeWidth;
     private int changeHeight;
 
@@ -93,7 +95,9 @@ public class MainFrame extends JFrame
     {
         StringBuilder builder = new StringBuilder();
         for (ClientLogPageManager.LogInfo logInfo : logList)
+        {
             builder.append(logInfo.getTime()).append(" - ").append(logInfo.getMsg()).append("\r\n");
+        }
         logTextArea.setText(builder.toString());
     }
 
@@ -159,45 +163,62 @@ public class MainFrame extends JFrame
         {
             setAllEditable(false);
 
-            String mappingName = getMappingName();
-            String ip = getIp();
-            String port = getPort();
-            boolean isFilterMappingName = isFilterMappingName();
-            if (!connectHandler.isConnect())
+            String butText = runButton.getText();
+            if ("启动".equals(butText))
             {
-                clientLogPageManager.addLog("与服务器失败,不能成功启动...");
-                setAllEditable(true);
-                return;
-            }
+                String mappingName = getMappingName();
+                String ip = getIp();
+                String port = getPort();
+                boolean isFilterMappingName = isFilterMappingName();
+                if (!connectHandler.isConnect())
+                {
+                    clientLogPageManager.addLog("与服务器失败,不能成功启动...");
+                    setAllEditable(true);
+                    return;
+                }
 
-            if (!checkUtils.checkMappingName(mappingName))
-            {
-                clientLogPageManager.addLog("请检查映射名称是否正确(不能含有特殊字符，长度>0)");
-                setAllEditable(true);
-                return;
-            }
-            if (!checkUtils.checkPort(port))
-            {
-                clientLogPageManager.addLog("请检查端口是否正确");
-                setAllEditable(true);
-                return;
-            }
-            if (!checkUtils.checkIp(ip))
-            {
-                clientLogPageManager.addLog("ip地址不能为空");
-                setAllEditable(true);
-                return;
-            }
+                if (!checkUtils.checkMappingName(mappingName))
+                {
+                    clientLogPageManager.addLog("请检查映射名称是否正确(不能含有特殊字符，长度>0)");
+                    setAllEditable(true);
+                    return;
+                }
+                if (!checkUtils.checkPort(port))
+                {
+                    clientLogPageManager.addLog("请检查端口是否正确");
+                    setAllEditable(true);
+                    return;
+                }
+                if (!checkUtils.checkIp(ip))
+                {
+                    clientLogPageManager.addLog("ip地址不能为空");
+                    setAllEditable(true);
+                    return;
+                }
 
-            Handshake handshake = new Handshake();
-            handshake.setVersion(config.getVersion());
-            handshake.setMappingIp(ip);
-            handshake.setPort(Integer.parseInt(port));
-            handshake.setFilterMappingName(isFilterMappingName);
-            handshake.setMappingName(mappingName);
-            connectHandler.setHandshake(handshake);
-            connectHandler.send(handshake);
-            clientLogPageManager.addLog("对服务器发起连接请求");
+                Handshake handshake = new Handshake();
+                handshake.setVersion(config.getVersion());
+                handshake.setMappingIp(ip);
+                handshake.setPort(Integer.parseInt(port));
+                handshake.setFilterMappingName(isFilterMappingName);
+                handshake.setMappingName(mappingName);
+                connectHandler.setHandshake(handshake);
+                connectHandler.send(handshake);
+                clientLogPageManager.addLog("发送启动请求");
+            }
+            else
+            {
+                setAllEditable(false);
+                if (connectHandler.getChannel() == null || !connectHandler.getChannel().isActive())
+                {
+                    clientLogPageManager.addLog("与服务器连接断开，请稍后重试...");
+                    runButton.setEnabled(true);
+                    return;
+                }
+                clientLogPageManager.addLog("发送暂停请求");
+                connectHandler.setHandshake(null);
+                connectHandler.send(new CancelMapping());
+            }
         });
 
         upPanel.add(mappingNameLabel);
@@ -219,6 +240,7 @@ public class MainFrame extends JFrame
         downPanel = new JPanel();
         downPanel.setLayout(null);
         downPanel.setBounds(15, 135, 500, 220);
+        downPanel.setLocation(15, 135);
         downPanel.setBackground(new Color(44, 44, 44));
 
         logTextArea = new JTextArea();
@@ -229,8 +251,8 @@ public class MainFrame extends JFrame
         logTextArea.setWrapStyleWord(true);
         logTextArea.setEditable(false);
 
-        JScrollPane logTextAreaScrollPane = new JScrollPane(logTextArea);
-        logTextAreaScrollPane.setBounds(10, 5, 480, 190);
+        logTextAreaScrollPane = new JScrollPane(logTextArea);
+        logTextAreaScrollPane.setBounds(10, 5, 480, 210);
         logTextAreaScrollPane.setBackground(new Color(44, 44, 44));
         logTextAreaScrollPane.setBorder(new LineBorder(null, 0));
 

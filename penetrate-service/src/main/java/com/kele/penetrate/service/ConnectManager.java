@@ -99,6 +99,23 @@ public class ConnectManager
 
     }
 
+    public void cancelMapping(ChannelHandlerContext ctx)
+    {
+        synchronized (CONNECT_LOCK)
+        {
+            ConnectHandler connectHandler = channelIdBindConnectHandler.get(ctx.channel().id());
+            if (connectHandler != null)
+            {
+                if (connectHandler.getMappingName() != null)
+                {
+                    mappingNameBindConnectHandler.remove(connectHandler.getMappingName());
+                    log.info("连接断开," + "共有" + channelIdBindConnectHandler.size() + "个连接,{" + connectHandler + "}");
+                }
+            }
+        }
+
+    }
+
     public boolean isExist(String mappingName)
     {
         return mappingNameBindConnectHandler.containsKey(mappingName);
