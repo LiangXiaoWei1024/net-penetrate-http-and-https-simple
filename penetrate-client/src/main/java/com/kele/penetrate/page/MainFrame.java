@@ -114,14 +114,19 @@ public class MainFrame extends JFrame
         upPanel.setBounds(15, 15, 500, 120);
         upPanel.setBackground(new Color(255, 255, 255));
 
+        Font font = new Font("宋体", Font.PLAIN, 12);
+
         JLabel mappingNameLabel = new JLabel("映射名称");
+        mappingNameLabel.setFont(font);
         mappingNameLabel.setBounds(10, 5, 100, 30);
         mappingNameTextField = new JTextField();
         mappingNameTextField.setBounds(80, 7, 200, 25);
+        mappingNameTextField.setFont(font);
         mappingNameTextField.setText(uuidUtils.generateShortUuid());
 
 
         JLabel filterMappingNameLabel = new JLabel("是否过滤映射名称");
+        filterMappingNameLabel.setFont(font);
         filterMappingNameLabel.setBounds(320, 5, 130, 30);
         filterMappingNameRadioButton = new JRadioButton();
         filterMappingNameRadioButton.setBounds(450, 10, 30, 20);
@@ -129,20 +134,26 @@ public class MainFrame extends JFrame
 
 
         JLabel ipLabel = new JLabel("IP");
+        ipLabel.setFont(font);
+
         ipLabel.setBounds(10, 45, 50, 30);
         ipTextField = new JTextField();
         ipTextField.setBounds(80, 47, 200, 25);
+        ipTextField.setFont(font);
         ipTextField.setText("127.0.0.1");
 
 
         JLabel portLabel = new JLabel("端口");
+        portLabel.setFont(font);
         portLabel.setBounds(320, 45, 50, 30);
         portTextField = new JTextField();
         portTextField.setBounds(360, 47, 130, 25);
+        portTextField.setFont(font);
         portTextField.setText("8080");
 
 
         runButton = new JButton("启动");
+        runButton.setFont(font);
         runButton.setBounds(200, 85, 100, 25);
         runButton.addActionListener(e ->
         {
