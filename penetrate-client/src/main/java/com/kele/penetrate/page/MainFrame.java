@@ -20,6 +20,8 @@ import java.util.List;
 @Data
 public class MainFrame extends JFrame
 {
+
+
     private JPanel upPanel;
     private JPanel downPanel;
     private JTextField mappingNameTextField;
@@ -87,13 +89,11 @@ public class MainFrame extends JFrame
         return filterMappingNameRadioButton.isSelected();
     }
 
-    public void setLogTextArea(List<String> logList)
+    public void setLogTextArea(List<ClientLogPageManager.LogInfo> logList)
     {
         StringBuilder builder = new StringBuilder();
-        for (String log : logList)
-        {
-            builder.append("- ").append(log).append("\r\n");
-        }
+        for (ClientLogPageManager.LogInfo logInfo : logList)
+            builder.append(logInfo.getTime()).append(" - ").append(logInfo.getMsg()).append("\r\n");
         logTextArea.setText(builder.toString());
     }
 
@@ -212,6 +212,7 @@ public class MainFrame extends JFrame
         logTextArea = new JTextArea();
         logTextArea.setForeground(new Color(255, 255, 255));
         logTextArea.setBackground(new Color(44, 44, 44));
+        logTextArea.setFont(new Font("宋体", Font.PLAIN, 10));
         logTextArea.setLineWrap(true);
         logTextArea.setWrapStyleWord(true);
         logTextArea.setEditable(false);

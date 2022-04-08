@@ -3,6 +3,7 @@ package com.kele.penetrate.page;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,10 +14,40 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class ClientLogPageManager
 {
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
     @Autowired
     private MainFrame mainFrame;
 
-    private static final List<String> logList = new ArrayList<>();
+
+    class LogInfo
+    {
+        private String time;
+        private String msg;
+
+        public String getTime()
+        {
+            return time;
+        }
+
+        public void setTime(String time)
+        {
+            this.time = time;
+        }
+
+        public String getMsg()
+        {
+            return msg;
+        }
+
+        public void setMsg(String msg)
+        {
+            this.msg = msg;
+        }
+    }
+
+    private static final List<LogInfo> logList = new ArrayList<>();
 
     public synchronized void addLog(String log)
     {
@@ -24,7 +55,10 @@ public class ClientLogPageManager
         {
             logList.remove(0);
         }
-        logList.add(log);
+        LogInfo logInfo = new LogInfo();
+        logInfo.setMsg(log);
+        logInfo.setTime(sdf.format(System.currentTimeMillis()));
+        logList.add(logInfo);
         mainFrame.setLogTextArea(logList);
     }
 
