@@ -99,6 +99,7 @@ public class MainFrame extends JFrame
             builder.append(logInfo.getTime()).append(" - ").append(logInfo.getMsg()).append("\r\n");
         }
         logTextArea.setText(builder.toString());
+        logTextArea.setCaretPosition(logTextArea.getText().length());
     }
 
 
