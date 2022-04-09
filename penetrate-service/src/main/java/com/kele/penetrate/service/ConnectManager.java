@@ -66,7 +66,7 @@ public class ConnectManager
             if (connectHandler.getMappingName() != null)
             {
                 mappingNameBindConnectHandler.put(connectHandler.getMappingName(), connectHandler);
-                log.info("新的连接进来," + "共有" + channelIdBindConnectHandler.size() + "个连接,{" + connectHandler + "}");
+                log.info("新的连接进来," + "共有" + channelIdBindConnectHandler.size() + "个连接->" + connectHandler);
             }
         }
     }
@@ -92,7 +92,7 @@ public class ConnectManager
                 if (connectHandler.getMappingName() != null)
                 {
                     mappingNameBindConnectHandler.remove(connectHandler.getMappingName());
-                    log.info("连接断开," + "共有" + channelIdBindConnectHandler.size() + "个连接,{" + connectHandler + "}");
+                    log.info("连接断开," + "共有" + channelIdBindConnectHandler.size() + "个连接->" + connectHandler);
                 }
             }
         }
@@ -109,7 +109,7 @@ public class ConnectManager
                 if (connectHandler.getMappingName() != null)
                 {
                     mappingNameBindConnectHandler.remove(connectHandler.getMappingName());
-                    log.info("连接断开," + "共有" + channelIdBindConnectHandler.size() + "个连接,{" + connectHandler + "}");
+                    log.info("连接断开," + "共有" + channelIdBindConnectHandler.size() + "个连接->" + connectHandler);
                 }
             }
         }
@@ -156,5 +156,4 @@ public class ConnectManager
         requestIdBindConnect.remove(requestId);
         return msgManager;
     }
-
 }
