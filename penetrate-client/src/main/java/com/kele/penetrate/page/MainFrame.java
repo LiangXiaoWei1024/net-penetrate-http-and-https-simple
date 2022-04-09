@@ -16,13 +16,15 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * 页面主入口
+ */
 @EqualsAndHashCode(callSuper = true)
 @Recognizer
 @Data
 public class MainFrame extends JFrame
 {
-
-
+    //<editor-fold desc="属性">
     private JPanel upPanel;
     private JPanel downPanel;
     private JTextField mappingNameTextField;
@@ -34,7 +36,9 @@ public class MainFrame extends JFrame
     private JScrollPane logTextAreaScrollPane;
     private int changeWidth;
     private int changeHeight;
+    //</editor-fold>
 
+    //<editor-fold desc="注入">
     @Autowired
     private UUIDUtils uuidUtils;
     @Autowired
@@ -45,32 +49,39 @@ public class MainFrame extends JFrame
     private ConnectHandler connectHandler;
     @Autowired
     private CheckUtils checkUtils;
+    //</editor-fold>
 
-
+    //<editor-fold desc="构造">
     public MainFrame() throws HeadlessException
     {
+        //<editor-fold desc="判断系统修改页面尺寸">
         if (System.getProperty("os.name").toLowerCase().contains("windows"))
         {
             changeWidth = 16;
             changeHeight = 6;
         }
-        setTitle("penetrate(大家可以加一下QQ群:704592910)");
+        //</editor-fold>
+
+        setTitle("penetrate(大家可以加一下交流QQ群:704592910)");
         setLayout(null);
         setSize(530 + changeWidth, 400 + changeHeight);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         setIconImage(Tray.icon);
-
     }
+    //</editor-fold>
 
+    //<editor-fold desc="初始化">
     public void init()
     {
         createUpPanel();
         createDownPanel();
         setVisible(true);
     }
+    //</editor-fold>
 
+    //<editor-fold desc="对属性操作的方法">
     public String getIp()
     {
         return ipTextField.getText();
@@ -101,8 +112,9 @@ public class MainFrame extends JFrame
         logTextArea.setText(builder.toString());
         logTextArea.setCaretPosition(logTextArea.getText().length());
     }
+    //</editor-fold>
 
-
+    //<editor-fold desc="设置是否可以编辑">
     public void setAllEditable(boolean isEditable)
     {
         mappingNameTextField.setEditable(isEditable);
@@ -111,15 +123,18 @@ public class MainFrame extends JFrame
         filterMappingNameRadioButton.setEnabled(isEditable);
         runButton.setEnabled(isEditable);
     }
+    //</editor-fold>
 
+    //<editor-fold desc="创建上面面板">
     private void createUpPanel()
     {
+        Font font = new Font("宋体", Font.PLAIN, 12);
+
         upPanel = new JPanel();
         upPanel.setLayout(null);
         upPanel.setBounds(15, 15, 500, 120);
         upPanel.setBackground(new Color(255, 255, 255));
 
-        Font font = new Font("宋体", Font.PLAIN, 12);
 
         JLabel mappingNameLabel = new JLabel("映射名称");
         mappingNameLabel.setFont(font);
@@ -140,7 +155,6 @@ public class MainFrame extends JFrame
 
         JLabel ipLabel = new JLabel("IP");
         ipLabel.setFont(font);
-
         ipLabel.setBounds(10, 45, 50, 30);
         ipTextField = new JTextField();
         ipTextField.setBounds(80, 47, 200, 25);
@@ -235,7 +249,9 @@ public class MainFrame extends JFrame
 
         this.add(upPanel);
     }
+    //</editor-fold>
 
+    //<editor-fold desc="创建下面面板">
     private void createDownPanel()
     {
         downPanel = new JPanel();
@@ -260,4 +276,5 @@ public class MainFrame extends JFrame
         downPanel.add(logTextAreaScrollPane);
         this.add(downPanel);
     }
+    //</editor-fold>
 }

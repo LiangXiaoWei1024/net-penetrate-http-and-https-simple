@@ -9,19 +9,21 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
- * 托盘系统
+ * 托盘程序
  */
 @Slf4j
-@SuppressWarnings("unused")
 @Recognizer
+@SuppressWarnings("unused")
 public class Tray
 {
     public static final Image icon = new ImageIcon(Tray.class.getResource("/icon.png")).getImage();
+
     @Autowired
     private MainFrame mainFrame;
 
     public Tray()
     {
+        //检查系统是否支持托盘程序
         if (SystemTray.isSupported())
         {
             SystemTray tray = SystemTray.getSystemTray();
@@ -41,6 +43,7 @@ public class Tray
             popupMenu.add(createMenuItem("\u9000\u51fa", e -> System.exit(0)));
             //</editor-fold>
 
+            //设置图标
             TrayIcon trayIcon = new TrayIcon(icon, "penetrate", popupMenu);
             trayIcon.setImageAutoSize(true);
             try
@@ -58,7 +61,14 @@ public class Tray
         }
     }
 
-    public MenuItem createMenuItem(String label, ActionListener actionListener)
+    /**
+     * 创建菜单
+     *
+     * @param label          标题
+     * @param actionListener 触发的事件
+     * @return MenuItem
+     */
+    private MenuItem createMenuItem(String label, ActionListener actionListener)
     {
         MenuItem menuItem = new MenuItem(label);
         menuItem.addActionListener(actionListener);
