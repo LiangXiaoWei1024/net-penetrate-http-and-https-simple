@@ -1,7 +1,6 @@
 package com.kele.penetrate.pojo;
 
 import com.kele.penetrate.protocol.RequestFile;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;

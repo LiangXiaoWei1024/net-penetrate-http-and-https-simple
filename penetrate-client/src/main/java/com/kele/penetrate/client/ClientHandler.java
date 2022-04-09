@@ -6,7 +6,6 @@ import com.kele.penetrate.config.Config;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.page.MainFrame;
-import com.kele.penetrate.protocol.Handshake;
 import com.kele.penetrate.utils.UUIDUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -14,12 +13,14 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 
 
-@SuppressWarnings("unused")
+
 @Slf4j
 @Recognizer
 @ChannelHandler.Sharable
+@SuppressWarnings("unused")
 public class ClientHandler extends SimpleChannelInboundHandler<Object>
 {
+    //<editor-fold desc="注入">
     @Autowired
     private ConnectHandler connectHandler;
     @Autowired
@@ -28,6 +29,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
     private UUIDUtils uuidUtils;
     @Autowired
     private MainFrame mainFrame;
+    //</editor-fold>
 
     //<editor-fold desc="接收通道消息">
     @Override
@@ -47,7 +49,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
         {
             connectHandler.send(connectHandler.getHandshake());
         }
-
         //</editor-fold>
     }
     //</editor-fold>
@@ -68,5 +69,4 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
         ctx.close();
     }
     //</editor-fold>
-
 }

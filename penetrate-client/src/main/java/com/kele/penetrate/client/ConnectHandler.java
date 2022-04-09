@@ -16,21 +16,25 @@ import java.util.concurrent.TimeUnit;
 
 @Data
 @Slf4j
-@SuppressWarnings("unused")
 @Recognizer
+@SuppressWarnings("unused")
 public class ConnectHandler
 {
+    //<editor-fold desc="属性">
     private Bootstrap bootstrap;
     private Channel channel;
     private long lastReplyTime;
     private Handshake handshake;
+    //</editor-fold>
 
+    //<editor-fold desc="注入">
     @Autowired
     private NettyClientChannelInitializerHandler nettyClientChannelInitializerHandler;
     @Autowired
     private Config config;
     @Autowired
     private ClientLogPageManager clientLogPageManager;
+    //</editor-fold>
 
     //<editor-fold desc="启动">
     public void start()
@@ -69,13 +73,16 @@ public class ConnectHandler
     }
     //</editor-fold>
 
+    //<editor-fold desc="是否连接成功">
     public boolean isConnect(){
         if(channel == null){
             return false;
         }
         return channel.isActive();
     }
+    //</editor-fold>
 
+    //<editor-fold desc="连接断开处理">
     public void disconnect()
     {
         log.info("与服务器断开链接");
@@ -83,6 +90,7 @@ public class ConnectHandler
         setChannel(null);
         doConnect();
     }
+    //</editor-fold>
 
     //<editor-fold desc="发送消息">
     public void send(Object msg)
