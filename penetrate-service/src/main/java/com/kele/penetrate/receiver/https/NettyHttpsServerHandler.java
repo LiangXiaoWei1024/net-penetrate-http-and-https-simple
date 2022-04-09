@@ -14,14 +14,9 @@ import io.netty.handler.codec.http.*;
 @ChannelHandler.Sharable
 public class NettyHttpsServerHandler extends SimpleChannelInboundHandler<FullHttpRequest>
 {
-    /*
-     * 处理请求
-     */
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest)
     {
         Start.hypertextProtocolEvents.notice(new PipelineTransmission(channelHandlerContext, fullHttpRequest, HypertextTransferProtocolType.HTTPS));
     }
-
-
 }
