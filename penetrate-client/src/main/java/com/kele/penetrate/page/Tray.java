@@ -27,8 +27,8 @@ public class Tray
             SystemTray tray = SystemTray.getSystemTray();
             PopupMenu popupMenu = new PopupMenu();
 
-            //<editor-fold desc="打开">
-            popupMenu.add(createMenuItem("open", e ->
+            //<editor-fold desc="打开 ASCll编码">
+            popupMenu.add(createMenuItem("\u6253\u5f00", e ->
             {
                 if (!mainFrame.isShowing())
                 {
@@ -37,8 +37,8 @@ public class Tray
             }));
             //</editor-fold>
 
-            //<editor-fold desc="退出">
-            popupMenu.add(createMenuItem("exit", e -> System.exit(0)));
+            //<editor-fold desc="退出 ASCll编码">
+            popupMenu.add(createMenuItem("\u9000\u51fa", e -> System.exit(0)));
             //</editor-fold>
 
             TrayIcon trayIcon = new TrayIcon(icon, "penetrate", popupMenu);
