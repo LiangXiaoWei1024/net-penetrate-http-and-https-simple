@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 /**
  * 托盘程序
@@ -16,7 +17,7 @@ import java.awt.event.ActionListener;
 @SuppressWarnings("unused")
 public class Tray
 {
-    public static final Image icon = new ImageIcon(Tray.class.getResource("/icon.png")).getImage();
+    public static final Image icon = new ImageIcon(Objects.requireNonNull(Tray.class.getResource("/icon.png"))).getImage();
 
     @Autowired
     private MainFrame mainFrame;
@@ -29,8 +30,8 @@ public class Tray
             SystemTray tray = SystemTray.getSystemTray();
             PopupMenu popupMenu = new PopupMenu();
 
-            //<editor-fold desc="打开 ASCll编码">
-            popupMenu.add(createMenuItem("\u6253\u5f00", e ->
+            //<editor-fold desc="打开">
+            popupMenu.add(createMenuItem("open", e ->
             {
                 if (!mainFrame.isShowing())
                 {
@@ -39,8 +40,8 @@ public class Tray
             }));
             //</editor-fold>
 
-            //<editor-fold desc="退出 ASCll编码">
-            popupMenu.add(createMenuItem("\u9000\u51fa", e -> System.exit(0)));
+            //<editor-fold desc="退出">
+            popupMenu.add(createMenuItem("exit", e -> System.exit(0)));
             //</editor-fold>
 
             //设置图标
