@@ -25,9 +25,9 @@ public class PageTemplate
             "<hr><center>kele</center>\n" +
             "</body></html>";
 
-    private static final String serviceUnavailableTemplate = "<html><head><title>503 暂时只支持GET|POST</title></head>\n" +
+    private static final String serviceUnavailableTemplate = "<html><head><title>暂时只支持GET|POST|PUT|PATCH|DELETE</title></head>\n" +
             "<body bgcolor=\"white\">\n" +
-            "<center><h1>503 暂时只支持GET|POST</h1></center>\n" +
+            "<center><h1>503 暂时只支持GET|POST|PUT|PATCH|DELETE</h1></center>\n" +
             "<hr><center>kele</center>\n" +
             "</body></html>";
 
@@ -41,7 +41,7 @@ public class PageTemplate
     public  FullHttpResponse getAccessDeniedTemplate()
     {
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.FORBIDDEN, Unpooled.copiedBuffer(accessDeniedTemplate.getBytes(StandardCharsets.UTF_8)));
-        response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.getCode());
+        response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.code);
         response.headers().set("Content_Length", response.content().readableBytes());
         return response;
     }
@@ -49,7 +49,7 @@ public class PageTemplate
     public  FullHttpResponse getNotFoundTemplate()
     {
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.FORBIDDEN, Unpooled.copiedBuffer(notFound.getBytes(StandardCharsets.UTF_8)));
-        response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.getCode());
+        response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.code);
         response.headers().set("Content_Length", response.content().readableBytes());
         return response;
     }
@@ -57,7 +57,7 @@ public class PageTemplate
     public  FullHttpResponse getServiceUnavailableTemplate()
     {
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.SERVICE_UNAVAILABLE, Unpooled.copiedBuffer(serviceUnavailableTemplate.getBytes(StandardCharsets.UTF_8)));
-        response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.getCode());
+        response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.code);
         response.headers().set("Content_Length", response.content().readableBytes());
         return response;
     }
@@ -65,7 +65,7 @@ public class PageTemplate
     public  FullHttpResponse getUnableProcess()
     {
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.PRECONDITION_FAILED, Unpooled.copiedBuffer(unableProcessTemplate.getBytes(StandardCharsets.UTF_8)));
-        response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.getCode());
+        response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.code);
         response.headers().set("Content_Length", response.content().readableBytes());
         return response;
     }

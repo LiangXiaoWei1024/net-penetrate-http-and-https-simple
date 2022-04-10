@@ -10,10 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Register
-@SuppressWarnings("unused")
 @Slf4j
 @Recognizer
-public class PostPipeline implements Func<PipelineTransmission, Boolean>
+@SuppressWarnings("unused")
+public class DeletePipeline implements Func<PipelineTransmission, Boolean>
 {
     @Autowired
     private BodyRequestHandle bodyRequestHandle;

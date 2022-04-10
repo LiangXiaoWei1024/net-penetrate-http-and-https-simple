@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @SuppressWarnings("unused")
-public class PostRequestText extends PostRequest
+public class RequestTextBody extends BaseRequest
 {
     private String dataText;
 }

@@ -9,18 +9,12 @@ public enum RequestContentType
     TEXT_PLAIN("text"),
     APPLICATION_JSON("application/json"),
     APPLICATION_JAVASCRIPT("application/javascript"),
-    APPLICATION_XML("application/xml"),
-
-    ;
-    private final String code;
+    APPLICATION_XML("application/xml");
+    public final String code;
 
     RequestContentType(String code)
     {
         this.code = code;
     }
 
-    public String getCode()
-    {
-        return code;
-    }
 }

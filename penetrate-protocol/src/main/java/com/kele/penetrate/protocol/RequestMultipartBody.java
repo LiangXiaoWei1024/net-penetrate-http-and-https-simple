@@ -9,7 +9,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @SuppressWarnings("unused")
-public class PostRequestMultipart extends PostRequest
+public class RequestMultipartBody extends BaseRequest
 {
     private Map<String, String> bodyMap;
     private List<RequestFile> bodyFile;

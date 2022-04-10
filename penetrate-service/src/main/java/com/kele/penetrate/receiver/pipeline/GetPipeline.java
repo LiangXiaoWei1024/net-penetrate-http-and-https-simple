@@ -6,7 +6,7 @@ import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
 import com.kele.penetrate.pojo.PipelineTransmission;
-import com.kele.penetrate.protocol.GetRequest;
+import com.kele.penetrate.protocol.RequestNotBody;
 import com.kele.penetrate.service.ConnectHandler;
 import com.kele.penetrate.service.ConnectManager;
 import com.kele.penetrate.utils.UUIDUtils;
@@ -20,10 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
-@Register
-@SuppressWarnings("unused")
+/**
+ * GET请求管道，不GET请求不支持携带请求体
+ */
 @Slf4j
+@Register
 @Recognizer
+@SuppressWarnings("unused")
 public class GetPipeline implements Func<PipelineTransmission, Boolean>
 {
 
@@ -66,15 +69,16 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
                     if (connectHandler != null)
                     {
                         String requestUrl = analysisHttpGetRequest.getRequestUrl(fullHttpRequest, connectHandler.isFilterMappingName());
-                        requestUrl = hypertextTransferProtocolType.getCode() + "://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
+                        requestUrl = hypertextTransferProtocolType.code + "://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
 
-                        GetRequest getRequest = new GetRequest();
-                        getRequest.setRequestId(uuidUtils.getUUID());
-                        getRequest.setRequestUrl(requestUrl);
-                        getRequest.setHeaders(requestHeaders);
+                        RequestNotBody requestNotBody = new RequestNotBody();
+                        requestNotBody.setRequestId(uuidUtils.getUUID());
+                        requestNotBody.setRequestUrl(requestUrl);
+                        requestNotBody.setHeaders(requestHeaders);
+                        requestNotBody.setRequestType(RequestType.GET);
 
-                        connectManager.recordMsg(getRequest, channelHandlerContext);
-                        connectHandler.reply(getRequest);
+                        connectManager.recordMsg(requestNotBody, channelHandlerContext);
+                        connectHandler.reply(requestNotBody);
                     }
                     else
                     {

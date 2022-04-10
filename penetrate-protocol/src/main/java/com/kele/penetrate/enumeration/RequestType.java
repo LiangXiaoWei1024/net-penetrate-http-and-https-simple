@@ -1,12 +1,14 @@
 package com.kele.penetrate.enumeration;
 
+import java.io.Serializable;
+
 @SuppressWarnings("unused")
-public enum RequestType
+public enum RequestType implements Serializable
 {
     GET("GET"),
     POST("POST"),
     PUT("PUT"),
-    PATCH("PUT"),
+    PATCH("PATCH"),
     DELETE("DELETE"),
     COPY("COPY"),
     HEAD("HEAD"),
@@ -20,7 +22,7 @@ public enum RequestType
     VIEW("VIEW"),
     TRACE("TRACE"),
     CONNECT("CONNECT");
-    private final String code;
+    public final String code;
 
     RequestType(String code)
     {

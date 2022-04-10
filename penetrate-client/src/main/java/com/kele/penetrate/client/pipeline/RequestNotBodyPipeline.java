@@ -4,15 +4,16 @@ import com.kele.penetrate.client.ConnectHandler;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
-import com.kele.penetrate.protocol.PostRequestEmpty;
+import com.kele.penetrate.protocol.RequestNotBody;
 import com.kele.penetrate.utils.Func;
 import com.kele.penetrate.utils.HttpUtils;
 
 @Register
 @Recognizer
 @SuppressWarnings("unused")
-public class PostRequestEmptyPipeline implements Func<Object, Boolean>
+public class RequestNotBodyPipeline implements Func<Object, Boolean>
 {
+
     @Autowired
     private ConnectHandler connectHandler;
     @Autowired
@@ -21,13 +22,12 @@ public class PostRequestEmptyPipeline implements Func<Object, Boolean>
     @Override
     public Boolean func(Object msg)
     {
-        if (msg instanceof PostRequestEmpty)
+        if (msg instanceof RequestNotBody)
         {
-            PostRequestEmpty postRequestEmpty = (PostRequestEmpty) msg;
-
-            httpUtils.post(postRequestEmpty.getRequestUrl(), postRequestEmpty.getHeaders(), requestResult ->
+            RequestNotBody requestNotBody = (RequestNotBody) msg;
+            httpUtils.requestNotBody(requestNotBody.getRequestType(), requestNotBody.getRequestUrl(), requestNotBody.getHeaders(), requestResult ->
             {
-                requestResult.setRequestId(postRequestEmpty.getRequestId());
+                requestResult.setRequestId(requestNotBody.getRequestId());
                 connectHandler.send(requestResult);
             });
             return true;

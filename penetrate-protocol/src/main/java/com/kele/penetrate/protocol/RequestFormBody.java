@@ -8,7 +8,7 @@ import java.util.Map;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @SuppressWarnings("unused")
-public class PostRequestForm extends PostRequest
+public class RequestFormBody extends BaseRequest
 {
     private Map<String, String> dataBody;
 }

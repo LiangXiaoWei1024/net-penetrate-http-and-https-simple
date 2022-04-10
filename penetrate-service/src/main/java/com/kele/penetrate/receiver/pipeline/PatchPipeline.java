@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @SuppressWarnings("unused")
 @Slf4j
 @Recognizer
-public class PostPipeline implements Func<PipelineTransmission, Boolean>
+public class PatchPipeline implements Func<PipelineTransmission, Boolean>
 {
     @Autowired
     private BodyRequestHandle bodyRequestHandle;

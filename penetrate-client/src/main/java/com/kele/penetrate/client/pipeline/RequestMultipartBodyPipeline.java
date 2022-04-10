@@ -4,32 +4,34 @@ import com.kele.penetrate.client.ConnectHandler;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
-import com.kele.penetrate.protocol.PostRequestForm;
+import com.kele.penetrate.protocol.RequestMultipartBody;
 import com.kele.penetrate.utils.Func;
 import com.kele.penetrate.utils.HttpUtils;
 
 @Register
 @Recognizer
 @SuppressWarnings("unused")
-public class PostRequestFormPipeline implements Func<Object, Boolean>
+public class RequestMultipartBodyPipeline implements Func<Object, Boolean>
 {
     @Autowired
     private ConnectHandler connectHandler;
     @Autowired
     private HttpUtils httpUtils;
 
+
     @Override
     public Boolean func(Object msg)
     {
-        if (msg instanceof PostRequestForm)
+        if (msg instanceof RequestMultipartBody)
         {
-            PostRequestForm postRequestForm = (PostRequestForm) msg;
+            RequestMultipartBody requestMultipartBody = (RequestMultipartBody) msg;
 
-            httpUtils.postForm(postRequestForm.getRequestUrl(), postRequestForm.getHeaders(), postRequestForm.getDataBody(), requestResult ->
+            httpUtils.requestMultipartBody(requestMultipartBody.getRequestType(), requestMultipartBody.getRequestUrl(), requestMultipartBody.getHeaders(), requestMultipartBody.getBodyMap(), requestMultipartBody.getBodyFile(), requestResult ->
             {
-                requestResult.setRequestId(postRequestForm.getRequestId());
+                requestResult.setRequestId(requestMultipartBody.getRequestId());
                 connectHandler.send(requestResult);
             });
+
             return true;
         }
         return false;

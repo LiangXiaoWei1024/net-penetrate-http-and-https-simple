@@ -1,5 +1,6 @@
 package com.kele.penetrate.utils;
 
+import com.kele.penetrate.enumeration.RequestType;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.protocol.RequestFile;
 import com.kele.penetrate.protocol.RequestResult;
@@ -29,7 +30,6 @@ public class HttpUtils
     private final OkHttpClient client;
     private final X509TrustManager manager = SSLSocketClientUtil.getX509TrustManager();
 
-
     public HttpUtils()
     {
         //设置超时时间
@@ -41,61 +41,64 @@ public class HttpUtils
         client = clientBuilder.build();
     }
 
-    //<editor-fold desc="GET">
-    public void get(String url, Action1<RequestResult> action1)
-    {
-        Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(url);
-        requestBuilder.get();
-        execute(requestBuilder.build(), action1);
-    }
+    //<editor-fold desc="Not Body">
 
-    public void get(String url, Map<String, String> headers, Action1<RequestResult> action1)
+    /**
+     * 不携带请求体的
+     *
+     * @param requestType 请求类型
+     * @param url         地址
+     * @param headers     头部信息
+     * @param action1     结果回调
+     */
+    public void requestNotBody(RequestType requestType, String url, Map<String, String> headers, Action1<RequestResult> action1)
     {
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(url);
-        requestBuilder.get();
+        if (requestType == RequestType.GET)
+        {
+            requestBuilder.get();
+        }
+        else
+        {
+            requestBuilder.method(requestType.code, RequestBody.create("", null));
+        }
         headers.forEach(requestBuilder::addHeader);
         execute(requestBuilder.build(), action1);
     }
     //</editor-fold>
 
-    //<editor-fold desc="POST">
-    public void post(String url, Map<String, String> headers, Action1<RequestResult> action1)
-    {
-        Request.Builder requestBuilder = new Request.Builder();
-        requestBuilder.url(url);
-        requestBuilder.post(RequestBody.create("", null));
-        headers.forEach(requestBuilder::addHeader);
-        execute(requestBuilder.build(), action1);
-    }
-
-
-    public void postForm(String url, Map<String, String> headers, Map<String, String> formBody, Action1<RequestResult> action1)
+    //<editor-fold desc="Form Body">
+    public void requestFormBody(RequestType requestType, String url, Map<String, String> headers, Map<String, String> formBody, Action1<RequestResult> action1)
     {
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
         formBody.forEach(formBodyBuilder::add);
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(url);
-        requestBuilder.post(formBodyBuilder.build());
+        requestBuilder.method(requestType.code, formBodyBuilder.build());
         headers.forEach(requestBuilder::addHeader);
         execute(requestBuilder.build(), action1);
     }
+    //</editor-fold>
 
-    public void postText(String url, Map<String, String> headers, String text, Action1<RequestResult> action1)
+    //<editor-fold desc="Form Text">
+    public void requestTextBody(RequestType requestType, String url, Map<String, String> headers, String textBody, Action1<RequestResult> action1)
     {
-        RequestBody body = RequestBody.create(text, MediaType.parse(headers.get("Content-Type")));
+        RequestBody body = RequestBody.create(textBody, MediaType.parse(headers.get("Content-Type")));
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(url);
         requestBuilder.post(body);
         headers.forEach(requestBuilder::addHeader);
         execute(requestBuilder.build(), action1);
     }
+    //</editor-fold>
 
-    public void postMultipart(String url, Map<String, String> headers, Map<String, String> bodyMap, List<RequestFile> bodyFiles, Action1<RequestResult> action1)
+    //<editor-fold desc="Form Multipart">
+    public void requestMultipartBody(RequestType requestType, String url, Map<String, String> headers, Map<String, String> bodyMap, List<RequestFile> bodyFiles, Action1<RequestResult> action1)
     {
         MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
         multipartBodyBuilder.setType(MultipartBody.FORM);
+        bodyMap.forEach(multipartBodyBuilder::addFormDataPart);
 
         if (bodyFiles != null)
         {
@@ -104,16 +107,13 @@ public class HttpUtils
                 multipartBodyBuilder.addFormDataPart(requestFile.getName(), requestFile.getFileName(), RequestBody.create(requestFile.getFileByte(), MediaType.parse("multipart/form-data")));
             }
         }
-        bodyMap.forEach(multipartBodyBuilder::addFormDataPart);
 
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.url(url);
-        requestBuilder.post(multipartBodyBuilder.build());
+        requestBuilder.method(requestType.code, multipartBodyBuilder.build());
         headers.forEach(requestBuilder::addHeader);
         execute(requestBuilder.build(), action1);
     }
-
-
     //</editor-fold>
 
     //<editor-fold desc="执行">
@@ -170,7 +170,8 @@ public class HttpUtils
             requestResult.setCode(408);
         }
 
-        if(exception instanceof SSLException){
+        if (exception instanceof SSLException)
+        {
             requestResult.setFailMessage("Unsupported or unrecognized SSL message");
             requestResult.setCode(401);
         }

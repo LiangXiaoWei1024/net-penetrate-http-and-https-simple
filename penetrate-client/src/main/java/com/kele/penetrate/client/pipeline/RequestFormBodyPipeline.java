@@ -4,16 +4,15 @@ import com.kele.penetrate.client.ConnectHandler;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
-import com.kele.penetrate.protocol.GetRequest;
+import com.kele.penetrate.protocol.RequestFormBody;
 import com.kele.penetrate.utils.Func;
 import com.kele.penetrate.utils.HttpUtils;
 
 @Register
 @Recognizer
 @SuppressWarnings("unused")
-public class GetRequestPipeline implements Func<Object, Boolean>
+public class RequestFormBodyPipeline implements Func<Object, Boolean>
 {
-
     @Autowired
     private ConnectHandler connectHandler;
     @Autowired
@@ -22,12 +21,13 @@ public class GetRequestPipeline implements Func<Object, Boolean>
     @Override
     public Boolean func(Object msg)
     {
-        if (msg instanceof GetRequest)
+        if (msg instanceof RequestFormBody)
         {
-            GetRequest getRequest = (GetRequest) msg;
-            httpUtils.get(getRequest.getRequestUrl(), getRequest.getHeaders(), requestResult ->
+            RequestFormBody requestFormBody = (RequestFormBody) msg;
+
+            httpUtils.requestFormBody(requestFormBody.getRequestType(), requestFormBody.getRequestUrl(), requestFormBody.getHeaders(), requestFormBody.getDataBody(), requestResult ->
             {
-                requestResult.setRequestId(getRequest.getRequestId());
+                requestResult.setRequestId(requestFormBody.getRequestId());
                 connectHandler.send(requestResult);
             });
             return true;
