@@ -122,14 +122,14 @@ public class BodyRequestHandle
                     else
                     {
                         log.error("无法处理的Content-Type：" + contentType);
-                        channelHandlerContext.writeAndFlush(pageTemplate.getUnableProcess()).addListener(ChannelFutureListener.CLOSE);
+                        channelHandlerContext.writeAndFlush(pageTemplate.get_UnableProcess_Template()).addListener(ChannelFutureListener.CLOSE);
                     }
                     //</editor-fold>
                 }
             }
             else
             {
-                FullHttpResponse serviceUnavailableTemplate = pageTemplate.getNotFoundTemplate();
+                FullHttpResponse serviceUnavailableTemplate = pageTemplate.get_ServiceUnavailable_Template();
                 channelHandlerContext.writeAndFlush(serviceUnavailableTemplate).addListener(ChannelFutureListener.CLOSE);
             }
             return true;

@@ -187,7 +187,7 @@ public class MainFrame extends JFrame
                 boolean isFilterMappingName = isFilterMappingName();
                 if (!connectHandler.isConnect())
                 {
-                    clientLogPageManager.addLog("与服务器失败,不能成功启动...");
+                    clientLogPageManager.addLog("未与服务器链接，请稍后重试...");
                     setAllEditable(true);
                     return;
                 }
@@ -226,7 +226,7 @@ public class MainFrame extends JFrame
                 setAllEditable(false);
                 if (connectHandler.getChannel() == null || !connectHandler.getChannel().isActive())
                 {
-                    clientLogPageManager.addLog("与服务器连接断开，请稍后重试...");
+                    clientLogPageManager.addLog("未与服务器链接，请稍后重试...");
                     runButton.setEnabled(true);
                     return;
                 }

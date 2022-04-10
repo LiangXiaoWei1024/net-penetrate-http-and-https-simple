@@ -7,6 +7,7 @@ import com.kele.penetrate.pojo.ServicePipeline;
 import com.kele.penetrate.protocol.RequestResult;
 import com.kele.penetrate.service.ConnectManager;
 import com.kele.penetrate.utils.Func;
+import com.kele.penetrate.utils.PageTemplate;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,8 +16,6 @@ import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import lombok.extern.slf4j.Slf4j;
-
-import java.nio.charset.StandardCharsets;
 
 
 @SuppressWarnings("unused")
@@ -27,6 +26,8 @@ public class RequestResultPipeline implements Func<ServicePipeline, Boolean>
 {
     @Autowired
     private ConnectManager connectManager;
+    @Autowired
+    private PageTemplate pageTemplate;
 
     @Override
     public Boolean func(ServicePipeline servicePipeline)
@@ -52,24 +53,11 @@ public class RequestResultPipeline implements Func<ServicePipeline, Boolean>
             }
             else
             {
-                FullHttpResponse responseFail = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.FAILED_DEPENDENCY, Unpooled.copiedBuffer(requestResult.getFailMessage().getBytes(StandardCharsets.UTF_8)));
                 ConnectManager.MsgManager recordMsg = connectManager.getRecordMsg(requestResult.getRequestId());
-                if (requestResult.getFailMessage().contains("request timeout"))
-                {
-                    responseFail.setStatus(HttpResponseStatus.REQUEST_TIMEOUT);
-                }
-                if (requestResult.getFailMessage().contains("connect timeout"))
-                {
-                    responseFail.setStatus(HttpResponseStatus.GATEWAY_TIMEOUT);
-                }
-                if (requestResult.getFailMessage().contains("Unsupported or unrecognized SSL message"))
-                {
-                    responseFail.setStatus(HttpResponseStatus.FAILED_DEPENDENCY);
-                }
-
 
                 if (recordMsg != null && recordMsg.getChannelHandlerContext() != null)
                 {
+                    FullHttpResponse responseFail = pageTemplate.createTemplate(requestResult.getFailMessage(), requestResult.getFailMessage(), new HttpResponseStatus(requestResult.getCode(), requestResult.getFailMessage()));
                     recordMsg.getChannelHandlerContext().writeAndFlush(responseFail).addListener(ChannelFutureListener.CLOSE);
                 }
             }

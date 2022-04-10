@@ -20,7 +20,7 @@ public class UndefinedPipeline implements Func<PipelineTransmission, Boolean>
     @Override
     public Boolean func(PipelineTransmission pipelineTransmission)
     {
-        FullHttpResponse serviceUnavailableTemplate = pageTemplate.getServiceUnavailableTemplate();
+        FullHttpResponse serviceUnavailableTemplate = pageTemplate.get_ServiceUnavailable_Template();
         pipelineTransmission.getChannelHandlerContext().writeAndFlush(serviceUnavailableTemplate).addListener(ChannelFutureListener.CLOSE);
         return true;
     }

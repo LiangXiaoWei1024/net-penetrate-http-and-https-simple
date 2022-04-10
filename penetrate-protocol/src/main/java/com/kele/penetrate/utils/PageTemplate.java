@@ -13,60 +13,45 @@ import java.nio.charset.StandardCharsets;
 @Recognizer
 public class PageTemplate
 {
-    private static final String accessDeniedTemplate = "<html><head><title>403 Access Denied(GET请求不支持请求体)</title></head>\n" +
-            "<body bgcolor=\"white\">\n" +
-            "<center><h1>404 Access Denied (GET请求不支持请求体)</h1></center>\n" +
-            "<hr><center>kele</center>\n" +
-            "</body></html>";
 
-    private static final String notFound = "<html><head><title>404 Not Found</title></head>\n" +
-            "<body bgcolor=\"white\">\n" +
-            "<center><h1>404 Not Found</h1></center>\n" +
-            "<hr><center>kele</center>\n" +
-            "</body></html>";
-
-    private static final String serviceUnavailableTemplate = "<html><head><title>暂时只支持GET|POST|PUT|PATCH|DELETE</title></head>\n" +
-            "<body bgcolor=\"white\">\n" +
-            "<center><h1>503 暂时只支持GET|POST|PUT|PATCH|DELETE</h1></center>\n" +
-            "<hr><center>kele</center>\n" +
-            "</body></html>";
-
-    private static final String unableProcessTemplate = "<html><head><title>无法处理的请求(可以联系管理员反馈一下问题，以便下个版本更新)</title></head>\n" +
-            "<body bgcolor=\"white\">\n" +
-            "<center><h1>无法处理的请求(可以联系管理员反馈一下问题，以便下个版本更新)</h1></center>\n" +
-            "<hr><center>kele</center>\n" +
-            "</body></html>";
+    private static final String GET_BODY_ACCESS_DENIED = "403 Access Denied(GET请求不支持请求体)";
+    private static final String NOT_FOUND = "404 Not Found";
+    private static final String SERVICE_UNAVAILABLE = "只支持GET|POST|PUT|PATCH|DELETE";
+    private static final String UNABLE_PROCESS = "Content-Type类型是无法处理的请求类型,请看一下请求头的信息,(可以联系管理员反馈一下问题，以便下个版本更新)";
 
 
-    public  FullHttpResponse getAccessDeniedTemplate()
+    public FullHttpResponse get_GetBodyAccessDenied_Template()
     {
-        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.FORBIDDEN, Unpooled.copiedBuffer(accessDeniedTemplate.getBytes(StandardCharsets.UTF_8)));
-        response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.code);
-        response.headers().set("Content_Length", response.content().readableBytes());
-        return response;
+        return createTemplate(GET_BODY_ACCESS_DENIED, GET_BODY_ACCESS_DENIED, HttpResponseStatus.FORBIDDEN);
     }
 
-    public  FullHttpResponse getNotFoundTemplate()
+    public FullHttpResponse get_NotFound_Template()
     {
-        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.FORBIDDEN, Unpooled.copiedBuffer(notFound.getBytes(StandardCharsets.UTF_8)));
-        response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.code);
-        response.headers().set("Content_Length", response.content().readableBytes());
-        return response;
+        return createTemplate(NOT_FOUND, NOT_FOUND, HttpResponseStatus.NOT_FOUND);
     }
 
-    public  FullHttpResponse getServiceUnavailableTemplate()
+    public FullHttpResponse get_ServiceUnavailable_Template()
     {
-        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.SERVICE_UNAVAILABLE, Unpooled.copiedBuffer(serviceUnavailableTemplate.getBytes(StandardCharsets.UTF_8)));
-        response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.code);
-        response.headers().set("Content_Length", response.content().readableBytes());
-        return response;
+        return createTemplate(SERVICE_UNAVAILABLE, SERVICE_UNAVAILABLE, HttpResponseStatus.SERVICE_UNAVAILABLE);
     }
 
-    public  FullHttpResponse getUnableProcess()
+    public FullHttpResponse get_UnableProcess_Template()
     {
-        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.PRECONDITION_FAILED, Unpooled.copiedBuffer(unableProcessTemplate.getBytes(StandardCharsets.UTF_8)));
+        return createTemplate(UNABLE_PROCESS, UNABLE_PROCESS, HttpResponseStatus.PRECONDITION_FAILED);
+    }
+
+    public FullHttpResponse createTemplate(String title, String msg, HttpResponseStatus responseStatus)
+    {
+        String template = "<html><head><title>" + title + "</title></head>\n" +
+                "<body bgcolor=\"white\">\n" +
+                "<center><h1>" + msg + "</h1></center>\n" +
+                "<hr><center>kele</center>\n" +
+                "</body></html>";
+        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, responseStatus, Unpooled.copiedBuffer(template.getBytes(StandardCharsets.UTF_8)));
+
         response.headers().set("Content-Type", ResponseContentType.TEXT_HTML.code);
         response.headers().set("Content_Length", response.content().readableBytes());
+
         return response;
     }
 

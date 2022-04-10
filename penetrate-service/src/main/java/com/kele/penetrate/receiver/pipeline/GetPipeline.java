@@ -53,7 +53,7 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
             if (contentType != null)
             {
                 log.error("get 不支持携带请求体");
-                channelHandlerContext.writeAndFlush(pageTemplate.getAccessDeniedTemplate()).addListener(ChannelFutureListener.CLOSE);
+                channelHandlerContext.writeAndFlush(pageTemplate.get_GetBodyAccessDenied_Template()).addListener(ChannelFutureListener.CLOSE);
             }
             else
             {
@@ -61,7 +61,7 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
                 String mappingName = analysisHttpGetRequest.getHomeUser(fullHttpRequest);
                 if (mappingName == null || !connectManager.isExist(mappingName))
                 {
-                    channelHandlerContext.writeAndFlush(pageTemplate.getNotFoundTemplate()).addListener(ChannelFutureListener.CLOSE);
+                    channelHandlerContext.writeAndFlush(pageTemplate.get_NotFound_Template()).addListener(ChannelFutureListener.CLOSE);
                 }
                 else
                 {
@@ -82,7 +82,7 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
                     }
                     else
                     {
-                        FullHttpResponse serviceUnavailableTemplate = pageTemplate.getNotFoundTemplate();
+                        FullHttpResponse serviceUnavailableTemplate = pageTemplate.get_NotFound_Template();
                         channelHandlerContext.writeAndFlush(serviceUnavailableTemplate).addListener(ChannelFutureListener.CLOSE);
                     }
                 }

@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
-import javax.net.ssl.SSLException;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.net.ConnectException;
@@ -42,15 +41,6 @@ public class HttpUtils
     }
 
     //<editor-fold desc="Not Body">
-
-    /**
-     * 不携带请求体的
-     *
-     * @param requestType 请求类型
-     * @param url         地址
-     * @param headers     头部信息
-     * @param action1     结果回调
-     */
     public void requestNotBody(RequestType requestType, String url, Map<String, String> headers, Action1<RequestResult> action1)
     {
         Request.Builder requestBuilder = new Request.Builder();
@@ -159,22 +149,30 @@ public class HttpUtils
     private void failResultHandle(IOException exception, Action1<RequestResult> action1)
     {
         RequestResult requestResult = new RequestResult();
-        if (exception instanceof ConnectException)
+
+        if (exception != null)
         {
-            requestResult.setFailMessage("connect timeout");
-            requestResult.setCode(408);
+            requestResult.setFailMessage(exception.getMessage());
+            if (exception instanceof ConnectException)
+            {
+                requestResult.setCode(504);
+            }
+            else if (exception instanceof SocketTimeoutException)
+            {
+                requestResult.setFailMessage(exception.getMessage());
+                requestResult.setCode(408);
+            }
+            else
+            {
+                requestResult.setCode(-1);
+            }
         }
-        if (exception instanceof SocketTimeoutException)
+        else
         {
-            requestResult.setFailMessage("request timeout");
-            requestResult.setCode(408);
+            requestResult.setFailMessage("Unknown exception");
+            requestResult.setCode(-1);
         }
 
-        if (exception instanceof SSLException)
-        {
-            requestResult.setFailMessage("Unsupported or unrecognized SSL message");
-            requestResult.setCode(401);
-        }
         action1.action(requestResult);
     }
     //</editor-fold>
