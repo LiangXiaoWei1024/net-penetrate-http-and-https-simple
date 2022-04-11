@@ -13,7 +13,6 @@ public class TextAreaMenu extends JTextArea
 {
     @Autowired
     private ClientLogPageManager clientLogPageManager;
-
     @Autowired
     private Config config;
 
@@ -26,14 +25,20 @@ public class TextAreaMenu extends JTextArea
         menu.add(createMenuItem("帮助", actionEvent ->
                 clientLogPageManager.addLog("如有问题可以联系微信:1049705180,QQ群:704592910")));
 
-        menu.add(createMenuItem("清空日志", actionEvent ->
-                clientLogPageManager.clear()));
+        JMenuItem aa = createMenuItem("清空日志", actionEvent ->
+                clientLogPageManager.clear());
+
+
+        aa.setAccelerator(KeyStroke.getKeyStroke('P', InputEvent.CTRL_MASK));
+
+
+        menu.add(aa);
 
 
         this.addMouseListener(new MouseAdapter()
         {
             @Override
-            public void mouseClicked(MouseEvent e)
+            public void mousePressed(MouseEvent e)
             {
                 // MouseEvent.BUTTON1:  左键点击
                 // MouseEvent.BUTTON2:  中间点击(滑轮)
