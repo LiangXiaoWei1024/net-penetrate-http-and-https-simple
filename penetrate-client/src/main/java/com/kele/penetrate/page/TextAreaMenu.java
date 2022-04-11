@@ -25,14 +25,8 @@ public class TextAreaMenu extends JTextArea
         menu.add(createMenuItem("帮助", actionEvent ->
                 clientLogPageManager.addLog("如有问题可以联系微信:1049705180,QQ群:704592910")));
 
-        JMenuItem aa = createMenuItem("清空日志", actionEvent ->
-                clientLogPageManager.clear());
-
-
-        aa.setAccelerator(KeyStroke.getKeyStroke('P', InputEvent.CTRL_MASK));
-
-
-        menu.add(aa);
+        menu.add(createMenuItem("清空日志", actionEvent ->
+                clientLogPageManager.clear()));
 
 
         this.addMouseListener(new MouseAdapter()
