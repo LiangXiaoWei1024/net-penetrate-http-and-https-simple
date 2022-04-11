@@ -39,7 +39,17 @@ public class RequestResultPipeline implements Func<ServicePipeline, Boolean>
             RequestResult requestResult = (RequestResult) msg;
             if (requestResult.isSuccess())
             {
-                FullHttpResponse responseSuccess = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, Unpooled.copiedBuffer(requestResult.getData()));
+                FullHttpResponse responseSuccess;
+
+                if (requestResult.getData() != null)
+                {
+                    responseSuccess = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, new HttpResponseStatus(requestResult.getCode(), ""), Unpooled.copiedBuffer(requestResult.getData()));
+                }
+                else
+                {
+                    responseSuccess = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, new HttpResponseStatus(requestResult.getCode(), ""));
+                }
+
                 if (requestResult.getHeaders() != null)
                 {
                     requestResult.getHeaders().forEach((k, v) ->

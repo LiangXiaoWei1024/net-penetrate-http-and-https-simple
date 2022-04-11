@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.List;
@@ -129,20 +130,41 @@ public class HttpUtils
     //<editor-fold desc="数据处理">
     private void successResultHandle(Response response, Action1<RequestResult> action1)
     {
+        Response priorResponse = response.priorResponse();
         RequestResult requestResult = new RequestResult();
-        requestResult.setCode(response.code());
-        requestResult.setSuccess(true);
-        Map<String, String> headers = new HashMap<>();
-        response.headers().forEach(pair -> headers.put(pair.getFirst(), pair.getSecond()));
-        requestResult.setHeaders(headers);
-        try
+        Response resultResponse = null;
+
+
+        if (priorResponse != null)
         {
-            requestResult.setData(Objects.requireNonNull(response.body()).bytes());
+            int priorResponseCode = priorResponse.code();
+            if (priorResponseCode == HttpURLConnection.HTTP_MOVED_PERM || priorResponseCode == HttpURLConnection.HTTP_MOVED_TEMP)
+            {
+                resultResponse = priorResponse;
+            }
         }
-        catch (IOException e)
+        else
         {
-            log.error("获取数据异常", e);
+            resultResponse = response;
+            try
+            {
+                requestResult.setData(Objects.requireNonNull(response.body()).bytes());
+            }
+            catch (IOException e)
+            {
+                log.error("获取数据异常", e);
+            }
         }
+
+        if (resultResponse != null)
+        {
+            requestResult.setCode(resultResponse.code());
+            requestResult.setSuccess(true);
+            Map<String, String> headers = new HashMap<>();
+            resultResponse.headers().forEach(pair -> headers.put(pair.getFirst(), pair.getSecond()));
+            requestResult.setHeaders(headers);
+        }
+
         action1.action(requestResult);
     }
 
@@ -164,13 +186,13 @@ public class HttpUtils
             }
             else
             {
-                requestResult.setCode(-1);
+                requestResult.setCode(0);
             }
         }
         else
         {
             requestResult.setFailMessage("Unknown exception");
-            requestResult.setCode(-1);
+            requestResult.setCode(0);
         }
 
         action1.action(requestResult);
