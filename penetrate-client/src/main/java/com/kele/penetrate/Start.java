@@ -33,7 +33,7 @@ public class Start
     private ClientLogPageManager clientLogPageManager;
 
 
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args)
     {
         //<editor-fold desc="swing 样式包，弃用，对新的jdk有问题">
 //        if (System.getProperty("os.name").toLowerCase().contains("windows"))
