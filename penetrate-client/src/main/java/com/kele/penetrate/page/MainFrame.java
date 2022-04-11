@@ -31,7 +31,8 @@ public class MainFrame extends JFrame
     private JTextField ipTextField;
     private JTextField portTextField;
     private JRadioButton filterMappingNameRadioButton;
-    private JTextArea logTextArea;
+    @Autowired
+    private TextAreaMenu logTextArea;
     private JButton runButton;
     private JScrollPane logTextAreaScrollPane;
     private int changeWidth;
@@ -260,13 +261,14 @@ public class MainFrame extends JFrame
         downPanel.setLocation(15, 135);
         downPanel.setBackground(new Color(44, 44, 44));
 
-        logTextArea = new JTextArea();
+
         logTextArea.setForeground(new Color(255, 255, 255));
         logTextArea.setBackground(new Color(44, 44, 44));
         logTextArea.setFont(new Font("宋体", Font.PLAIN, 10));
         logTextArea.setLineWrap(true);
         logTextArea.setWrapStyleWord(true);
         logTextArea.setEditable(false);
+
 
         logTextAreaScrollPane = new JScrollPane(logTextArea);
         logTextAreaScrollPane.setBounds(10, 5, 480, 210);

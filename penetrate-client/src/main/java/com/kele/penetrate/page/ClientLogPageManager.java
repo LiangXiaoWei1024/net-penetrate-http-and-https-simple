@@ -77,4 +77,12 @@ public class ClientLogPageManager
         }
     }
     //</editor-fold>
+
+    //<editor-fold desc="清空日志">
+    public synchronized void clear()
+    {
+        logList.clear();
+        mainFrame.setLogTextArea(logList);
+    }
+    //</editor-fold>
 }
