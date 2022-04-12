@@ -195,19 +195,45 @@ public class MainFrame extends JFrame
 
                 if (!checkUtils.checkMappingName(mappingName))
                 {
-                    clientLogPageManager.addLog("请检查映射名称是否正确(不能含有特殊字符，长度>0)");
+                    clientLogPageManager.addLog("请检查映射名称是否正确(不能含有特殊字符，不能为空)");
                     setAllEditable(true);
                     return;
                 }
+
+                mappingName = mappingName.trim();
+                if (mappingName.length() < 1 || mappingName.length() > 30)
+                {
+                    clientLogPageManager.addLog("检查映射名称长度(长度>0,长度<30)");
+                    setAllEditable(true);
+                    return;
+                }
+
                 if (!checkUtils.checkPort(port))
                 {
                     clientLogPageManager.addLog("请检查端口是否正确");
                     setAllEditable(true);
                     return;
                 }
+
+                port = port.trim();
+                if (port.length() < 1 || port.length() > 9)
+                {
+                    clientLogPageManager.addLog("检查端口长度(长度>0,长度<9)");
+                    setAllEditable(true);
+                    return;
+                }
+
                 if (!checkUtils.checkIp(ip))
                 {
                     clientLogPageManager.addLog("ip地址不能为空");
+                    setAllEditable(true);
+                    return;
+                }
+
+                ip = ip.trim();
+                if (ip.length() < 1 || ip.length() > 50)
+                {
+                    clientLogPageManager.addLog("检查IP长度(长度>0,长度<=50)");
                     setAllEditable(true);
                     return;
                 }
