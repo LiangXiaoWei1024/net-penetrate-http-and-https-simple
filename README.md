@@ -19,10 +19,10 @@
 ## 示例
 
 2. 设置映射名称，可以自定义，也可以使用默认值(方便)。
-3. 填写穿透的IP与端口。
+3. 填写需要穿透的IP(默认127.0.0.1)与端口(默认8080)。
 4. 点击启动
-5. 看到图片中**启动成功**，就可以开始使用了。并且明确的告诉你外网请求地址转到内网那个地址。
-6.  本地地址为： http://127.0.0.1:20001/ 远程地址为http://101.35.221.134:80/cimjfYUW/ 当访问http://101.35.221.134:80/cimjfYUW/ 的时候，请求会被转发到http://localhost:8080/ 实现内网可外网访
+5. 看到图片中**启动成功**，并且明确的告诉你外网请求地址转到内网那个地址，就可以开始使用了。
+6.  本地地址为： http://127.0.0.1:20001/ 远程地址为http://101.35.221.134:80/cimjfYUW/ 当访问http://101.35.221.134:80/cimjfYUW/ 的时候，请求会被转发到http://127.0.0.1:20001/ 实现内网可外网访
 7. 图1过滤映射名称，图2为未过滤映射名称
    ![图1](https://img-blog.csdnimg.cn/9f54039063954f259e14560a216210e1.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5Y-v5LmQX3Z2,size_19,color_FFFFFF,t_70,g_se,x_16)
    ![图2](https://img-blog.csdnimg.cn/100e4ba39ac146209e7414e6fddae20f.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5Y-v5LmQX3Z2,size_19,color_FFFFFF,t_70,g_se,x_16)
