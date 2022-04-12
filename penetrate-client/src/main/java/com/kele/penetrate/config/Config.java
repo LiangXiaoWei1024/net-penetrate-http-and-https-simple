@@ -2,7 +2,6 @@ package com.kele.penetrate.config;
 
 import com.alibaba.fastjson.JSONObject;
 import com.kele.penetrate.factory.annotation.Recognizer;
-import com.kele.penetrate.pojo.DefaultInfo;
 import com.kele.penetrate.pojo.ServiceConnectInfo;
 import com.kele.penetrate.utils.FileUtils;
 import lombok.Data;
@@ -13,7 +12,6 @@ import lombok.Data;
 public class Config
 {
     private final ServiceConnectInfo serviceConnectInfo = new ServiceConnectInfo();
-    private final DefaultInfo defaultInfo = new DefaultInfo();
     private String version;
 
     public Config()
@@ -24,8 +22,6 @@ public class Config
         JSONObject defaultInfo = configJson.getJSONObject("defaultInfo");
         this.serviceConnectInfo.setIp(serviceConnectInfo.getString("ip"));
         this.serviceConnectInfo.setPort(serviceConnectInfo.getInteger("port"));
-        this.defaultInfo.setForwardIp(defaultInfo.getString("forwardIp"));
         this.version = configJson.getJSONObject("version").getString("value");
-        this.defaultInfo.setPort(defaultInfo.getInteger("port"));
     }
 }

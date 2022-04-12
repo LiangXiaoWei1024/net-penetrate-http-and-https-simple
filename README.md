@@ -1,10 +1,12 @@
+
 ## 內网穿透工具(net-penetrate)
 ---
 ##  技术交流QQ群:704592910
 ---
+
 ## 介绍
-- 完全开源免费使用，不会有人窃取你的信息，有需要的可以自己下载源码独立部署使用。
-- 全新GUI界面，操作简单，一键安装使用
+- 完全开源,免费使用，不会有人窃取你的信息(可看源码)，有需要的可以自己下载源码独立部署使用。
+- 全新GUI界面，操作简单，一键安装
 - 为你穿透端口绑定域名，不再是IP+端口裸奔访问
 - 支持http/https等多种模式使用客户端网络代理上网，家里轻松访问公司网络
 - 支持GET | POST | PUT | PATCH | DELETE
@@ -25,11 +27,12 @@
 6.  本地地址为： http://127.0.0.1:20001/ 远程地址为http://101.35.221.134:80/cimjfYUW/ 当访问http://101.35.221.134:80/cimjfYUW/ 的时候，请求会被转发到http://127.0.0.1:20001/ 实现内网可外网访
 7. 图1 **过滤映射名称**，图2 **未过滤映射名称**
 
-   ![图1](https://img-blog.csdnimg.cn/9f54039063954f259e14560a216210e1.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5Y-v5LmQX3Z2,size_19,color_FFFFFF,t_70,g_se,x_16)
+![图1](https://img-blog.csdnimg.cn/9f54039063954f259e14560a216210e1.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5Y-v5LmQX3Z2,size_19,color_FFFFFF,t_70,g_se,x_16)
    
-   ![图2](https://img-blog.csdnimg.cn/100e4ba39ac146209e7414e6fddae20f.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5Y-v5LmQX3Z2,size_19,color_FFFFFF,t_70,g_se,x_16)
-   
-## 附加小功能，右键日志页面，方便大家调试测试使用
+![图2](https://img-blog.csdnimg.cn/100e4ba39ac146209e7414e6fddae20f.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5Y-v5LmQX3Z2,size_19,color_FFFFFF,t_70,g_se,x_16)
+
+## 附加小功能，右键日志页面，方便大家调试使用
+
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/bd1e74106348428ab741a0de6fa5e522.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5Y-v5LmQX3Z2,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 
@@ -39,4 +42,5 @@
 
 ## 赞助💰
 如果你觉得对你有帮助，你可以赞助我们一杯咖啡，鼓励我们继续开发维护下去。
+
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/f3a15cd9356c4b7eabb028a92d79654d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5Y-v5LmQX3Z2,size_20,color_FFFFFF,t_70,g_se,x_16)

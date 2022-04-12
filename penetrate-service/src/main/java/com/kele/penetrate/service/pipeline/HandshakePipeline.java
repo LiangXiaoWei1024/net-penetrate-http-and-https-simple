@@ -1,6 +1,7 @@
 package com.kele.penetrate.service.pipeline;
 
 import com.kele.penetrate.config.Config;
+import com.kele.penetrate.enumeration.HypertextTransferProtocolType;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
@@ -71,13 +72,13 @@ public class HandshakePipeline implements Func<ServicePipeline, Boolean>
                     handshakeResult.setSuccess(true);
                     if (handshake.isFilterMappingName())
                     {
-                        failMessages.add("http://101.35.221.134:" + config.getHttpPort() + "/" + handshake.getMappingName() + "/ -> http://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/");
-                        failMessages.add("https://101.35.221.134:" + config.getHttpsPort() + "/" + handshake.getMappingName() + "/ -> https://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/");
+                        failMessages.add(HypertextTransferProtocolType.HTTP + "://" + config.getInternetAccessUrl() + ":" + config.getHttpPort() + "/" + handshake.getMappingName() + "/ -> " + HypertextTransferProtocolType.HTTP + "://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/");
+                        failMessages.add(HypertextTransferProtocolType.HTTPS + "://" + config.getInternetAccessUrl() + ":" + config.getHttpsPort() + "/" + handshake.getMappingName() + "/ -> " + HypertextTransferProtocolType.HTTPS + "://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/");
                     }
                     else
                     {
-                        failMessages.add("http://101.35.221.134:" + config.getHttpPort() + "/" + handshake.getMappingName() + "/  -> http://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/" + handshake.getMappingName() + "/");
-                        failMessages.add("https://101.35.221.134:" + config.getHttpsPort() + "/" + handshake.getMappingName() + "/ -> https://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/" + handshake.getMappingName() + "/");
+                        failMessages.add(HypertextTransferProtocolType.HTTP + "://" + config.getInternetAccessUrl() + ":" + config.getHttpPort() + "/" + handshake.getMappingName() + "/  -> " + HypertextTransferProtocolType.HTTP + "://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/" + handshake.getMappingName() + "/");
+                        failMessages.add(HypertextTransferProtocolType.HTTPS + "://" + config.getInternetAccessUrl() + ":" + config.getHttpsPort() + "/" + handshake.getMappingName() + "/ -> " + HypertextTransferProtocolType.HTTPS + "://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/" + handshake.getMappingName() + "/");
                     }
 
                 }

@@ -15,6 +15,7 @@ public class Config
     private int servicePort;
     private int httpPort;
     private int httpsPort;
+    private String internetAccessUrl;
     private VersionInfo versionInfo = new VersionInfo();
 
     public Config()
@@ -25,7 +26,7 @@ public class Config
         servicePort = configJson.getJSONObject("service").getInteger("port");
         httpPort = configJson.getJSONObject("http").getInteger("port");
         httpsPort = configJson.getJSONObject("https").getInteger("port");
-
+        this.internetAccessUrl = configJson.getJSONObject("internetAccessInfo").getString("url");
         this.versionInfo.setVersion(versionInfo.getString("version"));
         this.versionInfo.setContents(versionInfo.getJSONArray("contents"));
     }
