@@ -6,16 +6,11 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslHandler;
-import io.netty.handler.ssl.util.SelfSignedCertificate;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
 import javax.net.ssl.SSLEngine;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+
 
 @SuppressWarnings("unused")
 @Recognizer
