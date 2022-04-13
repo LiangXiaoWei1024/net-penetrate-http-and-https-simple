@@ -1,5 +1,6 @@
 package com.kele.penetrate.page;
 
+import com.alibaba.fastjson.JSONObject;
 import com.kele.penetrate.client.ConnectHandler;
 import com.kele.penetrate.config.Config;
 import com.kele.penetrate.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.protocol.CancelMapping;
 import com.kele.penetrate.protocol.Handshake;
 import com.kele.penetrate.utils.CheckUtils;
+import com.kele.penetrate.utils.FileUtils;
 import com.kele.penetrate.utils.UUIDUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -131,47 +133,87 @@ public class MainFrame extends JFrame
     {
         Font font = new Font("宋体", Font.PLAIN, 12);
 
+        //<editor-fold desc="系统默认配置">
+        String mappingNameDefault = uuidUtils.generateShortUuid();
+        boolean isFilterMappingNameDefault = true;
+        String ipDefault = "127.0.0.1";
+        String portDefault = "8080";
+        //</editor-fold>
+
+        //<editor-fold desc="读取本地配置">
+        String readFileStr = FileUtils.readFileStr(FileUtils.rootDirectory + "/" + FileUtils.recordOperation);
+        if (readFileStr != null)
+        {
+            try
+            {
+                JSONObject jsonObject = JSONObject.parseObject(readFileStr);
+                if (jsonObject.containsKey("mappingName") && jsonObject.containsKey("isFilterMappingName") && jsonObject.containsKey("ip") && jsonObject.containsKey("port"))
+                {
+                    int confirm = JOptionPane.showConfirmDialog(null, "是否读取上次配置?", "提示", JOptionPane.YES_NO_OPTION);
+                    if (confirm == 0)
+                    {
+                        mappingNameDefault = jsonObject.getString("mappingName");
+                        isFilterMappingNameDefault = jsonObject.getBoolean("isFilterMappingName");
+                        ipDefault = jsonObject.getString("ip");
+                        portDefault = jsonObject.getString("port");
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="面板">
         upPanel = new JPanel();
         upPanel.setLayout(null);
         upPanel.setBounds(15, 15, 500, 120);
         upPanel.setBackground(new Color(255, 255, 255));
+        //</editor-fold>
 
-
+        //<editor-fold desc="映射名称">
         JLabel mappingNameLabel = new JLabel("映射名称");
         mappingNameLabel.setFont(font);
         mappingNameLabel.setBounds(10, 5, 100, 30);
         mappingNameTextField = new JTextField();
         mappingNameTextField.setBounds(80, 7, 200, 25);
         mappingNameTextField.setFont(font);
-        mappingNameTextField.setText(uuidUtils.generateShortUuid());
+        mappingNameTextField.setText(mappingNameDefault);
+        //</editor-fold>
 
-
+        //<editor-fold desc="是否过滤映射名称">
         JLabel filterMappingNameLabel = new JLabel("是否过滤映射名称");
         filterMappingNameLabel.setFont(font);
         filterMappingNameLabel.setBounds(320, 5, 130, 30);
         filterMappingNameRadioButton = new JRadioButton();
         filterMappingNameRadioButton.setBounds(450, 10, 30, 20);
-        filterMappingNameRadioButton.setSelected(true);
+        filterMappingNameRadioButton.setSelected(isFilterMappingNameDefault);
+        //</editor-fold>
 
-
+        //<editor-fold desc="IP">
         JLabel ipLabel = new JLabel("IP");
         ipLabel.setFont(font);
         ipLabel.setBounds(10, 45, 50, 30);
         ipTextField = new JTextField();
         ipTextField.setBounds(80, 47, 200, 25);
         ipTextField.setFont(font);
-        ipTextField.setText("127.0.0.1");
+        ipTextField.setText(ipDefault);
+        //</editor-fold>
 
-
+        //<editor-fold desc="端口">
         JLabel portLabel = new JLabel("端口");
         portLabel.setFont(font);
         portLabel.setBounds(320, 45, 50, 30);
         portTextField = new JTextField();
         portTextField.setBounds(360, 47, 130, 25);
         portTextField.setFont(font);
-        portTextField.setText("8080");
+        portTextField.setText(portDefault);
+        //</editor-fold>
 
-
+        //<editor-fold desc="启动">
         runButton = new JButton("启动");
         runButton.setFont(font);
         runButton.setBounds(200, 85, 100, 25);
@@ -262,6 +304,7 @@ public class MainFrame extends JFrame
                 connectHandler.send(new CancelMapping());
             }
         });
+        //</editor-fold>
 
         upPanel.add(mappingNameLabel);
         upPanel.add(mappingNameTextField);

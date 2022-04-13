@@ -7,3 +7,4 @@ logs
 *.iml
 dependency-reduced-pom.xml
 *.DS_Store
+recordOperation.json
