@@ -8,4 +8,3 @@ logs
 dependency-reduced-pom.xml
 *.DS_Store
 recordOperation.json
-SSLContextFactory.java
