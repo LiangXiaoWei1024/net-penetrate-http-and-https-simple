@@ -45,11 +45,12 @@ public class HandshakePipeline implements Func<ServicePipeline, Boolean>
 
             if (!versionInfo.getVersion().equals(handshake.getVersion()))
             {
-                failMessages.add("版本不一致、要求更新后使用、下载地址:https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple");
+                failMessages.add("版本不一致、要求更新后使用、更新内容如下：");
                 for (int i = 0; i < versionInfo.getContents().size(); i++)
                 {
                     failMessages.add(versionInfo.getContents().getString(i));
                 }
+                failMessages.add("下载地址:https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple");
             }
             else
             {
