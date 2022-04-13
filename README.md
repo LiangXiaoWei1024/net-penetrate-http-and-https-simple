@@ -31,6 +31,11 @@
    
 ![图2](https://img-blog.csdnimg.cn/100e4ba39ac146209e7414e6fddae20f.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5Y-v5LmQX3Z2,size_19,color_FFFFFF,t_70,g_se,x_16)
 
+系统托盘，windows的又下角的位置
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/6f0ba1fbb50d4ac78a99e7d382a731e6.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5Y-v5LmQX3Z2,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+
 ## 附加小功能，右键日志页面，方便大家调试使用
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/bd1e74106348428ab741a0de6fa5e522.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5Y-v5LmQX3Z2,size_20,color_FFFFFF,t_70,g_se,x_16)
