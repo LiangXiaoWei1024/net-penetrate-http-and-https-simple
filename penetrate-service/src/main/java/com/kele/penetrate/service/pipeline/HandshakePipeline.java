@@ -72,13 +72,13 @@ public class HandshakePipeline implements Func<ServicePipeline, Boolean>
                     handshakeResult.setSuccess(true);
                     if (handshake.isFilterMappingName())
                     {
-                        failMessages.add(HypertextTransferProtocolType.HTTP + "://" + config.getInternetAccessUrl() + ":" + config.getHttpPort() + "/" + handshake.getMappingName() + "/ -> " + HypertextTransferProtocolType.HTTP + "://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/");
-                        failMessages.add(HypertextTransferProtocolType.HTTPS + "://" + config.getInternetAccessUrl() + ":" + config.getHttpsPort() + "/" + handshake.getMappingName() + "/ -> " + HypertextTransferProtocolType.HTTPS + "://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/");
+                        failMessages.add(HypertextTransferProtocolType.HTTP.code + "://" + config.getInternetAccessUrl() + ":" + config.getHttpPort() + "/" + handshake.getMappingName() + "/ -> " + HypertextTransferProtocolType.HTTP.code + "://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/");
+                        failMessages.add(HypertextTransferProtocolType.HTTPS.code + "://" + config.getInternetAccessUrl() + ":" + config.getHttpsPort() + "/" + handshake.getMappingName() + "/ -> " + HypertextTransferProtocolType.HTTPS.code + "://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/");
                     }
                     else
                     {
-                        failMessages.add(HypertextTransferProtocolType.HTTP + "://" + config.getInternetAccessUrl() + ":" + config.getHttpPort() + "/" + handshake.getMappingName() + "/  -> " + HypertextTransferProtocolType.HTTP + "://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/" + handshake.getMappingName() + "/");
-                        failMessages.add(HypertextTransferProtocolType.HTTPS + "://" + config.getInternetAccessUrl() + ":" + config.getHttpsPort() + "/" + handshake.getMappingName() + "/ -> " + HypertextTransferProtocolType.HTTPS + "://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/" + handshake.getMappingName() + "/");
+                        failMessages.add(HypertextTransferProtocolType.HTTP.code + "://" + config.getInternetAccessUrl() + ":" + config.getHttpPort() + "/" + handshake.getMappingName() + "/  -> " + HypertextTransferProtocolType.HTTP.code + "://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/" + handshake.getMappingName() + "/");
+                        failMessages.add(HypertextTransferProtocolType.HTTPS.code + "://" + config.getInternetAccessUrl() + ":" + config.getHttpsPort() + "/" + handshake.getMappingName() + "/ -> " + HypertextTransferProtocolType.HTTPS.code + "://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/" + handshake.getMappingName() + "/");
                     }
 
                 }
