@@ -32,8 +32,8 @@ public class NettyServiceInit extends Thread
                     .channel(NioServerSocketChannel.class)
                     .childHandler(nettyServiceChannelInitializerHandler);
 
-            ChannelFuture future = server.bind(config.getServicePort()).sync();
-            log.info("服务器启动成功,端口：" + config.getServicePort());
+            ChannelFuture future = server.bind(config.getStartPort()).sync();
+            log.info("服务器启动成功,端口：" + config.getStartPort());
             future.channel().closeFuture().sync();
         }
         catch (Exception ex)

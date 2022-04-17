@@ -1,9 +1,0 @@
-{
-  "serviceConnectInfo": {
-    "ip": "127.0.0.1",
-    "port": 8080
-  },
-  "version": {
-    "value": "1.0.0"
-  }
-}

@@ -1,10 +1,14 @@
 package com.kele.penetrate.config;
 
-import com.alibaba.fastjson.JSONObject;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.pojo.ServiceConnectInfo;
-import com.kele.penetrate.utils.FileUtils;
 import lombok.Data;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Objects;
+import java.util.Properties;
 
 @Data
 @Recognizer
@@ -14,14 +18,12 @@ public class Config
     private final ServiceConnectInfo serviceConnectInfo = new ServiceConnectInfo();
     private String version;
 
-    public Config()
+    public Config() throws IOException
     {
-        String jsonStr = FileUtils.getDataFromFile(Config.class.getClassLoader().getResourceAsStream("config-dev.json"));
-        JSONObject configJson = JSONObject.parseObject(jsonStr);
-        JSONObject serviceConnectInfo = configJson.getJSONObject("serviceConnectInfo");
-        JSONObject defaultInfo = configJson.getJSONObject("defaultInfo");
-        this.serviceConnectInfo.setIp(serviceConnectInfo.getString("ip"));
-        this.serviceConnectInfo.setPort(serviceConnectInfo.getInteger("port"));
-        this.version = configJson.getJSONObject("version").getString("value");
+        Properties properties = new Properties();
+        properties.load(new BufferedReader(new InputStreamReader(Objects.requireNonNull(Config.class.getClassLoader().getResourceAsStream("config.properties")))));
+        this.version = properties.getProperty("version");
+        this.serviceConnectInfo.setIp(properties.getProperty("service.ip"));
+        this.serviceConnectInfo.setPort(Integer.parseInt(properties.getProperty("service.port")));
     }
 }

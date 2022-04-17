@@ -1,10 +1,15 @@
 package com.kele.penetrate.config;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONArray;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.pojo.VersionInfo;
 import lombok.Data;
-import com.kele.penetrate.utils.FileUtils;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Objects;
+import java.util.Properties;
 
 
 @Data
@@ -12,22 +17,24 @@ import com.kele.penetrate.utils.FileUtils;
 @SuppressWarnings("unused")
 public class Config
 {
-    private int servicePort;
+    private int startPort;
     private int httpPort;
     private int httpsPort;
     private String internetAccessUrl;
     private VersionInfo versionInfo = new VersionInfo();
 
-    public Config()
+    public Config() throws IOException
     {
-        String jsonStr = FileUtils.getDataFromFile(Config.class.getClassLoader().getResourceAsStream("config-dev.json"));
-        JSONObject configJson = JSONObject.parseObject(jsonStr);
-        JSONObject versionInfo = configJson.getJSONObject("versionInfo");
-        servicePort = configJson.getJSONObject("service").getInteger("port");
-        httpPort = configJson.getJSONObject("http").getInteger("port");
-        httpsPort = configJson.getJSONObject("https").getInteger("port");
-        this.internetAccessUrl = configJson.getJSONObject("internetAccessInfo").getString("url");
-        this.versionInfo.setVersion(versionInfo.getString("version"));
-        this.versionInfo.setContents(versionInfo.getJSONArray("contents"));
+
+        Properties properties = new Properties();
+        properties.load(new BufferedReader(new InputStreamReader(Objects.requireNonNull(Config.class.getClassLoader().getResourceAsStream("config.properties")))));
+
+        this.httpPort = Integer.parseInt(properties.getProperty("http.port"));
+        this.httpsPort = Integer.parseInt(properties.getProperty("https.port"));
+        this.startPort = Integer.parseInt(properties.getProperty("start.port"));
+        this.internetAccessUrl = properties.getProperty("internet.access");
+
+        this.versionInfo.setVersion(properties.getProperty("version"));
+        this.versionInfo.setContents(JSONArray.parseArray(properties.getProperty("version.contents")));
     }
 }
