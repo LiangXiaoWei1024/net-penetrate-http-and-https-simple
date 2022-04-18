@@ -52,6 +52,8 @@ public class MainFrame extends JFrame
     private ConnectHandler connectHandler;
     @Autowired
     private CheckUtils checkUtils;
+    @Autowired
+    private FileUtils fileUtils;
     //</editor-fold>
 
     //<editor-fold desc="构造">
@@ -141,7 +143,7 @@ public class MainFrame extends JFrame
         //</editor-fold>
 
         //<editor-fold desc="读取本地配置">
-        String readFileStr = FileUtils.readFileStr(FileUtils.rootDirectory + "/" + FileUtils.recordOperation);
+        String readFileStr = fileUtils.readFileStr(fileUtils.rootDirectory + "/" + fileUtils.recordOperation);
         if (readFileStr != null)
         {
             try

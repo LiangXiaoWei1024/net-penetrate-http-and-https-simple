@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Start
 {
     private static final BeanFactoryImpl beanFactory = new BeanFactoryImpl();
-    public static final Events<Object> clientEvents = new Events("Client", Object.class, "com.kele.penetrate.client.pipeline");
+    public static final Events<Object> clientEvents = new Events<>("Client", Object.class, "com.kele.penetrate.client.pipeline");
 
     @Autowired
     private Config config;

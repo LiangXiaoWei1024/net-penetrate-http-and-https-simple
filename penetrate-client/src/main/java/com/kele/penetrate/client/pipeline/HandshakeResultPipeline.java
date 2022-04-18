@@ -21,6 +21,8 @@ public class HandshakeResultPipeline implements Func<Object, Boolean>
     private ClientLogPageManager clientLogPageManager;
     @Autowired
     private MainFrame mainFrame;
+    @Autowired
+    private FileUtils fileUtils;
 
     @Override
     public Boolean func(Object msg)
@@ -40,7 +42,7 @@ public class HandshakeResultPipeline implements Func<Object, Boolean>
                 recordOperationJson.put("isFilterMappingName", mainFrame.isFilterMappingName());
                 recordOperationJson.put("ip", mainFrame.getIp());
                 recordOperationJson.put("port", mainFrame.getPort());
-                FileUtils.writeLocalStr(recordOperationJson.toJSONString(), FileUtils.rootDirectory, FileUtils.recordOperation);
+                fileUtils.writeLocalStr(recordOperationJson.toJSONString(), fileUtils.rootDirectory, fileUtils.recordOperation);
             }
             else
             {

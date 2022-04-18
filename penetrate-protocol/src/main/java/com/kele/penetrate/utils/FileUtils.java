@@ -1,17 +1,20 @@
 package com.kele.penetrate.utils;
 
 
+import com.kele.penetrate.factory.annotation.Recognizer;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 @SuppressWarnings("unused")
+@Recognizer
 public class FileUtils
 {
     /**
      * 根目录
      */
-    public static final String rootDirectory = System.getProperty("user.dir");
-    public static final String recordOperation = "recordOperation.json";
+    public final String rootDirectory = System.getProperty("user.dir");
+    public final String recordOperation = "recordOperation.json";
 
     /**
      * 写入本地文件
@@ -20,7 +23,7 @@ public class FileUtils
      * @param path     路径
      * @param fileName 文件名称
      */
-    public static void writeLocalStr(String str, String path, String fileName)
+    public void writeLocalStr(String str, String path, String fileName)
     {
         try
         {
@@ -50,7 +53,7 @@ public class FileUtils
      * @param filePath 文件路径
      * @return 结果
      */
-    public static String readFileStr(String filePath)
+    public String readFileStr(String filePath)
     {
         BufferedReader bf = null;
         StringBuilder buffer = null;
@@ -99,7 +102,7 @@ public class FileUtils
      * @param fileInputStream 流
      * @return 结果
      */
-    public static String getDataFromFile(InputStream fileInputStream)
+    public String getDataFromFile(InputStream fileInputStream)
     {
         BufferedReader reader = null;
         StringBuilder latest = new StringBuilder();

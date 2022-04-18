@@ -22,8 +22,8 @@ import java.util.TimerTask;
 public class Start
 {
     private static final BeanFactoryImpl beanFactory = new BeanFactoryImpl();
-    public static final Events<PipelineTransmission> hypertextProtocolEvents = new Events("HTTP", PipelineTransmission.class, "com.kele.penetrate.receiver.pipeline");
-    public static final Events<ServicePipeline> serviceEvents = new Events("Service", ServicePipeline.class, "com.kele.penetrate.service.pipeline");
+    public static final Events<PipelineTransmission> hypertextProtocolEvents = new Events<>("HTTP", PipelineTransmission.class, "com.kele.penetrate.receiver.pipeline");
+    public static final Events<ServicePipeline> serviceEvents = new Events<>("Service", ServicePipeline.class, "com.kele.penetrate.service.pipeline");
 
     @Autowired
     private NettyHttpService nettyHttpService;
@@ -37,7 +37,7 @@ public class Start
 
     public static void main(String[] args)
     {
-        Start start = beanFactory.getBean(Start.class);
+        Start start = BeanFactoryImpl.getBean(Start.class);
         start.nettyHttpService.start();
         start.nettyHttpsService.start();
         start.nettyServiceInit.start();
@@ -47,7 +47,6 @@ public class Start
 
     public void heartbeat()
     {
-        //<editor-fold desc="心跳">
         Timer timer = new Timer();
         timer.schedule(new TimerTask()
         {
@@ -57,7 +56,6 @@ public class Start
                 connectManager.replyAll(new Heartbeat());
             }
         }, 1000 * 10, 1000 * 10);
-        //</editor-fold>
     }
 
     public void clearUntreatedMsg()

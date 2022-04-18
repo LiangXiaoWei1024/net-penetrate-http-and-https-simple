@@ -19,6 +19,8 @@ public class NettyHttpsChannelInitializerHandler extends ChannelInitializer<Sock
 
     @Autowired
     private NettyHttpsServerHandler nettyHttpsServerHandler;
+    @Autowired
+    private SSLContextFactory sslContextFactory;
 
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception
@@ -29,7 +31,7 @@ public class NettyHttpsChannelInitializerHandler extends ChannelInitializer<Sock
 //        socketChannel.pipeline().addLast(sslContext.newHandler(socketChannel.alloc()));
         //</editor-fold>
 
-        SSLEngine sslEngine = SSLContextFactory.getSslContext().createSSLEngine();
+        SSLEngine sslEngine = sslContextFactory.getSslContext().createSSLEngine();
         sslEngine.setUseClientMode(false);
         socketChannel.pipeline().addLast(new SslHandler(sslEngine));
 

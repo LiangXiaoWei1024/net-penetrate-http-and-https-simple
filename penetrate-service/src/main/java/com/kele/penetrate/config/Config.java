@@ -2,6 +2,7 @@ package com.kele.penetrate.config;
 
 import com.alibaba.fastjson.JSONArray;
 import com.kele.penetrate.factory.annotation.Recognizer;
+import com.kele.penetrate.pojo.MySSL;
 import com.kele.penetrate.pojo.VersionInfo;
 import lombok.Data;
 
@@ -22,6 +23,7 @@ public class Config
     private int httpsPort;
     private String internetAccessUrl;
     private VersionInfo versionInfo = new VersionInfo();
+    private MySSL mySSL = new MySSL();
 
     public Config() throws IOException
     {
@@ -36,5 +38,8 @@ public class Config
 
         this.versionInfo.setVersion(properties.getProperty("version"));
         this.versionInfo.setContents(JSONArray.parseArray(properties.getProperty("version.contents")));
+
+        mySSL.setPassword(properties.getProperty("ssl.password"));
+        mySSL.setName(properties.getProperty("ssl.name"));
     }
 }
