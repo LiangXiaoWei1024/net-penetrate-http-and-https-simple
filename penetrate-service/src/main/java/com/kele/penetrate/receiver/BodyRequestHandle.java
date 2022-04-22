@@ -129,7 +129,7 @@ public class BodyRequestHandle
             }
             else
             {
-                FullHttpResponse serviceUnavailableTemplate = pageTemplate.get_ServiceUnavailable_Template();
+                FullHttpResponse serviceUnavailableTemplate = pageTemplate.get_NotFound_Template();
                 channelHandlerContext.writeAndFlush(serviceUnavailableTemplate).addListener(ChannelFutureListener.CLOSE);
             }
             return true;

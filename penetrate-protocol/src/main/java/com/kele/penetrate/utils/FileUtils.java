@@ -13,8 +13,8 @@ public class FileUtils
     /**
      * 根目录
      */
-    public final String rootDirectory = System.getProperty("user.dir");
-    public final String recordOperation = "recordOperation.json";
+    public String rootDirectory = System.getProperty("user.dir");
+    public String recordOperation = "recordOperation.json";
 
     /**
      * 写入本地文件
