@@ -16,7 +16,6 @@ import javax.net.ssl.SSLEngine;
 @Recognizer
 public class NettyHttpsChannelInitializerHandler extends ChannelInitializer<SocketChannel>
 {
-
     @Autowired
     private NettyHttpsServerHandler nettyHttpsServerHandler;
     @Autowired

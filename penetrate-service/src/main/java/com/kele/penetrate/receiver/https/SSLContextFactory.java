@@ -25,9 +25,9 @@ public class SSLContextFactory
         SSLContext sslContext = SSLContext.getInstance("TLSv1");
         KeyStore ks = KeyStore.getInstance("JKS");
         //加载keytool 生成的文件
-        FileInputStream inputStream = new FileInputStream("证书路径");
+        FileInputStream inputStream = new FileInputStream(fileUtils.rootDirectory + "/" + config.getMySSL().getName());
         ks.load(inputStream, passArray);
-        KeyManagerFactory kmf = KeyManagerFactory.getInstance(fileUtils.rootDirectory + "/" + config.getMySSL().getName());
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         kmf.init(ks, passArray);
         sslContext.init(kmf.getKeyManagers(), null, null);
         inputStream.close();
