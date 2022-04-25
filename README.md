@@ -47,6 +47,23 @@
 
 大家有什么问题可以加入到QQ群，有什么需要改进以及需要新增的功能大家一起交流。
 
+## 安装教程
+
+### Windows
+![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/install_windows_1.png?raw=true)
+![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/install_windows_2.png?raw=true)
+![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/install_windows_3.png?raw=true)
+
+### Mac
+![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/install_mac_1.png?raw=true)
+![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/install_mac_2.png?raw=true)
+![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/install_mac_4.png?raw=true)
+
+- 出现下面的问题，打开终端 进入当前目录， chmod +x penetrate-start.command
+![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/install_mac_3.png?raw=true)
+
+
+
 ## 问题
 
 - 如果重定向的地址是外网无法访问的地址是用不了的。
