@@ -22,7 +22,7 @@ public class SSLContextFactory
     public SSLContext getSslContext() throws Exception
     {
         char[] passArray = config.getMySSL().getPassword().toCharArray();
-        SSLContext sslContext = SSLContext.getInstance("TLSv1");
+        SSLContext sslContext = SSLContext.getInstance("SSLv3");
         KeyStore ks = KeyStore.getInstance("JKS");
         //加载keytool 生成的文件
         FileInputStream inputStream = new FileInputStream(fileUtils.rootDirectory + "/" + config.getMySSL().getName());
