@@ -70,9 +70,3 @@
 - 如果是一个地址是入口，随后加载的css,js什么东西也要带上映射名称才能访问(如图)
 
 ![在这里插入图片描述](https://wxlc.oss-cn-shenzhen.aliyuncs.com/491650887818_.pic_hd.jpg)
-
-## 赞助💰
-
-如果你觉得对你有帮助，你可以赞助我们一杯咖啡，鼓励我们继续开发维护下去。
-
-![在这里插入图片描述](https://wxlc.oss-cn-shenzhen.aliyuncs.com/481650887363_.pic_hd.jpg)
