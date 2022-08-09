@@ -26,7 +26,7 @@ public class ScanPackage
             Enumeration<URL> resources = e.getResources(path);
             ArrayList<File> dirs = new ArrayList<>();
 
-            if (!getJarStart())
+            if (!isJarStart())
             {
                 while (resources.hasMoreElements())
                 {
@@ -95,9 +95,10 @@ public class ScanPackage
     }
 
     //<editor-fold desc="获取是否是jar启动">
-    private static boolean getJarStart()
+    private static boolean isJarStart()
     {
         URL url = ScanPackage.class.getResource("");
+        assert url != null;
         String protocol = url.getProtocol();
         return "jar".equals(protocol);
     }

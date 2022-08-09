@@ -6,7 +6,7 @@ import com.kele.penetrate.factory.annotation.Recognizer;
 @SuppressWarnings("unused")
 public class CheckUtils
 {
-    public boolean checkMappingName(String mappingName)
+    public boolean checkDomainName(String mappingName)
     {
         boolean check = false;
         if (mappingName != null)
@@ -14,8 +14,13 @@ public class CheckUtils
             String trim = mappingName.trim();
             if (trim.length() > 0)
             {
-                String regex = "^[a-z0-9A-Z]+$";
+                String regex = "^[a-z0-9.]+$";
                 check = trim.matches(regex);
+            }
+            if (check)
+            {
+                String last = trim.substring(trim.length() - 1);
+                check = (!last.equals("."));
             }
         }
         return check;

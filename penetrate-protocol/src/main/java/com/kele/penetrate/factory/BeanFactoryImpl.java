@@ -18,6 +18,16 @@ public class BeanFactoryImpl
     private static String scanningPath;
     private static final Map<String, Object> beans = new HashMap<>();
 
+    public synchronized static BeanFactoryImpl getInstance(String scanning)
+    {
+        if (beanFactory == null)
+        {
+            scanningPath = scanning;
+            beanFactory = new BeanFactoryImpl();
+        }
+        return beanFactory;
+    }
+
     public BeanFactoryImpl()
     {
         init();
@@ -62,16 +72,6 @@ public class BeanFactoryImpl
         {
             log.error("注入扫描异常", ex);
         }
-    }
-
-    public synchronized static BeanFactoryImpl getInstance(String scanning)
-    {
-        if (beanFactory == null)
-        {
-            scanningPath = scanning;
-            beanFactory = new BeanFactoryImpl();
-        }
-        return beanFactory;
     }
 
     public static <T> T getBean(Class<T> type)
