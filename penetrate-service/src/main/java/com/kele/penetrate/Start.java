@@ -21,9 +21,10 @@ import java.util.TimerTask;
 @Recognizer
 public class Start
 {
-    private static final BeanFactoryImpl beanFactory = new BeanFactoryImpl();
-    public static final Events<PipelineTransmission> hypertextProtocolEvents = new Events<>("HTTP", PipelineTransmission.class, "com.kele.penetrate.receiver.pipeline");
-    public static final Events<ServicePipeline> serviceEvents = new Events<>("Service", ServicePipeline.class, "com.kele.penetrate.service.pipeline");
+    private static final BeanFactoryImpl beanFactory;
+    public static final Events<PipelineTransmission> hypertextProtocolEvents;
+    public static final Events<ServicePipeline> serviceEvents;
+    private static final Start start;
 
     @Autowired
     private NettyHttpService nettyHttpService;
@@ -34,6 +35,44 @@ public class Start
     @Autowired
     private ConnectManager connectManager;
 
+    //<editor-fold desc="初始化">
+    static
+    {
+        BeanFactoryImpl.setBean(new Timer());
+        beanFactory = BeanFactoryImpl.getInstance("com.kele.penetrate");
+        start = BeanFactoryImpl.getBean(Start.class);
+        hypertextProtocolEvents = new Events<>("HTTP", PipelineTransmission.class, "com.kele.penetrate.receiver.pipeline");
+        serviceEvents = new Events<>("Service", ServicePipeline.class, "com.kele.penetrate.service.pipeline");
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="心跳">
+    public void heartbeat()
+    {
+        BeanFactoryImpl.getBean(Timer.class).schedule(new TimerTask()
+        {
+            @SneakyThrows
+            public void run()
+            {
+                connectManager.replyAll(new Heartbeat());
+            }
+        }, 1000 * 20, 1000 * 20);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="清理未处理的消息">
+    public void clearUntreatedMsg()
+    {
+        BeanFactoryImpl.getBean(Timer.class).schedule(new TimerTask()
+        {
+            @SneakyThrows
+            public void run()
+            {
+                connectManager.clearUntreatedMsg();
+            }
+        }, 1000 * 60, 1000 * 60);
+    }
+    //</editor-fold>
 
     public static void main(String[] args)
     {
@@ -43,31 +82,5 @@ public class Start
         start.nettyServiceInit.start();
         start.heartbeat();
         start.clearUntreatedMsg();
-    }
-
-    public void heartbeat()
-    {
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask()
-        {
-            @SneakyThrows
-            public void run()
-            {
-                connectManager.replyAll(new Heartbeat());
-            }
-        }, 1000 * 10, 1000 * 10);
-    }
-
-    public void clearUntreatedMsg()
-    {
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask()
-        {
-            @SneakyThrows
-            public void run()
-            {
-                connectManager.clearUntreatedMsg();
-            }
-        }, 1000 * 60, 1000 * 60);
     }
 }

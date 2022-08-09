@@ -14,19 +14,20 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class BeanFactoryImpl
 {
-    /**
-     * 获取所有的java文件
-     */
-    private static final List<Class<?>> classesByPackageName = ScanPackage.getClassesByPackageName("com.kele.penetrate");
-    /**
-     * 管理IOC bean
-     */
+    private static BeanFactoryImpl beanFactory;
+    private static String scanningPath;
     private static final Map<String, Object> beans = new HashMap<>();
 
     public BeanFactoryImpl()
     {
+        init();
+    }
+
+    private void init()
+    {
         try
         {
+            List<Class<?>> classesByPackageName = ScanPackage.getClassesByPackageName(scanningPath);
             //<editor-fold desc="扫描所有Recognizer注解的类">
             for (Class<?> clazz : classesByPackageName)
             {
@@ -61,6 +62,16 @@ public class BeanFactoryImpl
         {
             log.error("注入扫描异常", ex);
         }
+    }
+
+    public synchronized static BeanFactoryImpl getInstance(String scanning)
+    {
+        if (beanFactory == null)
+        {
+            scanningPath = scanning;
+            beanFactory = new BeanFactoryImpl();
+        }
+        return beanFactory;
     }
 
     public static <T> T getBean(Class<T> type)
