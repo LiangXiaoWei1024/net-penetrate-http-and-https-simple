@@ -39,18 +39,16 @@ public class HandshakePipeline implements Func<ServicePipeline, Boolean>
             Handshake handshake = (Handshake) msg;
             VersionInfo versionInfo = config.getVersionInfo();
             HandshakeResult handshakeResult = new HandshakeResult();
-            List<String> failMessages = new ArrayList<>();
-            handshakeResult.setFailMessages(failMessages);
+            List<String> messages = new ArrayList<>();
+            handshakeResult.setFailMessages(messages);
             boolean success;
 
             if (!versionInfo.getVersion().equals(handshake.getVersion()))
             {
-                failMessages.add("版本不一致、要求更新后使用、更新内容如下：");
                 for (int i = 0; i < versionInfo.getContents().size(); i++)
                 {
-                    failMessages.add(versionInfo.getContents().getString(i));
+                    messages.add(versionInfo.getContents().getString(i));
                 }
-                failMessages.add("下载地址:https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple");
             }
             else
             {
@@ -58,14 +56,14 @@ public class HandshakePipeline implements Func<ServicePipeline, Boolean>
                 {
                     //映射名称已经存在
                     channelHandlerContext.writeAndFlush(new HandshakeResult());
-                    failMessages.add("域名已被别人使用[" + handshake.getCustomDomainName() + "]");
+                    messages.add("域名已被别人使用 [" + handshake.getCustomDomainName() + "]");
                 }
                 else
                 {
                     ConnectHandler connectHandler = connectManager.get(channelHandlerContext.channel().id());
                     connectHandler.setCustomDomainName(handshake.getCustomDomainName());
-                    failMessages.add("你的访问域名: " + HypertextTransferProtocolType.HTTP.code + "://" + handshake.getCustomDomainName() + ":" + config.getHttpPort());
-                    failMessages.add("你的访问域名: " + HypertextTransferProtocolType.HTTPS.code + "://" + handshake.getCustomDomainName() + ":" + config.getHttpsPort());
+                    messages.add("访问域名: " + HypertextTransferProtocolType.HTTP.code + "://" + handshake.getCustomDomainName() + ":" + config.getHttpPort());
+                    messages.add("访问域名: " + HypertextTransferProtocolType.HTTPS.code + "://" + handshake.getCustomDomainName() + ":" + config.getHttpsPort());
                     handshakeResult.setSuccess(true);
                 }
             }

@@ -61,6 +61,10 @@ public class ConnectManager
         {
             Map.Entry<ChannelId, ConnectHandler> next = iterator.next();
             ConnectHandler value = next.getValue();
+            if (value.getCustomDomainName() == null)
+            {
+                continue;
+            }
             if (value.getCustomDomainName().equals(customDomainName))
             {
                 connectHandler = value;
@@ -79,6 +83,10 @@ public class ConnectManager
         {
             Map.Entry<ChannelId, ConnectHandler> next = iterator.next();
             ConnectHandler connectHandler = next.getValue();
+            if (connectHandler.getCustomDomainName() == null)
+            {
+                continue;
+            }
             if (connectHandler.getCustomDomainName().equals(customDomainName))
             {
                 result = true;
