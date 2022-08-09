@@ -4,6 +4,7 @@ import com.kele.penetrate.client.ConnectHandler;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
+import com.kele.penetrate.page.MainFrame;
 import com.kele.penetrate.protocol.RequestTextBody;
 import com.kele.penetrate.utils.Func;
 import com.kele.penetrate.utils.HttpUtils;
@@ -18,6 +19,8 @@ public class RequestTextBodyPipeline implements Func<Object, Boolean>
     private ConnectHandler connectHandler;
     @Autowired
     private HttpUtils httpUtils;
+    @Autowired
+    private MainFrame mainFrame;
 
 
     @Override
@@ -26,7 +29,9 @@ public class RequestTextBodyPipeline implements Func<Object, Boolean>
         if (msg instanceof RequestTextBody)
         {
             RequestTextBody requestTextBody = (RequestTextBody) msg;
-            httpUtils.requestTextBody(requestTextBody.getRequestType(), requestTextBody.getRequestUrl(), requestTextBody.getHeaders(), requestTextBody.getDataText(), requestResult ->
+            String requestUrl = requestTextBody.getRequestProtocolType().code + "://" + mainFrame.getIp() + ":" + mainFrame.getPort() + "" + requestTextBody.getRequestUri();
+
+            httpUtils.requestTextBody(requestTextBody.getRequestType(), requestUrl, requestTextBody.getHeaders(), requestTextBody.getDataText(), requestResult ->
             {
                 requestResult.setRequestId(requestTextBody.getRequestId());
                 connectHandler.send(requestResult);

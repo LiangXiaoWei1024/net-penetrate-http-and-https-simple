@@ -38,8 +38,8 @@ public class HandshakeResultPipeline implements Func<Object, Boolean>
                 mainFrame.getRunButton().setEnabled(true);
 
                 JSONObject recordOperationJson = new JSONObject();
-                recordOperationJson.put("mappingName", mainFrame.getMappingName());
-                recordOperationJson.put("isFilterMappingName", mainFrame.isFilterMappingName());
+                recordOperationJson.put("customDomainName", mainFrame.getCustomDomainName());
+                recordOperationJson.put("isAutoStart", mainFrame.isAutoStart());
                 recordOperationJson.put("ip", mainFrame.getIp());
                 recordOperationJson.put("port", mainFrame.getPort());
                 fileUtils.writeLocalStr(recordOperationJson.toJSONString(), fileUtils.rootDirectory, fileUtils.recordOperation);
@@ -47,6 +47,7 @@ public class HandshakeResultPipeline implements Func<Object, Boolean>
             else
             {
                 clientLogPageManager.addLog("启动失败 :");
+                mainFrame.getRunButton().setText("启动");
                 clientLogPageManager.addLog(handshakeResult.getFailMessages());
                 mainFrame.setAllEditable(true);
             }

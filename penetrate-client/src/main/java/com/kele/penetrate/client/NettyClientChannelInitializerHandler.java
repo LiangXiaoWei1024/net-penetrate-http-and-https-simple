@@ -24,7 +24,7 @@ public class NettyClientChannelInitializerHandler extends ChannelInitializer<Nio
     {
         ch.pipeline().addLast(new ObjectEncoder());
         ch.pipeline().addLast(new ObjectDecoder(Integer.MAX_VALUE, ClassResolvers.weakCachingConcurrentResolver(null))); // 最大长度
-        ch.pipeline().addLast(new IdleStateHandler(30, 30, 30, TimeUnit.SECONDS));
+        ch.pipeline().addLast(new IdleStateHandler(5, 5, 5, TimeUnit.MINUTES));
         ch.pipeline().addLast(clientHandler);
     }
 }

@@ -15,7 +15,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>logs/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <!-- 日志文件保留天数 -->
-            <MaxHistory>15</MaxHistory>
+            <MaxHistory>7</MaxHistory>
             <!-- 日志文件最大尺寸 -->
             <maxFileSize>15MB</maxFileSize>
         </rollingPolicy>

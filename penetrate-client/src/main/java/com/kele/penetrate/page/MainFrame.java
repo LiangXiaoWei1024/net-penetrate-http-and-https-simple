@@ -5,7 +5,7 @@ import com.kele.penetrate.client.ConnectHandler;
 import com.kele.penetrate.config.Config;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
-import com.kele.penetrate.protocol.CancelMapping;
+import com.kele.penetrate.protocol.Cancel;
 import com.kele.penetrate.protocol.Handshake;
 import com.kele.penetrate.utils.CheckUtils;
 import com.kele.penetrate.utils.FileUtils;
@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.List;
 
 /**
@@ -24,15 +25,16 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Recognizer
 @Data
+@SuppressWarnings("unused")
 public class MainFrame extends JFrame
 {
     //<editor-fold desc="属性">
     private JPanel upPanel;
     private JPanel downPanel;
-    private JTextField mappingNameTextField;
+    private JTextField customDomainNameTextField;
     private JTextField ipTextField;
     private JTextField portTextField;
-    private JRadioButton filterMappingNameRadioButton;
+    private JRadioButton autoStartRadioButton;
     @Autowired
     private TextAreaMenu logTextArea;
     private JButton runButton;
@@ -97,14 +99,14 @@ public class MainFrame extends JFrame
         return portTextField.getText();
     }
 
-    public String getMappingName()
+    public String getCustomDomainName()
     {
-        return mappingNameTextField.getText();
+        return customDomainNameTextField.getText();
     }
 
-    public Boolean isFilterMappingName()
+    public Boolean isAutoStart()
     {
-        return filterMappingNameRadioButton.isSelected();
+        return autoStartRadioButton.isSelected();
     }
 
     public void setLogTextArea(List<ClientLogPageManager.LogInfo> logList)
@@ -122,10 +124,10 @@ public class MainFrame extends JFrame
     //<editor-fold desc="设置是否可以编辑">
     public void setAllEditable(boolean isEditable)
     {
-        mappingNameTextField.setEditable(isEditable);
+        customDomainNameTextField.setEditable(isEditable);
         portTextField.setEditable(isEditable);
         ipTextField.setEditable(isEditable);
-        filterMappingNameRadioButton.setEnabled(isEditable);
+        autoStartRadioButton.setEnabled(isEditable);
         runButton.setEnabled(isEditable);
     }
     //</editor-fold>
@@ -136,8 +138,8 @@ public class MainFrame extends JFrame
         Font font = new Font("宋体", Font.PLAIN, 12);
 
         //<editor-fold desc="系统默认配置">
-        String mappingNameDefault = uuidUtils.generateShortUuid();
-        boolean isFilterMappingNameDefault = true;
+        String customDomainName = uuidUtils.generateShortUUID();
+        boolean isAutoStart = false;
         String ipDefault = "127.0.0.1";
         String portDefault = "8080";
         //</editor-fold>
@@ -149,13 +151,13 @@ public class MainFrame extends JFrame
             try
             {
                 JSONObject jsonObject = JSONObject.parseObject(readFileStr);
-                if (jsonObject.containsKey("mappingName") && jsonObject.containsKey("isFilterMappingName") && jsonObject.containsKey("ip") && jsonObject.containsKey("port"))
+                if (jsonObject.containsKey("customDomainName") && jsonObject.containsKey("isAutoStart") && jsonObject.containsKey("ip") && jsonObject.containsKey("port"))
                 {
                     int confirm = JOptionPane.showConfirmDialog(null, "是否读取上次配置?", "提示", JOptionPane.YES_NO_OPTION);
                     if (confirm == 0)
                     {
-                        mappingNameDefault = jsonObject.getString("mappingName");
-                        isFilterMappingNameDefault = jsonObject.getBoolean("isFilterMappingName");
+                        customDomainName = jsonObject.getString("customDomainName");
+                        isAutoStart = jsonObject.getBoolean("isAutoStart");
                         ipDefault = jsonObject.getString("ip");
                         portDefault = jsonObject.getString("port");
 
@@ -176,23 +178,29 @@ public class MainFrame extends JFrame
         upPanel.setBackground(new Color(255, 255, 255));
         //</editor-fold>
 
-        //<editor-fold desc="映射名称">
-        JLabel mappingNameLabel = new JLabel("映射名称");
-        mappingNameLabel.setFont(font);
-        mappingNameLabel.setBounds(10, 5, 100, 30);
-        mappingNameTextField = new JTextField();
-        mappingNameTextField.setBounds(80, 7, 200, 25);
-        mappingNameTextField.setFont(font);
-        mappingNameTextField.setText(mappingNameDefault);
+        //<editor-fold desc="二级域名">
+        JLabel customDomainNameLabel = new JLabel("二级域名");
+        customDomainNameLabel.setFont(font);
+        customDomainNameLabel.setBounds(10, 5, 100, 30);
+
+        customDomainNameTextField = new JTextField();
+        customDomainNameTextField.setBounds(80, 7, 140, 25);
+        customDomainNameTextField.setFont(font);
+        customDomainNameTextField.setText(customDomainName);
+
+        JLabel customDomainNameLastLabel = new JLabel(config.getDomainName());
+        customDomainNameLastLabel.setFont(font);
+        customDomainNameLastLabel.setBounds(220, 5, 100, 30);
         //</editor-fold>
 
-        //<editor-fold desc="是否过滤映射名称">
-        JLabel filterMappingNameLabel = new JLabel("是否过滤映射名称");
-        filterMappingNameLabel.setFont(font);
-        filterMappingNameLabel.setBounds(320, 5, 130, 30);
-        filterMappingNameRadioButton = new JRadioButton();
-        filterMappingNameRadioButton.setBounds(450, 10, 30, 20);
-        filterMappingNameRadioButton.setSelected(isFilterMappingNameDefault);
+        //<editor-fold desc="自动启动">
+        JLabel autoStartLabel = new JLabel("自动启动");
+        autoStartLabel.setFont(font);
+        autoStartLabel.setBounds(320, 5, 50, 30);
+
+        autoStartRadioButton = new JRadioButton();
+        autoStartRadioButton.setBounds(400, 10, 30, 20);
+        autoStartRadioButton.setSelected(isAutoStart);
         //</editor-fold>
 
         //<editor-fold desc="IP">
@@ -219,103 +227,18 @@ public class MainFrame extends JFrame
         runButton = new JButton("启动");
         runButton.setFont(font);
         runButton.setBounds(200, 85, 100, 25);
-        runButton.addActionListener(e ->
-        {
-            setAllEditable(false);
-
-            String butText = runButton.getText();
-            if ("启动".equals(butText))
-            {
-                String mappingName = getMappingName();
-                String ip = getIp();
-                String port = getPort();
-                boolean isFilterMappingName = isFilterMappingName();
-                if (!connectHandler.isConnect())
-                {
-                    clientLogPageManager.addLog("未与服务器链接，请稍后重试...");
-                    setAllEditable(true);
-                    return;
-                }
-
-                if (!checkUtils.checkMappingName(mappingName))
-                {
-                    clientLogPageManager.addLog("请检查映射名称是否正确(不能含有特殊字符，不能为空)");
-                    setAllEditable(true);
-                    return;
-                }
-
-                mappingName = mappingName.trim();
-                if (mappingName.length() < 1 || mappingName.length() > 30)
-                {
-                    clientLogPageManager.addLog("检查映射名称长度(长度>0,长度<30)");
-                    setAllEditable(true);
-                    return;
-                }
-
-                if (!checkUtils.checkPort(port))
-                {
-                    clientLogPageManager.addLog("请检查端口是否正确");
-                    setAllEditable(true);
-                    return;
-                }
-
-                port = port.trim();
-                if (port.length() < 1 || port.length() > 9)
-                {
-                    clientLogPageManager.addLog("检查端口长度(长度>0,长度<9)");
-                    setAllEditable(true);
-                    return;
-                }
-
-                if (!checkUtils.checkIp(ip))
-                {
-                    clientLogPageManager.addLog("ip地址不能为空");
-                    setAllEditable(true);
-                    return;
-                }
-
-                ip = ip.trim();
-                if (ip.length() < 1 || ip.length() > 50)
-                {
-                    clientLogPageManager.addLog("检查IP长度(长度>0,长度<=50)");
-                    setAllEditable(true);
-                    return;
-                }
-
-                Handshake handshake = new Handshake();
-                handshake.setVersion(config.getVersion());
-                handshake.setMappingIp(ip);
-                handshake.setPort(Integer.parseInt(port));
-                handshake.setFilterMappingName(isFilterMappingName);
-                handshake.setMappingName(mappingName);
-                connectHandler.setHandshake(handshake);
-                connectHandler.send(handshake);
-                clientLogPageManager.addLog("发送启动请求");
-            }
-            else
-            {
-                setAllEditable(false);
-                if (connectHandler.getChannel() == null || !connectHandler.getChannel().isActive())
-                {
-                    clientLogPageManager.addLog("未与服务器链接，请稍后重试...");
-                    runButton.setEnabled(true);
-                    return;
-                }
-                clientLogPageManager.addLog("发送暂停请求");
-                connectHandler.setHandshake(null);
-                connectHandler.send(new CancelMapping());
-            }
-        });
+        runButton.addActionListener(this::startButtonClickHandle);
         //</editor-fold>
 
-        upPanel.add(mappingNameLabel);
-        upPanel.add(mappingNameTextField);
+        upPanel.add(customDomainNameLabel);
+        upPanel.add(customDomainNameTextField);
+        upPanel.add(customDomainNameLastLabel);
         upPanel.add(ipLabel);
         upPanel.add(ipTextField);
         upPanel.add(portLabel);
         upPanel.add(portTextField);
-        upPanel.add(filterMappingNameLabel);
-        upPanel.add(filterMappingNameRadioButton);
+        upPanel.add(autoStartLabel);
+        upPanel.add(autoStartRadioButton);
         upPanel.add(runButton);
         upPanel.setFocusable(true);
 
@@ -348,6 +271,93 @@ public class MainFrame extends JFrame
 
         downPanel.add(logTextAreaScrollPane);
         this.add(downPanel);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="启动点击处理">
+    public void startButtonClickHandle(ActionEvent event)
+    {
+        setAllEditable(false);
+        String butText = runButton.getText();
+
+        if ("启动".equals(butText))
+        {
+            String customDomainName = getCustomDomainName();
+            String ip = getIp();
+            String port = getPort();
+            boolean isAutoStart = isAutoStart();
+            if (!connectHandler.isConnect())
+            {
+                clientLogPageManager.addLog("未与服务器链接，请稍后重试...");
+                setAllEditable(true);
+                return;
+            }
+
+            if (!checkUtils.checkDomainName(customDomainName))
+            {
+                clientLogPageManager.addLog("请二级域名是否正确(不能含有特殊字符(不包含.)，不能为空)");
+                setAllEditable(true);
+                return;
+            }
+
+            customDomainName = customDomainName.trim();
+            if (customDomainName.length() < 1 || customDomainName.length() > 30)
+            {
+                clientLogPageManager.addLog("检查二级域名长度(长度>0,长度<=30)");
+                setAllEditable(true);
+                return;
+            }
+
+            if (!checkUtils.checkPort(port))
+            {
+                clientLogPageManager.addLog("请检查端口是否正确");
+                setAllEditable(true);
+                return;
+            }
+
+            port = port.trim();
+            if (port.length() < 1 || port.length() > 9)
+            {
+                clientLogPageManager.addLog("检查端口长度(长度>0,长度<9)");
+                setAllEditable(true);
+                return;
+            }
+
+            if (!checkUtils.checkIp(ip))
+            {
+                clientLogPageManager.addLog("ip地址不能为空");
+                setAllEditable(true);
+                return;
+            }
+
+            ip = ip.trim();
+            if (ip.length() < 1 || ip.length() > 50)
+            {
+                clientLogPageManager.addLog("检查IP长度(长度>0,长度<=50)");
+                setAllEditable(true);
+                return;
+            }
+
+            Handshake handshake = new Handshake();
+            handshake.setVersion(config.getVersion());
+            handshake.setCustomDomainName(customDomainName + config.getDomainName());
+            connectHandler.setHandshake(handshake);
+            connectHandler.send(handshake);
+            clientLogPageManager.addLog("发送启动请求");
+        }
+        else
+        {
+            setAllEditable(false);
+            if (connectHandler.getChannel() == null || !connectHandler.getChannel().isActive())
+            {
+                clientLogPageManager.addLog("未与服务器链接，请稍后重试...");
+                runButton.setEnabled(true);
+                return;
+            }
+            clientLogPageManager.addLog("发送暂停请求");
+            connectHandler.setHandshake(null);
+            connectHandler.send(new Cancel());
+        }
     }
     //</editor-fold>
 }

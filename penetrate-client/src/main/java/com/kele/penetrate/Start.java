@@ -12,14 +12,21 @@ import com.kele.penetrate.utils.Events;
 import lombok.extern.slf4j.Slf4j;
 
 
-
 @Recognizer
 @Slf4j
 @SuppressWarnings("unused")
 public class Start
 {
-    private static final BeanFactoryImpl beanFactory = new BeanFactoryImpl();
-    public static final Events<Object> clientEvents = new Events<>("Client", Object.class, "com.kele.penetrate.client.pipeline");
+    private static final BeanFactoryImpl beanFactory;
+    public static final Events<Object> clientEvents;
+
+    //<editor-fold desc="初始化">
+    static
+    {
+        beanFactory = BeanFactoryImpl.getInstance("com.kele.penetrate");
+        clientEvents = new Events<>("Client", Object.class, "com.kele.penetrate.client.pipeline");
+    }
+    //</editor-fold>
 
     @Autowired
     private Config config;
@@ -32,21 +39,18 @@ public class Start
     @Autowired
     private ClientLogPageManager clientLogPageManager;
 
-
     public static void main(String[] args)
     {
-        //<editor-fold desc="swing 样式包，弃用，对新的jdk有问题">
-//        if (System.getProperty("os.name").toLowerCase().contains("windows"))
-//        {
-//            BeautyEyeLNFHelper.launchBeautyEyeLNF();
-//        }
-        //</editor-fold>
-
         Start start = BeanFactoryImpl.getBean(Start.class);
         start.mainFrame.init();
+        start.clientLogPageManager.addLog("github上给个小星星鼓励一下吧～");
         start.clientLogPageManager.addLog("当前版本" + start.config.getVersion());
         start.clientLogPageManager.addLog("如有问题可以联系V:1049705180,QQ群:704592910");
-        start.clientLogPageManager.addLog("请输入信息后启动,也可以用默认配置,但是请映射到本地正确的ip+端口");
+        start.clientLogPageManager.addLog("下载地址:https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple");
+        if (start.mainFrame.isAutoStart())
+        {
+            start.clientLogPageManager.addLog("连接成功后自动启动～");
+        }
         start.connectHandler.start();
     }
 }

@@ -5,15 +5,13 @@ import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
 import com.kele.penetrate.page.ClientLogPageManager;
 import com.kele.penetrate.page.MainFrame;
-import com.kele.penetrate.protocol.CancelMappingResult;
+import com.kele.penetrate.protocol.CancelResult;
 import com.kele.penetrate.utils.Func;
-
-import javax.swing.*;
 
 @Register
 @Recognizer
 @SuppressWarnings("unused")
-public class CancelMappingResultPipeline implements Func<Object, Boolean>
+public class CancelResultPipeline implements Func<Object, Boolean>
 {
     @Autowired
     private ClientLogPageManager clientLogPageManager;
@@ -23,11 +21,10 @@ public class CancelMappingResultPipeline implements Func<Object, Boolean>
     @Override
     public Boolean func(Object msg)
     {
-        if (msg instanceof CancelMappingResult)
+        if (msg instanceof CancelResult)
         {
             clientLogPageManager.addLog("已暂停");
-            JButton runButton = mainFrame.getRunButton();
-            runButton.setText("启动");
+            mainFrame.getRunButton().setText("启动");
             mainFrame.setAllEditable(true);
             return true;
         }

@@ -17,6 +17,7 @@ public class Config
 {
     private final ServiceConnectInfo serviceConnectInfo = new ServiceConnectInfo();
     private String version;
+    private String domainName;
 
     public Config() throws IOException
     {
@@ -25,5 +26,6 @@ public class Config
         this.version = properties.getProperty("version");
         this.serviceConnectInfo.setIp(properties.getProperty("service.ip"));
         this.serviceConnectInfo.setPort(Integer.parseInt(properties.getProperty("service.port")));
+        this.domainName = properties.getProperty("domain.name");
     }
 }

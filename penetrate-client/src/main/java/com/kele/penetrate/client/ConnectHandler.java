@@ -61,12 +61,14 @@ public class ConnectHandler
         {
             if (futureListener.isSuccess())
             {
-                log.info("与服务器连接成功：" + config.getServiceConnectInfo().getIp() + ":" + config.getServiceConnectInfo().getPort());
+                setChannel(future.channel());
+                clientLogPageManager.addLog("连接成功");
+                log.info("与服务器连接成功：{} : {}", config.getServiceConnectInfo().getIp(), config.getServiceConnectInfo().getPort());
             }
             else
             {
-                clientLogPageManager.addLog("5秒之后自动重连");
-                log.info("5秒之后自动重连：" + config.getServiceConnectInfo().getIp() + ":" + config.getServiceConnectInfo().getPort());
+                clientLogPageManager.addLog("5秒后自动重连...");
+                log.info("5秒后自动重连：{} : {}", config.getServiceConnectInfo().getIp(), config.getServiceConnectInfo().getPort());
                 futureListener.channel().eventLoop().schedule(this::doConnect, 5, TimeUnit.SECONDS);
             }
         });
@@ -74,8 +76,10 @@ public class ConnectHandler
     //</editor-fold>
 
     //<editor-fold desc="是否连接成功">
-    public boolean isConnect(){
-        if(channel == null){
+    public boolean isConnect()
+    {
+        if (channel == null)
+        {
             return false;
         }
         return channel.isActive();
@@ -85,8 +89,8 @@ public class ConnectHandler
     //<editor-fold desc="连接断开处理">
     public void disconnect()
     {
-        log.info("与服务器断开链接");
-        clientLogPageManager.addLog("连接断开,自动重连中...");
+        log.info("连接断开");
+        clientLogPageManager.addLog("连接断开(自动重联～)");
         setChannel(null);
         doConnect();
     }

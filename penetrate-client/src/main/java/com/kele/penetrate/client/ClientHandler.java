@@ -5,13 +5,13 @@ import com.kele.penetrate.Start;
 import com.kele.penetrate.config.Config;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
+import com.kele.penetrate.page.ClientLogPageManager;
 import com.kele.penetrate.page.MainFrame;
 import com.kele.penetrate.utils.UUIDUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
-
 
 
 @Slf4j
@@ -29,6 +29,9 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
     private UUIDUtils uuidUtils;
     @Autowired
     private MainFrame mainFrame;
+    @Autowired
+    private ClientLogPageManager clientLogPageManager;
+    private boolean isFirst = true;
     //</editor-fold>
 
     //<editor-fold desc="接收通道消息">
@@ -43,13 +46,18 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
     @Override
     public void channelActive(ChannelHandlerContext ctx)
     {
-        connectHandler.setChannel(ctx.channel());
-        //<editor-fold desc="通道激活与客户端握手，告知转发信息">
-        if (connectHandler.getHandshake() != null)
+        if (isFirst && mainFrame.isAutoStart())
         {
-            connectHandler.send(connectHandler.getHandshake());
+            isFirst = false;
+            mainFrame.startButtonClickHandle(null);
         }
-        //</editor-fold>
+        else
+        {
+            if (connectHandler.getHandshake() != null)
+            {
+                connectHandler.send(connectHandler.getHandshake());
+            }
+        }
     }
     //</editor-fold>
 
