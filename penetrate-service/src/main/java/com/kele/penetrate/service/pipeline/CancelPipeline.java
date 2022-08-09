@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Register
 @Recognizer
-public class CancelMappingPipeline implements Func<ServicePipeline, Boolean>
+public class CancelPipeline implements Func<ServicePipeline, Boolean>
 {
     @Autowired
     private ConnectManager connectManager;
