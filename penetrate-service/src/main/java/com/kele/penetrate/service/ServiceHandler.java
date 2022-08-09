@@ -16,7 +16,6 @@ public class ServiceHandler extends SimpleChannelInboundHandler<Object>
     @Autowired
     private ConnectManager connectManager;
 
-
     //<editor-fold desc="读取通道消息">
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object msg)

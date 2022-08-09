@@ -58,26 +58,24 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
             else
             {
                 Map<String, String> requestHeaders = analysisHttpGetRequest.getRequestHeaders(fullHttpRequest);
-                String mappingName = analysisHttpGetRequest.getHomeUser(fullHttpRequest);
-                if (mappingName == null || !connectManager.isExist(mappingName))
+                String host = analysisHttpGetRequest.getHost(fullHttpRequest);
+                if (host == null || !connectManager.isExist(host))
                 {
                     channelHandlerContext.writeAndFlush(pageTemplate.get_NotFound_Template()).addListener(ChannelFutureListener.CLOSE);
                 }
                 else
                 {
-                    ConnectHandler connectHandler = connectManager.get(mappingName);
+                    ConnectHandler connectHandler = connectManager.get(host);
                     if (connectHandler != null)
                     {
-                        String requestUrl = analysisHttpGetRequest.getRequestUrl(fullHttpRequest, connectHandler.isFilterMappingName());
-                        requestUrl = hypertextTransferProtocolType.code + "://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
-
                         RequestNotBody requestNotBody = new RequestNotBody();
                         requestNotBody.setRequestId(uuidUtils.getUUID());
-                        requestNotBody.setRequestUrl(requestUrl);
+                        requestNotBody.setRequestProtocolType(hypertextTransferProtocolType);
+                        requestNotBody.setRequestUri(analysisHttpGetRequest.getRequestUrl(fullHttpRequest));
                         requestNotBody.setHeaders(requestHeaders);
                         requestNotBody.setRequestType(RequestType.GET);
 
-                        connectManager.recordMsg(requestNotBody, channelHandlerContext);
+                        connectManager.addRecordMessage(requestNotBody, channelHandlerContext);
                         connectHandler.reply(requestNotBody);
                     }
                     else

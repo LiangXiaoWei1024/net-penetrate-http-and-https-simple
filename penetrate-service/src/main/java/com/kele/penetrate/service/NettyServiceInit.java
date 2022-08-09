@@ -33,7 +33,7 @@ public class NettyServiceInit extends Thread
                     .childHandler(nettyServiceChannelInitializerHandler);
 
             ChannelFuture future = server.bind(config.getStartPort()).sync();
-            log.info("服务器启动成功,端口：" + config.getStartPort());
+            log.info("服务器启动成功: {}", config.getStartPort());
             future.channel().closeFuture().sync();
         }
         catch (Exception ex)

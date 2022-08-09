@@ -4,7 +4,7 @@ import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.factory.annotation.Register;
 import com.kele.penetrate.pojo.ServicePipeline;
-import com.kele.penetrate.protocol.CancelMapping;
+import com.kele.penetrate.protocol.Cancel;
 import com.kele.penetrate.protocol.CancelMappingResult;
 import com.kele.penetrate.service.ConnectManager;
 import com.kele.penetrate.utils.Func;
@@ -25,9 +25,9 @@ public class CancelMappingPipeline implements Func<ServicePipeline, Boolean>
     {
         Object msg = servicePipeline.getMsg();
         ChannelHandlerContext channelHandlerContext = servicePipeline.getChannelHandlerContext();
-        if (msg instanceof CancelMapping)
+        if (msg instanceof Cancel)
         {
-            connectManager.cancelMapping(channelHandlerContext);
+            connectManager.get(channelHandlerContext.channel().id()).setCustomDomainName(null);
             channelHandlerContext.writeAndFlush(new CancelMappingResult());
             return true;
         }

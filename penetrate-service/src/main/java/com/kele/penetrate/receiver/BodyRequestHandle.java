@@ -48,22 +48,20 @@ public class BodyRequestHandle
         if (requestType == RequestType.POST || requestType == RequestType.PUT || requestType == RequestType.PATCH || requestType == RequestType.DELETE)
         {
             Map<String, String> requestHeaders = analysisHttpPostRequest.getRequestHeaders(fullHttpRequest);
-            String mappingName = analysisHttpPostRequest.getHomeUser(fullHttpRequest);
+            String host = analysisHttpPostRequest.getHost(fullHttpRequest);
             String contentType = fullHttpRequest.headers().get("Content-Type");
-            ConnectHandler connectHandler = this.connectManager.get(mappingName);
-
+            ConnectHandler connectHandler = connectManager.get(host);
             if (connectHandler != null)
             {
-                String requestUrl = analysisHttpPostRequest.getRequestUrl(fullHttpRequest, connectHandler.isFilterMappingName());
-                requestUrl = hypertextTransferProtocolType.code + "://" + connectHandler.getMappingIp() + ":" + connectHandler.getPort() + requestUrl;
                 if (contentType == null)
                 {
                     RequestNotBody requestNotBody = new RequestNotBody();
                     requestNotBody.setRequestId(uuidUtils.getUUID());
-                    requestNotBody.setRequestUrl(requestUrl);
+                    requestNotBody.setRequestProtocolType(hypertextTransferProtocolType);
+                    requestNotBody.setRequestUri(analysisHttpPostRequest.getRequestUrl(fullHttpRequest));
                     requestNotBody.setHeaders(requestHeaders);
                     requestNotBody.setRequestType(requestType);
-                    this.connectManager.recordMsg(requestNotBody, channelHandlerContext);
+                    connectManager.addRecordMessage(requestNotBody, channelHandlerContext);
                     connectHandler.reply(requestNotBody);
                 }
                 else
@@ -76,9 +74,10 @@ public class BodyRequestHandle
                         requestFormBody.setRequestId(uuidUtils.getUUID());
                         requestFormBody.setHeaders(requestHeaders);
                         requestFormBody.setDataBody(analysisHttpPostRequest.getFormBody(fullHttpRequest));
-                        requestFormBody.setRequestUrl(requestUrl);
+                        requestFormBody.setRequestProtocolType(hypertextTransferProtocolType);
+                        requestFormBody.setRequestUri(analysisHttpPostRequest.getRequestUrl(fullHttpRequest));
 
-                        this.connectManager.recordMsg(requestFormBody, channelHandlerContext);
+                        connectManager.addRecordMessage(requestFormBody, channelHandlerContext);
                         connectHandler.reply(requestFormBody);
                     }
                     //</editor-fold>
@@ -89,13 +88,14 @@ public class BodyRequestHandle
                         RequestMultipartBody requestMultipartBody = new RequestMultipartBody();
                         requestMultipartBody.setRequestId(uuidUtils.getUUID());
                         requestMultipartBody.setRequestType(requestType);
-                        requestMultipartBody.setRequestUrl(requestUrl);
+                        requestMultipartBody.setRequestProtocolType(hypertextTransferProtocolType);
+                        requestMultipartBody.setRequestUri(analysisHttpPostRequest.getRequestUrl(fullHttpRequest));
                         requestMultipartBody.setHeaders(requestHeaders);
                         MultipartBody multipartBody = analysisHttpPostRequest.getMultipartBody(fullHttpRequest);
                         requestMultipartBody.setBodyMap(multipartBody.getBodyMap());
                         requestMultipartBody.setBodyFile(multipartBody.getBodyFiles());
 
-                        this.connectManager.recordMsg(requestMultipartBody, channelHandlerContext);
+                        connectManager.addRecordMessage(requestMultipartBody, channelHandlerContext);
                         connectHandler.reply(requestMultipartBody);
                     }
                     //</editor-fold>
@@ -110,10 +110,11 @@ public class BodyRequestHandle
                         RequestTextBody requestTextBody = new RequestTextBody();
                         requestTextBody.setRequestId(uuidUtils.getUUID());
                         requestTextBody.setRequestType(requestType);
-                        requestTextBody.setRequestUrl(requestUrl);
+                        requestTextBody.setRequestProtocolType(hypertextTransferProtocolType);
+                        requestTextBody.setRequestUri(analysisHttpPostRequest.getRequestUrl(fullHttpRequest));
                         requestTextBody.setHeaders(requestHeaders);
                         requestTextBody.setDataText(analysisHttpPostRequest.getTextBody(fullHttpRequest));
-                        this.connectManager.recordMsg(requestTextBody, channelHandlerContext);
+                        connectManager.addRecordMessage(requestTextBody, channelHandlerContext);
                         connectHandler.reply(requestTextBody);
                     }
                     //</editor-fold>
@@ -121,7 +122,7 @@ public class BodyRequestHandle
                     //<editor-fold desc="无法处理的 Content-Type">
                     else
                     {
-                        log.error("无法处理的Content-Type：" + contentType);
+                        log.error("无法处理的Content-Type：{}", contentType);
                         channelHandlerContext.writeAndFlush(pageTemplate.get_UnableProcess_Template()).addListener(ChannelFutureListener.CLOSE);
                     }
                     //</editor-fold>

@@ -52,35 +52,25 @@ public class AnalysisRequest
     }
     //</editor-fold>
 
-    //<editor-fold desc="获取归属用户">
-    public String getHomeUser(FullHttpRequest fullHttpRequest)
+    //<editor-fold desc="获取Host">
+    public String getHost(FullHttpRequest fullHttpRequest)
     {
         try
         {
-            return fullHttpRequest.uri().split("/")[1];
+            return fullHttpRequest.headers().get("Host");
         }
         catch (Exception ex)
         {
-            log.error("没有用户");
+            log.error("没有获取到Host");
         }
         return null;
     }
     //</editor-fold>
 
     //<editor-fold desc="获取请求路径">
-    public String getRequestUrl(FullHttpRequest fullHttpRequest, boolean isFilterMappingName)
+    public String getRequestUrl(FullHttpRequest fullHttpRequest)
     {
-        StringBuilder uri = new StringBuilder(fullHttpRequest.uri());
-        if (isFilterMappingName)
-        {
-            String[] split = uri.toString().split("/");
-            uri = new StringBuilder();
-            for (int i = 2; i < split.length; i++)
-            {
-                uri.append("/").append(split[i]);
-            }
-        }
-        return uri.toString();
+        return new StringBuilder(fullHttpRequest.uri()).toString();
     }
     //</editor-fold>
 }

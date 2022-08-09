@@ -94,7 +94,6 @@ public class AnalysisHttpPostRequest extends AnalysisRequest
     }
     //</editor-fold>
 
-
     //<editor-fold desc="获取请求体 application(json xml javaScript),text(plain html)">
     public String getTextBody(FullHttpRequest fullHttpRequest)
     {

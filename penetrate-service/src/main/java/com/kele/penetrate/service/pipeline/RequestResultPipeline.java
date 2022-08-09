@@ -34,9 +34,11 @@ public class RequestResultPipeline implements Func<ServicePipeline, Boolean>
     {
         Object msg = servicePipeline.getMsg();
         ChannelHandlerContext channelHandlerContext = servicePipeline.getChannelHandlerContext();
+
         if (msg instanceof RequestResult)
         {
             RequestResult requestResult = (RequestResult) msg;
+            ConnectManager.MessageManager recordMsg = connectManager.getRecordMessage(requestResult.getRequestId());
             if (requestResult.isSuccess())
             {
                 FullHttpResponse responseSuccess;
@@ -55,7 +57,7 @@ public class RequestResultPipeline implements Func<ServicePipeline, Boolean>
                     requestResult.getHeaders().forEach((k, v) ->
                             responseSuccess.headers().set(k, v));
                 }
-                ConnectManager.MsgManager recordMsg = connectManager.getRecordMsg(requestResult.getRequestId());
+
                 if (recordMsg != null && recordMsg.getChannelHandlerContext() != null)
                 {
                     recordMsg.getChannelHandlerContext().writeAndFlush(responseSuccess).addListener(ChannelFutureListener.CLOSE);
@@ -63,14 +65,14 @@ public class RequestResultPipeline implements Func<ServicePipeline, Boolean>
             }
             else
             {
-                ConnectManager.MsgManager recordMsg = connectManager.getRecordMsg(requestResult.getRequestId());
-
                 if (recordMsg != null && recordMsg.getChannelHandlerContext() != null)
                 {
                     FullHttpResponse responseFail = pageTemplate.createTemplate(requestResult.getFailMessage(), requestResult.getFailMessage(), new HttpResponseStatus(requestResult.getCode(), requestResult.getFailMessage()));
                     recordMsg.getChannelHandlerContext().writeAndFlush(responseFail).addListener(ChannelFutureListener.CLOSE);
                 }
             }
+
+            connectManager.removeRecordMessage(requestResult.getRequestId());
             return true;
         }
         return false;

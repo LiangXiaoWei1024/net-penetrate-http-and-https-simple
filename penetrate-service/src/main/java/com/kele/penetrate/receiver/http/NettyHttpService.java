@@ -33,7 +33,7 @@ public class NettyHttpService extends Thread
                     .childHandler(nettyHttpChannelInitializerHandler);
 
             ChannelFuture future = server.bind(config.getHttpPort()).sync();
-            log.info("http接收器启动成功,端口：" + config.getHttpPort());
+            log.info("http接收器启动成功：{}", config.getHttpPort());
             future.channel().closeFuture().sync();
         }
         catch (InterruptedException ex)

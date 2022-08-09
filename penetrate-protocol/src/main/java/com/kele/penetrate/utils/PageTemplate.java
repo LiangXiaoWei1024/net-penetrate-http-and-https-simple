@@ -11,6 +11,7 @@ import io.netty.handler.codec.http.HttpVersion;
 import java.nio.charset.StandardCharsets;
 
 @Recognizer
+@SuppressWarnings("unused")
 public class PageTemplate
 {
 

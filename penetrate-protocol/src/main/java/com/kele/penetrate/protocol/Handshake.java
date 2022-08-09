@@ -8,9 +8,6 @@ import java.io.Serializable;
 @SuppressWarnings("unused")
 public class Handshake implements Serializable
 {
-    private String mappingName;
-    private String mappingIp;
-    private Integer port;
+    private String customDomainName;
     private String version;
-    private boolean isFilterMappingName;
 }

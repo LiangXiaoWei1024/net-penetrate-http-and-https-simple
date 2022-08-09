@@ -24,7 +24,7 @@ public class NettyServiceChannelInitializerHandler extends ChannelInitializer<So
     {
         socketChannel.pipeline().addLast(new ObjectDecoder(Integer.MAX_VALUE, ClassResolvers.weakCachingConcurrentResolver(null)));
         socketChannel.pipeline().addLast(new ObjectEncoder());
-        socketChannel.pipeline().addLast(new IdleStateHandler(60, 60, 60, TimeUnit.SECONDS));
+        socketChannel.pipeline().addLast(new IdleStateHandler(5, 5, 5, TimeUnit.MINUTES));
         socketChannel.pipeline().addLast(serviceHandler);
     }
 }

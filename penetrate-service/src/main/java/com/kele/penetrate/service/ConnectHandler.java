@@ -11,31 +11,22 @@ import lombok.extern.slf4j.Slf4j;
 public class ConnectHandler
 {
     private ChannelHandlerContext ctx;
-    private String mappingName;
-    private String mappingIp;
-    private int port;
-    private boolean isFilterMappingName;
-
+    private String customDomainName;
 
     public ConnectHandler(ChannelHandlerContext ctx)
     {
         this.ctx = ctx;
     }
-
-    //<editor-fold desc="发送消息">
     public void reply(Object msg)
     {
         ctx.writeAndFlush(msg);
     }
-    //</editor-fold>
 
     @Override
     public String toString()
     {
         return "ConnectHandler{" +
-                "mappingName='" + mappingName + '\'' +
-                ", mappingIp='" + mappingIp + '\'' +
-                ", port=" + port +
+                "customDomainName='" + customDomainName + '\'' +
                 '}';
     }
 }

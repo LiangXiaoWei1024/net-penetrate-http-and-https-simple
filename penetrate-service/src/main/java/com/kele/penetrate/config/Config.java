@@ -21,7 +21,6 @@ public class Config
     private int startPort;
     private int httpPort;
     private int httpsPort;
-    private String internetAccessUrl;
     private VersionInfo versionInfo = new VersionInfo();
     private MySSL mySSL = new MySSL();
 
@@ -34,7 +33,6 @@ public class Config
         this.httpPort = Integer.parseInt(properties.getProperty("http.port"));
         this.httpsPort = Integer.parseInt(properties.getProperty("https.port"));
         this.startPort = Integer.parseInt(properties.getProperty("start.port"));
-        this.internetAccessUrl = properties.getProperty("internet.access");
 
         this.versionInfo.setVersion(properties.getProperty("version"));
         this.versionInfo.setContents(JSONArray.parseArray(properties.getProperty("version.contents")));

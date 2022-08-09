@@ -56,7 +56,7 @@ public class Start
             {
                 connectManager.replyAll(new Heartbeat());
             }
-        }, 1000 * 20, 1000 * 20);
+        }, 1000 * 30, 1000 * 30);
     }
     //</editor-fold>
 
@@ -68,7 +68,7 @@ public class Start
             @SneakyThrows
             public void run()
             {
-                connectManager.clearUntreatedMsg();
+                connectManager.clearUntreatedMessage();
             }
         }, 1000 * 60, 1000 * 60);
     }

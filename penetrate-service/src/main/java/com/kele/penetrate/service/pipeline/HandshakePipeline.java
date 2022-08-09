@@ -54,34 +54,19 @@ public class HandshakePipeline implements Func<ServicePipeline, Boolean>
             }
             else
             {
-                if (connectManager.isExist(handshake.getMappingName()))
+                if (connectManager.isExist(handshake.getCustomDomainName()))
                 {
                     //映射名称已经存在
                     channelHandlerContext.writeAndFlush(new HandshakeResult());
-                    failMessages.add("映射名称已存在(" + handshake.getMappingName() + ")");
+                    failMessages.add("域名已被别人使用[" + handshake.getCustomDomainName() + "]");
                 }
                 else
                 {
                     ConnectHandler connectHandler = connectManager.get(channelHandlerContext.channel().id());
-                    connectHandler.setCtx(channelHandlerContext);
-                    connectHandler.setMappingIp(handshake.getMappingIp());
-                    connectHandler.setPort(handshake.getPort());
-                    connectHandler.setMappingName(handshake.getMappingName());
-                    connectHandler.setFilterMappingName(handshake.isFilterMappingName());
-                    connectManager.add(connectHandler);
-                    //映射成功
+                    connectHandler.setCustomDomainName(handshake.getCustomDomainName());
+                    failMessages.add("你的访问域名: " + HypertextTransferProtocolType.HTTP.code + "://" + handshake.getCustomDomainName() + ":" + config.getHttpPort());
+                    failMessages.add("你的访问域名: " + HypertextTransferProtocolType.HTTPS.code + "://" + handshake.getCustomDomainName() + ":" + config.getHttpsPort());
                     handshakeResult.setSuccess(true);
-                    if (handshake.isFilterMappingName())
-                    {
-                        failMessages.add(HypertextTransferProtocolType.HTTP.code + "://" + config.getInternetAccessUrl() + ":" + config.getHttpPort() + "/" + handshake.getMappingName() + "/ -> " + HypertextTransferProtocolType.HTTP.code + "://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/");
-                        failMessages.add(HypertextTransferProtocolType.HTTPS.code + "://" + config.getInternetAccessUrl() + ":" + config.getHttpsPort() + "/" + handshake.getMappingName() + "/ -> " + HypertextTransferProtocolType.HTTPS.code + "://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/");
-                    }
-                    else
-                    {
-                        failMessages.add(HypertextTransferProtocolType.HTTP.code + "://" + config.getInternetAccessUrl() + ":" + config.getHttpPort() + "/" + handshake.getMappingName() + "/  -> " + HypertextTransferProtocolType.HTTP.code + "://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/" + handshake.getMappingName() + "/");
-                        failMessages.add(HypertextTransferProtocolType.HTTPS.code + "://" + config.getInternetAccessUrl() + ":" + config.getHttpsPort() + "/" + handshake.getMappingName() + "/ -> " + HypertextTransferProtocolType.HTTPS.code + "://" + handshake.getMappingIp() + ":" + handshake.getPort() + "/" + handshake.getMappingName() + "/");
-                    }
-
                 }
             }
             channelHandlerContext.writeAndFlush(handshakeResult);
