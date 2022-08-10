@@ -43,7 +43,7 @@ public class RequestResultPipeline implements Func<ServicePipeline, Boolean>
             {
                 FullHttpResponse responseSuccess;
 
-                if (requestResult.getData().length > 104857600)
+                if (requestResult.getData() != null && requestResult.getData().length > 104857600)
                 {
 
                     FullHttpResponse responseFail = pageTemplate.createTemplate("数据过大", "数据过大", new HttpResponseStatus(413, "数据过大"));

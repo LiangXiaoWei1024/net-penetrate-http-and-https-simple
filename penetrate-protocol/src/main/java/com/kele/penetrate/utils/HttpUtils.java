@@ -135,7 +135,6 @@ public class HttpUtils
         RequestResult requestResult = new RequestResult();
         Response resultResponse = null;
 
-
         if (priorResponse != null)
         {
             int priorResponseCode = priorResponse.code();
@@ -163,7 +162,7 @@ public class HttpUtils
             requestResult.setCode(resultResponse.code());
             requestResult.setSuccess(true);
             Map<String, String> headers = new HashMap<>();
-            if (requestResult.getData().length > 104857600)
+            if (requestResult.getData() != null && requestResult.getData().length > 104857600)
             {
                 requestResult.setData("数据过大".getBytes(StandardCharsets.UTF_8));
                 headers.put("Content-Length", "" + requestResult.getData().length);
