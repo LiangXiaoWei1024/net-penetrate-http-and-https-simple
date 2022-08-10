@@ -43,24 +43,33 @@ public class RequestResultPipeline implements Func<ServicePipeline, Boolean>
             {
                 FullHttpResponse responseSuccess;
 
-                if (requestResult.getData() != null)
+                if (requestResult.getData().length > 104857600)
                 {
-                    responseSuccess = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, new HttpResponseStatus(requestResult.getCode(), ""), Unpooled.copiedBuffer(requestResult.getData()));
+
+                    FullHttpResponse responseFail = pageTemplate.createTemplate("数据过大", "数据过大", new HttpResponseStatus(413, "数据过大"));
+                    recordMsg.getChannelHandlerContext().writeAndFlush(responseFail).addListener(ChannelFutureListener.CLOSE);
                 }
                 else
                 {
-                    responseSuccess = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, new HttpResponseStatus(requestResult.getCode(), ""));
-                }
+                    if (requestResult.getData() != null)
+                    {
+                        responseSuccess = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, new HttpResponseStatus(requestResult.getCode(), ""), Unpooled.copiedBuffer(requestResult.getData()));
+                    }
+                    else
+                    {
+                        responseSuccess = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, new HttpResponseStatus(requestResult.getCode(), ""));
+                    }
 
-                if (requestResult.getHeaders() != null)
-                {
-                    requestResult.getHeaders().forEach((k, v) ->
-                            responseSuccess.headers().set(k, v));
-                }
+                    if (requestResult.getHeaders() != null)
+                    {
+                        requestResult.getHeaders().forEach((k, v) ->
+                                responseSuccess.headers().set(k, v));
+                    }
 
-                if (recordMsg != null && recordMsg.getChannelHandlerContext() != null)
-                {
-                    recordMsg.getChannelHandlerContext().writeAndFlush(responseSuccess).addListener(ChannelFutureListener.CLOSE);
+                    if (recordMsg != null && recordMsg.getChannelHandlerContext() != null)
+                    {
+                        recordMsg.getChannelHandlerContext().writeAndFlush(responseSuccess).addListener(ChannelFutureListener.CLOSE);
+                    }
                 }
             }
             else

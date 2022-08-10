@@ -55,7 +55,6 @@ public class HandshakePipeline implements Func<ServicePipeline, Boolean>
                 if (connectManager.isExist(handshake.getCustomDomainName()))
                 {
                     //映射名称已经存在
-                    channelHandlerContext.writeAndFlush(new HandshakeResult());
                     messages.add("域名已被别人使用 [" + handshake.getCustomDomainName() + "]");
                 }
                 else

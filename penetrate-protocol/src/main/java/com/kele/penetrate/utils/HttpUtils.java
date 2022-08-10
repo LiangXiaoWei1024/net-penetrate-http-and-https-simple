@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,7 +149,8 @@ public class HttpUtils
             resultResponse = response;
             try
             {
-                requestResult.setData(Objects.requireNonNull(response.body()).bytes());
+                byte[] bytes = Objects.requireNonNull(response.body()).bytes();
+                requestResult.setData(bytes);
             }
             catch (IOException e)
             {
@@ -161,10 +163,18 @@ public class HttpUtils
             requestResult.setCode(resultResponse.code());
             requestResult.setSuccess(true);
             Map<String, String> headers = new HashMap<>();
-            resultResponse.headers().forEach(pair -> headers.put(pair.getFirst(), pair.getSecond()));
+            if (requestResult.getData().length > 104857600)
+            {
+                requestResult.setData("数据过大".getBytes(StandardCharsets.UTF_8));
+                headers.put("Content-Length", "" + requestResult.getData().length);
+                headers.put("Content-Type", "text/html;charset=UTF-8");
+            }
+            else
+            {
+                resultResponse.headers().forEach(pair -> headers.put(pair.getFirst(), pair.getSecond()));
+            }
             requestResult.setHeaders(headers);
         }
-
         action1.action(requestResult);
     }
 
