@@ -15,6 +15,8 @@ public class FileUtils
      */
     public String rootDirectory = System.getProperty("user.dir");
     public String recordOperation = "recordOperation.json";
+    public String customOperation = "customOperation.json";
+
 
     /**
      * 写入本地文件

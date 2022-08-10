@@ -145,22 +145,43 @@ public class MainFrame extends JFrame
         //</editor-fold>
 
         //<editor-fold desc="读取本地配置">
-        String readFileStr = fileUtils.readFileStr(fileUtils.rootDirectory + "/" + fileUtils.recordOperation);
-        if (readFileStr != null)
+        String recordOperationStr = fileUtils.readFileStr(fileUtils.rootDirectory + "/" + fileUtils.recordOperation);
+        String customOperationStr = fileUtils.readFileStr(fileUtils.rootDirectory + "/" + fileUtils.customOperation);
+        if (recordOperationStr != null)
         {
             try
             {
-                JSONObject jsonObject = JSONObject.parseObject(readFileStr);
-                if (jsonObject.containsKey("customDomainName") && jsonObject.containsKey("isAutoStart") && jsonObject.containsKey("ip") && jsonObject.containsKey("port"))
+                JSONObject recordOperationJson = JSONObject.parseObject(recordOperationStr);
+                JSONObject customOperationJson = null;
+                if (customOperationStr != null)
                 {
-                    int confirm = JOptionPane.showConfirmDialog(null, "是否读取上次配置?", "提示", JOptionPane.YES_NO_OPTION);
-                    if (confirm == 0)
-                    {
-                        customDomainName = jsonObject.getString("customDomainName");
-                        isAutoStart = jsonObject.getBoolean("isAutoStart");
-                        ipDefault = jsonObject.getString("ip");
-                        portDefault = jsonObject.getString("port");
+                    customOperationJson = JSONObject.parseObject(customOperationStr);
+                }
 
+                if (recordOperationJson.containsKey("customDomainName") && recordOperationJson.containsKey("isAutoStart") && recordOperationJson.containsKey("ip") && recordOperationJson.containsKey("port"))
+                {
+                    Boolean skip = false;
+                    if (customOperationJson != null && customOperationJson.containsKey("skip"))
+                    {
+                        skip = customOperationJson.getBoolean("skip");
+                    }
+                    if (!skip)
+                    {
+                        int confirm = JOptionPane.showConfirmDialog(null, "是否读取上次配置?", "提示", JOptionPane.YES_NO_OPTION);
+                        if (confirm == 0)
+                        {
+                            customDomainName = recordOperationJson.getString("customDomainName");
+                            isAutoStart = recordOperationJson.getBoolean("isAutoStart");
+                            ipDefault = recordOperationJson.getString("ip");
+                            portDefault = recordOperationJson.getString("port");
+                        }
+                    }
+                    else
+                    {
+                        customDomainName = recordOperationJson.getString("customDomainName");
+                        isAutoStart = recordOperationJson.getBoolean("isAutoStart");
+                        ipDefault = recordOperationJson.getString("ip");
+                        portDefault = recordOperationJson.getString("port");
                     }
                 }
             }
