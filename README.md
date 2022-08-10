@@ -28,7 +28,7 @@
 4. 看到日志中**启动成功**，并且明确的告诉你外网请求地址，就可以开始使用了。
 5. 本地地址为： http://127.0.0.1:20001/ 远程地址为http://test.kele.plus/ 当访问http://test.kele.plus/ 的时候，请求会被转发到http://127.0.0.1:20001/ 实现内网可外网访
 
-![图1](https://img-blog.csdnimg.cn/9f54039063954f259e14560a216210e1.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5Y-v5LmQX3Z2,size_19,color_FFFFFF,t_70,g_se,x_16)
+![图1](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/examples_1.png?raw=true)
 
 
 系统托盘，windows的又下角的位置
@@ -37,7 +37,7 @@
 
 ## 附加小功能，右键日志页面，方便大家调试使用
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/bd1e74106348428ab741a0de6fa5e522.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5Y-v5LmQX3Z2,size_20,color_FFFFFF,t_70,g_se,x_16)
+![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/examples_4.png?raw=true)
 
 
 > 源码&下载地址 [https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple)
