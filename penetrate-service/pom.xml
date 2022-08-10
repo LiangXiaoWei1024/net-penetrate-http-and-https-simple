@@ -6,12 +6,12 @@
 
     <groupId>com.kele.penetrate</groupId>
     <artifactId>penetrate-service</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <penetrate-protocol.version>2.0.0</penetrate-protocol.version>
+        <penetrate-protocol.version>2.0.1</penetrate-protocol.version>
     </properties>
 
     <!--依赖管理标签进行版本锁定-->
