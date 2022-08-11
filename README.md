@@ -39,11 +39,6 @@
 
 ![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/examples_4.png?raw=true)
 
-
-> 源码&下载地址 [https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple)
-
-大家有什么问题可以加入到QQ群，有什么需要改进以及需要新增的功能大家一起交流。
-
 ## 安装教程
 
 ### Windows
@@ -58,12 +53,3 @@
 
 - 出现下面的问题，打开终端 进入当前目录， chmod +x penetrate-start.command
 ![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/install_mac_3.png?raw=true)
-
-
-
-## 问题
-
-- 如果重定向的地址是外网无法访问的地址是用不了的。
-- 如果是一个地址是入口，随后加载的css,js什么东西也要带上映射名称才能访问(如图)
-
-![在这里插入图片描述](https://wxlc.oss-cn-shenzhen.aliyuncs.com/491650887818_.pic_hd.jpg)
