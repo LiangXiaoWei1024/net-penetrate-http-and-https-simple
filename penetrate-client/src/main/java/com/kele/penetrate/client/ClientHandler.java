@@ -46,6 +46,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object>
     @Override
     public void channelActive(ChannelHandlerContext ctx)
     {
+        connectHandler.setChannel(ctx.channel());
         if (isFirst && mainFrame.isAutoStart())
         {
             isFirst = false;
