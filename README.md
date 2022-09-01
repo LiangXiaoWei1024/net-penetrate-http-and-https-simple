@@ -40,12 +40,6 @@
 ![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/examples_4.png?raw=true)
 
 ## 安装教程
-
-### Windows
-![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/install_windows_1.png?raw=true)
-![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/install_windows_2.png?raw=true)
-![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/install_windows_3.png?raw=true)
-
 ### Mac
 ![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/install_mac_1.png?raw=true)
 ![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/install_mac_2.png?raw=true)
