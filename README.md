@@ -53,3 +53,9 @@
 
 - 出现下面的问题，打开终端 进入当前目录， chmod +x penetrate-start.command
 ![在这里插入图片描述](https://github.com/LiangXiaoWei1024/net-penetrate-http-and-https-simple/blob/master/image/install_mac_3.png?raw=true)
+
+## 赞助💰
+
+如果你觉得对你有帮助，你可以赞助我们一杯咖啡，鼓励我们继续开发维护下去。
+
+![在这里插入图片描述](https://wxlc.oss-cn-shenzhen.aliyuncs.com/481650887363_.pic_hd.jpg)
