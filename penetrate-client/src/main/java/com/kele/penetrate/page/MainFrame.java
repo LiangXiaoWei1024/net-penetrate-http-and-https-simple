@@ -146,43 +146,17 @@ public class MainFrame extends JFrame
 
         //<editor-fold desc="读取本地配置">
         String recordOperationStr = fileUtils.readFileStr(fileUtils.rootDirectory + "/" + fileUtils.recordOperation);
-        String customOperationStr = fileUtils.readFileStr(fileUtils.rootDirectory + "/" + fileUtils.customOperation);
         if (recordOperationStr != null)
         {
             try
             {
                 JSONObject recordOperationJson = JSONObject.parseObject(recordOperationStr);
-                JSONObject customOperationJson = null;
-                if (customOperationStr != null)
-                {
-                    customOperationJson = JSONObject.parseObject(customOperationStr);
-                }
-
                 if (recordOperationJson.containsKey("customDomainName") && recordOperationJson.containsKey("isAutoStart") && recordOperationJson.containsKey("ip") && recordOperationJson.containsKey("port"))
                 {
-                    Boolean skip = false;
-                    if (customOperationJson != null && customOperationJson.containsKey("skip"))
-                    {
-                        skip = customOperationJson.getBoolean("skip");
-                    }
-                    if (!skip)
-                    {
-                        int confirm = JOptionPane.showConfirmDialog(null, "是否读取上次配置?", "提示", JOptionPane.YES_NO_OPTION);
-                        if (confirm == 0)
-                        {
-                            customDomainName = recordOperationJson.getString("customDomainName");
-                            isAutoStart = recordOperationJson.getBoolean("isAutoStart");
-                            ipDefault = recordOperationJson.getString("ip");
-                            portDefault = recordOperationJson.getString("port");
-                        }
-                    }
-                    else
-                    {
-                        customDomainName = recordOperationJson.getString("customDomainName");
-                        isAutoStart = recordOperationJson.getBoolean("isAutoStart");
-                        ipDefault = recordOperationJson.getString("ip");
-                        portDefault = recordOperationJson.getString("port");
-                    }
+                    customDomainName = recordOperationJson.getString("customDomainName");
+                    isAutoStart = recordOperationJson.getBoolean("isAutoStart");
+                    ipDefault = recordOperationJson.getString("ip");
+                    portDefault = recordOperationJson.getString("port");
                 }
             }
             catch (Exception ex)
