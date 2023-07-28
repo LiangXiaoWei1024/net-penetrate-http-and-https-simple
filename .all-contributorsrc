@@ -1,12 +1,25 @@
 {
-  "projectName": "YOUR_PROJECT_NAME",
-  "projectOwner": "YOUR_GITHUB_USERNAME",
+  "projectName": "net-penetrate-http-and-https-simple",
+  "projectOwner": "LiangXiaoWei1024",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "files": ["README.md"],
+  "files": [
+    "README.md"
+  ],
   "imageSize": 100,
   "commit": true,
   "commitConvention": "none",
-  "contributors": [],
-  "contributorsPerLine": 7
+  "contributors": [
+    {
+      "login": "LiangXiaoWei1024",
+      "name": "kele",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38070995?v=4",
+      "profile": "https://github.com/LiangXiaoWei1024",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "commitType": "docs"
 }
