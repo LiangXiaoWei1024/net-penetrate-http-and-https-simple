@@ -1,10 +1,12 @@
 package com.kele.penetrate.utils.http;
 
 import com.kele.penetrate.enumeration.RequestType;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -39,8 +41,10 @@ public class AnalysisRequest
     //</editor-fold>
 
     //<editor-fold desc="获取请求头信息">
-    public Map<String, String> getRequestHeaders(FullHttpRequest fullHttpRequest)
+    public Map<String, String> getRequestHeaders(FullHttpRequest fullHttpRequest, ChannelHandlerContext channelHandlerContext)
     {
+        InetSocketAddress socketAddress = (InetSocketAddress) channelHandlerContext.channel().remoteAddress();
+        String ipAddress = socketAddress.getAddress().getHostAddress();
         Map<String, String> headers = new HashMap<>();
         Iterator<Map.Entry<String, String>> entryIterator = fullHttpRequest.headers().iteratorAsString();
         while (entryIterator.hasNext())
@@ -48,6 +52,10 @@ public class AnalysisRequest
             Map.Entry<String, String> next = entryIterator.next();
             headers.put(next.getKey(), next.getValue());
         }
+        headers.put("X-Forwarded-For",ipAddress);
+        headers.put("Proxy-Client-IP",ipAddress);
+        headers.put("WL-Proxy-Client-IP",ipAddress);
+        headers.put("X-Real-IP",ipAddress);
         return headers;
     }
     //</editor-fold>

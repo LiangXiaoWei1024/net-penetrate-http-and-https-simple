@@ -57,7 +57,7 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
             }
             else
             {
-                Map<String, String> requestHeaders = analysisHttpGetRequest.getRequestHeaders(fullHttpRequest);
+                Map<String, String> requestHeaders = analysisHttpGetRequest.getRequestHeaders(fullHttpRequest,channelHandlerContext);
                 String host = analysisHttpGetRequest.getHost(fullHttpRequest);
                 if (host == null || !connectManager.isExist(host))
                 {

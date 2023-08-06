@@ -47,7 +47,7 @@ public class BodyRequestHandle
 
         if (requestType == RequestType.POST || requestType == RequestType.PUT || requestType == RequestType.PATCH || requestType == RequestType.DELETE)
         {
-            Map<String, String> requestHeaders = analysisHttpPostRequest.getRequestHeaders(fullHttpRequest);
+            Map<String, String> requestHeaders = analysisHttpPostRequest.getRequestHeaders(fullHttpRequest, channelHandlerContext);
             String host = analysisHttpPostRequest.getHost(fullHttpRequest);
             String contentType = fullHttpRequest.headers().get("Content-Type");
             ConnectHandler connectHandler = connectManager.get(host);
