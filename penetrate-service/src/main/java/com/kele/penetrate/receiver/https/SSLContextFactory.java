@@ -4,9 +4,12 @@ import com.kele.penetrate.config.Config;
 import com.kele.penetrate.factory.annotation.Autowired;
 import com.kele.penetrate.factory.annotation.Recognizer;
 import com.kele.penetrate.utils.FileUtils;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import java.io.File;
 import java.io.FileInputStream;
 import java.security.KeyStore;
 
@@ -19,18 +22,17 @@ public class SSLContextFactory
     @Autowired
     private Config config;
 
-    public SSLContext getSslContext() throws Exception
+    public SslContext getSslContext() throws Exception
     {
-        char[] passArray = config.getMySSL().getPassword().toCharArray();
-        SSLContext sslContext = SSLContext.getInstance("SSLv3");
-        KeyStore ks = KeyStore.getInstance("JKS");
-        //加载keytool 生成的文件
-        FileInputStream inputStream = new FileInputStream(fileUtils.rootDirectory + "/" + config.getMySSL().getName());
-        ks.load(inputStream, passArray);
-        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-        kmf.init(ks, passArray);
-        sslContext.init(kmf.getKeyManagers(), null, null);
-        inputStream.close();
+        // 指定证书和私钥文件路径
+        File certFile = new File(fileUtils.rootDirectory + "/" + config.getMySSL().getCert());
+        File keyFile = new File(fileUtils.rootDirectory + "/" + config.getMySSL().getKey());
+
+        // 配置SSL/TLS上下文
+        SslContext sslContext = SslContextBuilder.forServer(certFile, keyFile, null)
+                .sslProvider(SslContext.defaultServerProvider())
+                .build();
+
         return sslContext;
     }
 

@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class MySSL
 {
-    private String password;
-    private String name;
+    private String cert;
+    private String key;
 }

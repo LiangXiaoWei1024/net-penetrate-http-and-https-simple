@@ -37,7 +37,7 @@ public class Config
         this.versionInfo.setVersion(properties.getProperty("version"));
         this.versionInfo.setContents(JSONArray.parseArray(properties.getProperty("version.contents")));
 
-        mySSL.setPassword(properties.getProperty("ssl.password"));
-        mySSL.setName(properties.getProperty("ssl.name"));
+        mySSL.setCert(properties.getProperty("ssl.cert"));
+        mySSL.setKey(properties.getProperty("ssl.key"));
     }
 }

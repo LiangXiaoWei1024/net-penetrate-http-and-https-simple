@@ -8,16 +8,19 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Recognizer
 @SuppressWarnings("unused")
 @ChannelHandler.Sharable
+@Slf4j
 public class NettyHttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest>
 {
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest)
     {
+        log.debug("http");
         Start.hypertextProtocolEvents.notice(new PipelineTransmission(channelHandlerContext, fullHttpRequest, HypertextTransferProtocolType.HTTP));
     }
 }

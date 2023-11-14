@@ -9,3 +9,6 @@ dependency-reduced-pom.xml
 *.DS_Store
 recordOperation.json
 kele.plus.jks
+*.cer
+*.key
+/penetrate-client/src/main/resources/*.properties

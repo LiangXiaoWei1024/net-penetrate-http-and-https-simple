@@ -6,10 +6,13 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
 import javax.net.ssl.SSLEngine;
+import java.io.File;
 
 
 @SuppressWarnings("unused")
@@ -24,16 +27,9 @@ public class NettyHttpsChannelInitializerHandler extends ChannelInitializer<Sock
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception
     {
-        //<editor-fold desc="生成本地证书(注释)">
-//        SelfSignedCertificate certificate = new SelfSignedCertificate();
-//        SslContext sslContext = SslContextBuilder.forServer(certificate.certificate(), certificate.privateKey()).build();
-//        socketChannel.pipeline().addLast(sslContext.newHandler(socketChannel.alloc()));
-        //</editor-fold>
-
-        SSLEngine sslEngine = sslContextFactory.getSslContext().createSSLEngine();
-        sslEngine.setUseClientMode(false);
-        socketChannel.pipeline().addLast(new SslHandler(sslEngine));
-
+        //配置证书
+        SslContext sslContext = sslContextFactory.getSslContext();
+        socketChannel.pipeline().addLast(sslContext.newHandler(socketChannel.alloc()));
         // 添加一个HTTP的编解码器
         socketChannel.pipeline().addLast(new HttpServerCodec());
         // 将HTTP消息的多个部分合成一条完整的HTTP消息
