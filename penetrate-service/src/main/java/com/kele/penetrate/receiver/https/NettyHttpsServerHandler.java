@@ -19,7 +19,6 @@ public class NettyHttpsServerHandler extends SimpleChannelInboundHandler<FullHtt
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest)
     {
-        log.debug("https");
         Start.hypertextProtocolEvents.notice(new PipelineTransmission(channelHandlerContext, fullHttpRequest, HypertextTransferProtocolType.HTTPS));
     }
 }
