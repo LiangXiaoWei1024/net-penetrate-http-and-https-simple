@@ -34,9 +34,9 @@ public class HttpUtils
     public HttpUtils()
     {
         //设置超时时间
-        clientBuilder.connectTimeout(10, TimeUnit.SECONDS);
-        clientBuilder.readTimeout(60, TimeUnit.SECONDS);
-        clientBuilder.writeTimeout(60, TimeUnit.SECONDS);
+        clientBuilder.connectTimeout(20, TimeUnit.SECONDS);
+        clientBuilder.readTimeout(60*5, TimeUnit.SECONDS);
+        clientBuilder.writeTimeout(60*5, TimeUnit.SECONDS);
         clientBuilder.sslSocketFactory(SSLSocketClientUtil.getSocketFactory(manager), manager);
         clientBuilder.hostnameVerifier(SSLSocketClientUtil.getHostnameVerifier());
         client = clientBuilder.build();
