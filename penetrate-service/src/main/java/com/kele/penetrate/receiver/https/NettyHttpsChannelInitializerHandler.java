@@ -13,6 +13,8 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 
 import javax.net.ssl.SSLEngine;
 import java.io.File;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 
 
 @SuppressWarnings("unused")
@@ -27,16 +29,27 @@ public class NettyHttpsChannelInitializerHandler extends ChannelInitializer<Sock
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception
     {
-        //配置证书
-        SslContext sslContext = sslContextFactory.getSslContext();
-        socketChannel.pipeline().addLast(sslContext.newHandler(socketChannel.alloc()));
-        // 添加一个HTTP的编解码器
-        socketChannel.pipeline().addLast(new HttpServerCodec());
-        // 将HTTP消息的多个部分合成一条完整的HTTP消息
-        socketChannel.pipeline().addLast(new HttpObjectAggregator(104857600));
-        // 解决大码流的问题，ChunkedWriteHandler：向客户端发送HTML5文件
-        socketChannel.pipeline().addLast(new ChunkedWriteHandler());
-        // 自定义处理handler
-        socketChannel.pipeline().addLast(nettyHttpsServerHandler);
+        //不允许通过ip直接访问
+        SocketAddress remoteAddress = socketChannel.remoteAddress();
+        if (remoteAddress instanceof InetSocketAddress) {
+            InetSocketAddress inetSocketAddress = (InetSocketAddress) remoteAddress;
+            String ipAddress = inetSocketAddress.getAddress().getHostAddress();
+
+            if (ipAddress.contains("kele.plus")) {
+                //配置证书
+                SslContext sslContext = sslContextFactory.getSslContext();
+                socketChannel.pipeline().addLast(sslContext.newHandler(socketChannel.alloc()));
+                // 添加一个HTTP的编解码器
+                socketChannel.pipeline().addLast(new HttpServerCodec());
+                // 将HTTP消息的多个部分合成一条完整的HTTP消息
+                socketChannel.pipeline().addLast(new HttpObjectAggregator(104857600));
+                // 解决大码流的问题，ChunkedWriteHandler：向客户端发送HTML5文件
+                socketChannel.pipeline().addLast(new ChunkedWriteHandler());
+                // 自定义处理handler
+                socketChannel.pipeline().addLast(nettyHttpsServerHandler);
+            } else {
+                socketChannel.close();
+            }
+        }
     }
 }
