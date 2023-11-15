@@ -25,7 +25,12 @@ public class ConnectManager
     public void replyAll(Object msg)
     {
         channelIdBindConnectHandler.forEach((k, v) ->
-                v.getCtx().writeAndFlush(msg));
+        {
+            if (v.getCtx().channel().isActive())
+            {
+                v.getCtx().writeAndFlush(msg);
+            }
+        });
     }
 
     public void add(ConnectHandler connectHandler)

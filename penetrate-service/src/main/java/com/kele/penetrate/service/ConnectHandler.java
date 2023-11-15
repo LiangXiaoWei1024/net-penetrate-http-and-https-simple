@@ -17,9 +17,13 @@ public class ConnectHandler
     {
         this.ctx = ctx;
     }
+
     public void reply(Object msg)
     {
-        ctx.writeAndFlush(msg);
+        if (ctx.channel().isActive())
+        {
+            ctx.writeAndFlush(msg);
+        }
     }
 
     @Override
