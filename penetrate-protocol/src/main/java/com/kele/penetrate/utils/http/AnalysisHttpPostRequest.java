@@ -30,14 +30,22 @@ public class AnalysisHttpPostRequest extends AnalysisRequest
         Map<String, String> body = new HashMap<>();
         HttpDataFactory factory = new DefaultHttpDataFactory(false);
         HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(factory, fullHttpRequest);
-        List<InterfaceHttpData> postData = decoder.getBodyHttpDatas();
-        for (InterfaceHttpData data : postData)
+        try
         {
-            if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute)
+            List<InterfaceHttpData> postData = decoder.getBodyHttpDatas();
+            for (InterfaceHttpData data : postData)
             {
-                MemoryAttribute attribute = (MemoryAttribute) data;
-                body.put(attribute.getName(), attribute.getValue());
+                if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute)
+                {
+                    MemoryAttribute attribute = (MemoryAttribute) data;
+                    body.put(attribute.getName(), attribute.getValue());
+                }
             }
+        }
+        finally
+        {
+            // 确保释放资源
+            decoder.destroy();
         }
         return body;
     }
@@ -57,38 +65,45 @@ public class AnalysisHttpPostRequest extends AnalysisRequest
         HttpPostRequestDecoder httpDecoder = new HttpPostRequestDecoder(factory, fullHttpRequest);
         httpDecoder.setDiscardThreshold(0);
         httpDecoder.offer(fullHttpRequest);
-        List<InterfaceHttpData> interfaceHttpDataList = httpDecoder.getBodyHttpDatas();
-        for (InterfaceHttpData data : interfaceHttpDataList)
+        try
         {
-            if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute)
+            List<InterfaceHttpData> interfaceHttpDataList = httpDecoder.getBodyHttpDatas();
+            for (InterfaceHttpData data : interfaceHttpDataList)
             {
-                Attribute attribute = (Attribute) data;
-                try
+                if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute)
                 {
-                    bodyMap.put(attribute.getName(), attribute.getValue());
+                    Attribute attribute = (Attribute) data;
+                    try
+                    {
+                        bodyMap.put(attribute.getName(), attribute.getValue());
+                    }
+                    catch (IOException e)
+                    {
+                        log.error("获取请求属性错误", e);
+                    }
                 }
-                catch (IOException e)
+                if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload)
                 {
-                    log.error("获取请求属性错误", e);
+                    FileUpload fileUpload = (FileUpload) data;
+                    RequestFile requestFile = new RequestFile();
+                    try
+                    {
+                        requestFile.setFileByte(fileUpload.get());
+                        requestFile.setFileName(fileUpload.getFilename());
+                        requestFile.setName(fileUpload.getName());
+                    }
+                    catch (IOException e)
+                    {
+                        log.error("获取文件异常", e);
+                    }
+                    bodyFiles.add(requestFile);
                 }
             }
-            if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload)
-            {
-                FileUpload fileUpload = (FileUpload) data;
-                RequestFile requestFile = new RequestFile();
-                try
-                {
-                    requestFile.setFileByte(fileUpload.get());
-                    requestFile.setFileName(fileUpload.getFilename());
-                    requestFile.setName(fileUpload.getName());
-                }
-                catch (IOException e)
-                {
-                    log.error("获取文件异常", e);
-                }
-                bodyFiles.add(requestFile);
-            }
-
+        }
+        finally
+        {
+            // 确保释放资源
+            httpDecoder.destroy();
         }
         return body;
     }
