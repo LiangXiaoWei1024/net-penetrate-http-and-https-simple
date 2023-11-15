@@ -7,8 +7,11 @@ import com.kele.penetrate.pojo.PipelineTransmission;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.http.*;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.net.ssl.SSLHandshakeException;
 
 @Recognizer
 @SuppressWarnings("unused")
@@ -21,4 +24,13 @@ public class NettyHttpsServerHandler extends SimpleChannelInboundHandler<FullHtt
     {
         Start.hypertextProtocolEvents.notice(new PipelineTransmission(channelHandlerContext, fullHttpRequest, HypertextTransferProtocolType.HTTPS));
     }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        if(!(cause instanceof DecoderException)){
+            log.error("netty错误日志",cause);
+        }
+        ctx.close();
+    }
+
 }
