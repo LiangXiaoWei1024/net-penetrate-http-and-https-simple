@@ -20,7 +20,7 @@ public class ConnectManager
     private final ConcurrentHashMap<String, MessageManager> requestIdBindConnect = new ConcurrentHashMap<>();
     private final static Object CONNECT_LOCK = new Object();
     private final static Object MESSAGE_LOCK = new Object();
-    private final static long THRESHOLD = 1000 * 60 * 5;
+    private final static long THRESHOLD = 1000 * 60 * 30;
 
     public void replyAll(Object msg)
     {
