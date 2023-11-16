@@ -22,4 +22,11 @@ public class NettyHttpServerHandler extends SimpleChannelInboundHandler<FullHttp
     {
         Start.hypertextProtocolEvents.notice(new PipelineTransmission(channelHandlerContext, fullHttpRequest, HypertextTransferProtocolType.HTTP));
     }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        log.error("netty HTTP 错误日志",cause);
+        ctx.flush();
+        ctx.close();
+    }
 }

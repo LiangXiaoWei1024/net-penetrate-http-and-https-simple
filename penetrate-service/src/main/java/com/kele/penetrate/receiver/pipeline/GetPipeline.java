@@ -50,10 +50,12 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
         {
             HttpHeaders headers = fullHttpRequest.headers();
             String contentType = headers.get("Content-Type");
+            FullHttpResponse serviceTemplate = null;
             if (contentType != null)
             {
                 log.error("get 不支持携带请求体");
-                channelHandlerContext.writeAndFlush(pageTemplate.get_GetBodyAccessDenied_Template()).addListener(ChannelFutureListener.CLOSE);
+                serviceTemplate = pageTemplate.get_GetBodyAccessDenied_Template();
+                channelHandlerContext.writeAndFlush(serviceTemplate).addListener(ChannelFutureListener.CLOSE);
             }
             else
             {
@@ -61,7 +63,8 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
                 String host = analysisHttpGetRequest.getHost(fullHttpRequest);
                 if (host == null || !connectManager.isExist(host))
                 {
-                    channelHandlerContext.writeAndFlush(pageTemplate.get_NotFound_Template()).addListener(ChannelFutureListener.CLOSE);
+                    serviceTemplate = pageTemplate.get_NotFound_Template();
+                    channelHandlerContext.writeAndFlush(serviceTemplate).addListener(ChannelFutureListener.CLOSE);
                 }
                 else
                 {
@@ -80,12 +83,16 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
                     }
                     else
                     {
-                        FullHttpResponse serviceUnavailableTemplate = pageTemplate.get_NotFound_Template();
-                        channelHandlerContext.writeAndFlush(serviceUnavailableTemplate).addListener(ChannelFutureListener.CLOSE);
+                        serviceTemplate = pageTemplate.get_NotFound_Template();
+                        channelHandlerContext.writeAndFlush(serviceTemplate).addListener(ChannelFutureListener.CLOSE);
                     }
                 }
             }
-
+            //释放资源
+            if(serviceTemplate != null){
+                serviceTemplate.release();
+            }
+            pipelineTransmission.getFullHttpRequest().release();
             return true;
         }
         return false;

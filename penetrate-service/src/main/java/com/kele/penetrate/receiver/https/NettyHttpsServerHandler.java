@@ -11,7 +11,6 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.http.*;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.net.ssl.SSLHandshakeException;
 
 @Recognizer
 @SuppressWarnings("unused")
@@ -28,8 +27,9 @@ public class NettyHttpsServerHandler extends SimpleChannelInboundHandler<FullHtt
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         if(!(cause instanceof DecoderException)){
-            log.error("netty错误日志",cause);
+            log.error("netty HTTPS 错误日志",cause);
         }
+        ctx.flush();
         ctx.close();
     }
 

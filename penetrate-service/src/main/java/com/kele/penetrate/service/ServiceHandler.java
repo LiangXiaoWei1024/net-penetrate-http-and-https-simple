@@ -7,10 +7,12 @@ import com.kele.penetrate.pojo.ServicePipeline;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import lombok.extern.slf4j.Slf4j;
 
 @SuppressWarnings("unused")
 @Recognizer
 @ChannelHandler.Sharable
+@Slf4j
 public class ServiceHandler extends SimpleChannelInboundHandler<Object>
 {
     @Autowired
@@ -44,6 +46,15 @@ public class ServiceHandler extends SimpleChannelInboundHandler<Object>
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt)
     {
+        ctx.flush();
+        ctx.close();
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="异常处理">
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        log.error("netty服务端错误日志",cause);
         ctx.flush();
         ctx.close();
     }

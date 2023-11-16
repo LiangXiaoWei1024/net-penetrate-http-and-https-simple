@@ -51,6 +51,7 @@ public class BodyRequestHandle
             String host = analysisHttpPostRequest.getHost(fullHttpRequest);
             String contentType = fullHttpRequest.headers().get("Content-Type");
             ConnectHandler connectHandler = connectManager.get(host);
+            FullHttpResponse serviceTemplate = null;
             if (connectHandler != null)
             {
                 if (contentType == null)
@@ -123,16 +124,22 @@ public class BodyRequestHandle
                     else
                     {
                         log.error("无法处理的Content-Type：{}", contentType);
-                        channelHandlerContext.writeAndFlush(pageTemplate.get_UnableProcess_Template()).addListener(ChannelFutureListener.CLOSE);
+                        serviceTemplate = pageTemplate.get_UnableProcess_Template();
+                        channelHandlerContext.writeAndFlush(serviceTemplate).addListener(ChannelFutureListener.CLOSE);
                     }
                     //</editor-fold>
                 }
             }
             else
             {
-                FullHttpResponse serviceUnavailableTemplate = pageTemplate.get_NotFound_Template();
-                channelHandlerContext.writeAndFlush(serviceUnavailableTemplate).addListener(ChannelFutureListener.CLOSE);
+                serviceTemplate = pageTemplate.get_NotFound_Template();
+                channelHandlerContext.writeAndFlush(serviceTemplate).addListener(ChannelFutureListener.CLOSE);
             }
+            //释放资源
+            if(serviceTemplate != null){
+                serviceTemplate.release();
+            }
+            pipelineTransmission.getFullHttpRequest().release();
             return true;
         }
         return false;
