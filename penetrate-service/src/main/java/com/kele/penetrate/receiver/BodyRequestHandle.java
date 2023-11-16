@@ -135,11 +135,6 @@ public class BodyRequestHandle
                 serviceTemplate = pageTemplate.get_NotFound_Template();
                 channelHandlerContext.writeAndFlush(serviceTemplate).addListener(ChannelFutureListener.CLOSE);
             }
-            //释放资源
-            if(serviceTemplate != null){
-                serviceTemplate.release();
-            }
-            pipelineTransmission.getFullHttpRequest().release();
             return true;
         }
         return false;

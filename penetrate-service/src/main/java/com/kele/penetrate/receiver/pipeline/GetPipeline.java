@@ -88,11 +88,6 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
                     }
                 }
             }
-            //释放资源
-            if(serviceTemplate != null){
-                serviceTemplate.release();
-            }
-            pipelineTransmission.getFullHttpRequest().release();
             return true;
         }
         return false;

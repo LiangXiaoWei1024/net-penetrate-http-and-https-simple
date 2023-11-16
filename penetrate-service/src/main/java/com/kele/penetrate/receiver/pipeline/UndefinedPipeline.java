@@ -23,9 +23,6 @@ public class UndefinedPipeline implements Func<PipelineTransmission, Boolean>
     {
         FullHttpResponse serviceUnavailableTemplate = pageTemplate.get_ServiceUnavailable_Template();
         pipelineTransmission.getChannelHandlerContext().writeAndFlush(serviceUnavailableTemplate).addListener(ChannelFutureListener.CLOSE);
-        //释放资源
-        serviceUnavailableTemplate.release();
-        pipelineTransmission.getFullHttpRequest().release();
         return true;
     }
 }
