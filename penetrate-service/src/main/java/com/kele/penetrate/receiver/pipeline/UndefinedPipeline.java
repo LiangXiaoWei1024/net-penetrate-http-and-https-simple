@@ -7,7 +7,6 @@ import com.kele.penetrate.pojo.PipelineTransmission;
 import com.kele.penetrate.utils.Func;
 import com.kele.penetrate.utils.PageTemplate;
 import io.netty.channel.ChannelFutureListener;
-import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 
 @Register(-1)

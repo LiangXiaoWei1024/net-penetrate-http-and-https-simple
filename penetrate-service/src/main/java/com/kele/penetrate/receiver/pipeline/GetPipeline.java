@@ -50,7 +50,7 @@ public class GetPipeline implements Func<PipelineTransmission, Boolean>
         {
             HttpHeaders headers = fullHttpRequest.headers();
             String contentType = headers.get("Content-Type");
-            FullHttpResponse serviceTemplate = null;
+            FullHttpResponse serviceTemplate;
             if (contentType != null)
             {
                 log.error("get 不支持携带请求体");

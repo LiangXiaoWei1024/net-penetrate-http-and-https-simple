@@ -51,7 +51,7 @@ public class BodyRequestHandle
             String host = analysisHttpPostRequest.getHost(fullHttpRequest);
             String contentType = fullHttpRequest.headers().get("Content-Type");
             ConnectHandler connectHandler = connectManager.get(host);
-            FullHttpResponse serviceTemplate = null;
+            FullHttpResponse serviceTemplate;
             if (connectHandler != null)
             {
                 if (contentType == null)
